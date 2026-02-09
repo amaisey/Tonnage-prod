@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * iOS PWA Safe Area Fix
+ * This is the proven fix from the community for the bottom bar issue.
+ * Setting min-height to 100% + safe-area-inset-top "pushes" the document
+ * down to fill the bottom gap that appears in standalone PWA mode.
+ * Source: https://dev.to/karmasakshi/make-your-pwas-look-handsome-on-ios-1o08
+ */
+html {
+  min-height: calc(100% + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background-color: #111827;
+}
+
+body {
+  background-color: #111827;
+  min-height: 100%;
+  min-height: -webkit-fill-available;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe area CSS variables for use in components */
+:root {
+  --sat: env(safe-area-inset-top);
+  --sab: env(safe-area-inset-bottom, 34px);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  -webkit-user-select: none;
+  user-select: none;
+}
