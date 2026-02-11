@@ -3,14 +3,16 @@ import { Icons } from './Icons';
 import { CATEGORIES, EXERCISE_TYPES, BAND_COLORS, EXERCISE_PHASES, SUPERSET_COLORS } from '../data/constants';
 import { formatDuration, getDefaultSetForCategory } from '../utils/helpers';
 import { NumberPad, DurationPad, SetInputRow, ExerciseSearchModal, ExerciseDetailModal, RestTimerBanner } from './SharedComponents';
+import { workoutDb } from '../db/workoutDb';
 
-const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, exercises, history, onNumpadStateChange, onScroll, compactMode }) => {
+const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, exercises, getPreviousData, onNumpadStateChange, onScroll, compactMode }) => {
   // Bug #3: Compact mode class helper
   const c = (normal, compact) => compactMode ? compact : normal;
   const [showExerciseModal, setShowExerciseModal] = useState(false);
   const [restTimer, setRestTimer] = useState({ active: false, time: 0, totalTime: 0, exerciseName: '' });
   const [editingRestTime, setEditingRestTime] = useState(null); // exercise index
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showFinishConfirm, setShowFinishConfirm] = useState(false);
   const [numpadState, setNumpadState] = useState(null); // { exIndex, setIndex, field, fieldIndex }
   const [exerciseDetail, setExerciseDetail] = useState(null); // exercise to show detail modal for
   const [showExerciseDetailModal, setShowExerciseDetailModal] = useState(null); // { exercise, history }
@@ -35,6 +37,64 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   const wakeLockRef = useRef(null);
   const supersetColorMap = useRef({}); // Bug #13: Track superset color assignments
   const scrollContainerRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const audioInitialized = useRef(false);
+
+  // Initialize audio context on first user interaction
+  const initAudio = () => {
+    if (audioInitialized.current) return;
+    try {
+      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      audioInitialized.current = true;
+    } catch (e) {
+      console.log('Audio init failed:', e);
+    }
+  };
+
+  const playBeep = (frequency = 880, duration = 0.15, volume = 0.3) => {
+    initAudio();
+    const ctx = audioContextRef.current;
+    if (!ctx) return;
+    try {
+      if (ctx.state === 'suspended') ctx.resume();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = frequency;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(volume, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + duration);
+    } catch (e) {
+      console.log('Beep failed:', e);
+    }
+  };
+
+  const playRestTimerAlarm = () => {
+    initAudio();
+    const ctx = audioContextRef.current;
+    if (!ctx) return;
+    try {
+      if (ctx.state === 'suspended') ctx.resume();
+      // Three ascending tones
+      [0, 0.2, 0.4].forEach((delay, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 660 + (i * 220);
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.4, ctx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.3);
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + 0.3);
+      });
+    } catch (e) {
+      console.log('Alarm failed:', e);
+    }
+  };
 
   // Bug #1: Seed timer state when workout starts so the first set shows elapsed time
   useEffect(() => {
@@ -60,6 +120,18 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   useEffect(() => {
     onNumpadStateChange?.(numpadState !== null);
   }, [numpadState, onNumpadStateChange]);
+
+  // Auto-scroll input into view when numpad opens so input isn't hidden behind it
+  useEffect(() => {
+    if (numpadState) {
+      setTimeout(() => {
+        const el = dragRefs.current[numpadState.exIndex];
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 150);
+    }
+  }, [numpadState?.exIndex, numpadState?.setIndex, numpadState?.field]);
 
   // Auto-scroll to rest time options when editing
   useEffect(() => {
@@ -114,22 +186,36 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     };
   }, [activeWorkout]);
 
-  // Get previous workout data for a specific exercise (returns full exercise with sets, restTime, notes, etc.)
-  const getPreviousExerciseData = (exerciseName) => {
-    if (!history || history.length === 0) return null;
-    for (const workout of history) {
-      const prevExercise = workout.exercises.find(ex => ex.name === exerciseName);
-      if (prevExercise && prevExercise.sets.some(s => s.completed)) {
-        return {
-          sets: prevExercise.sets.filter(s => s.completed),
-          restTime: prevExercise.restTime,
-          notes: prevExercise.notes,
-          phase: prevExercise.phase
-        };
+  // Scroll to next incomplete exercise on mount (tab switch) and when returning to app
+  useEffect(() => {
+    const scrollToNextIncomplete = () => {
+      if (!activeWorkout?.exercises?.length || !scrollContainerRef.current) return;
+      for (let i = 0; i < activeWorkout.exercises.length; i++) {
+        const hasIncomplete = activeWorkout.exercises[i].sets.some(s => !s.completed);
+        if (hasIncomplete) {
+          setTimeout(() => {
+            const el = dragRefs.current[i];
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 200);
+          break;
+        }
       }
-    }
-    return null;
-  };
+    };
+
+    // Scroll on mount (covers switching back from Templates/History tabs)
+    scrollToNextIncomplete();
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        scrollToNextIncomplete();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [activeWorkout?.exercises]);
+
+  // getPreviousData is passed as async prop from App (uses IndexedDB via usePreviousExerciseData hook)
 
   // Bug #7: Timestamp-based rest timer - derive remaining time from startedAt + totalTime
   useEffect(() => {
@@ -139,7 +225,8 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       const elapsed = Math.floor((Date.now() - restTimer.startedAt) / 1000);
       const remaining = Math.max(0, restTimer.totalTime - elapsed);
       if (remaining === 0) {
-        // Vibrate instead of audio to avoid pausing music (Bug #3 fix)
+        // Play alarm sound and vibrate
+        playRestTimerAlarm();
         if (navigator.vibrate) {
           navigator.vibrate([200, 100, 200, 100, 300]);
         }
@@ -155,39 +242,41 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   }, [restTimer.active, restTimer.startedAt, restTimer.totalTime]);
 
   const startRestTimer = (exerciseName, restTime) => {
-    const time = restTime || 90;
+    const time = restTime ?? 60; // Bug #16: Use ?? so restTime=0 is preserved (|| treats 0 as falsy)
+    if (time <= 0) return; // Don't start timer for 0-rest exercises (supersets)
     setRestTimer({ active: true, time, totalTime: time, startedAt: Date.now(), exerciseName });
     setRestTimerMinimized(false); // Bug #6: auto-show when new timer starts
   };
 
-  // Bug #8: Calculate the next expected set (superset-aware)
+  // Calculate the next expected set (superset-aware)
+  // For supersets: pick the incomplete set with the lowest set number,
+  // breaking ties by earliest exercise position in the superset.
   const calculateNextExpected = (justCompletedExIndex, justCompletedSetIndex) => {
     const exercises = activeWorkout.exercises;
     const justCompleted = exercises[justCompletedExIndex];
 
-    // If in a superset, navigate within the superset first
     if (justCompleted.supersetId) {
       const supersetExercises = exercises
         .map((ex, idx) => ({ ex, idx }))
         .filter(({ ex }) => ex.supersetId === justCompleted.supersetId);
 
-      const posInSuperset = supersetExercises.findIndex(({ idx }) => idx === justCompletedExIndex);
+      let bestCandidate = null;
+      let bestSetIndex = Infinity;
+      let bestExPos = Infinity;
 
-      if (posInSuperset < supersetExercises.length - 1) {
-        // Next exercise in superset (same round)
-        const nextInSuperset = supersetExercises[posInSuperset + 1];
-        const nextSetIdx = nextInSuperset.ex.sets.findIndex(s => !s.completed);
-        if (nextSetIdx >= 0) {
-          return { exIndex: nextInSuperset.idx, setIndex: nextSetIdx };
-        }
-      } else {
-        // Last in superset - loop back to first (next round)
-        const firstInSuperset = supersetExercises[0];
-        const nextSetIdx = firstInSuperset.ex.sets.findIndex(s => !s.completed);
-        if (nextSetIdx >= 0) {
-          return { exIndex: firstInSuperset.idx, setIndex: nextSetIdx };
-        }
-      }
+      supersetExercises.forEach(({ ex, idx }, posInSuperset) => {
+        ex.sets.forEach((s, sIdx) => {
+          if (!s.completed) {
+            if (sIdx < bestSetIndex || (sIdx === bestSetIndex && posInSuperset < bestExPos)) {
+              bestCandidate = { exIndex: idx, setIndex: sIdx };
+              bestSetIndex = sIdx;
+              bestExPos = posInSuperset;
+            }
+          }
+        });
+      });
+
+      if (bestCandidate) return bestCandidate;
     }
 
     // Not in superset, or superset fully complete: next incomplete set of same exercise
@@ -207,58 +296,142 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     return null; // All done
   };
 
-  // Bug #15: Determine if rest timer should fire (no timer within supersets)
+  // Determine if rest timer should fire
+  // Default: no timer between superset exercises within the same round (rest=0)
+  // But if user has manually set a rest time > 0 on a non-last superset exercise, respect it
   const shouldStartRestTimer = (justCompletedExIndex, nextExp) => {
     if (!nextExp) return false;
     const exercises = activeWorkout.exercises;
     const justCompleted = exercises[justCompletedExIndex];
     const nextExercise = exercises[nextExp.exIndex];
 
-    // If both in same superset, check if we're looping back (new round) or moving forward
+    // If both in same superset, check context
     if (justCompleted.supersetId && nextExercise.supersetId &&
         justCompleted.supersetId === nextExercise.supersetId) {
-      const supersetExercises = exercises
-        .map((ex, idx) => ({ ex, idx }))
-        .filter(({ ex }) => ex.supersetId === justCompleted.supersetId);
-      const currentPos = supersetExercises.findIndex(({ idx }) => idx === justCompletedExIndex);
-      const nextPos = supersetExercises.findIndex(({ idx }) => idx === nextExp.exIndex);
-      // Moving forward in superset = no rest timer. Looping back = rest timer.
-      return nextPos <= currentPos;
+      // Round transition (next set index is higher) → always fire rest timer
+      if (nextExp.setIndex > justCompletedSetIndex) return true;
+      // Same round: only fire if the just-completed exercise has a manually-set rest time > 0
+      return (justCompleted.restTime ?? 0) > 0;
     }
 
     return true; // Different exercises / not in superset = rest timer
   };
 
-  // Bug #2: Get the rest time that should display above a given exercise/set
-  // For set 0 of an exercise, use the PREVIOUS exercise's rest time
+  // Get the rest time to use for a superset round transition (last exercise's rest time)
+  const getSupersetRestTime = (supersetId) => {
+    const supersetExercises = activeWorkout.exercises
+      .filter(ex => ex.supersetId === supersetId);
+    if (supersetExercises.length === 0) return 90;
+    const lastEx = supersetExercises[supersetExercises.length - 1];
+    return lastEx.restTime ?? 60;
+  };
+
+  // Bug #18: Check if an exercise is a non-last member of a superset (should not show rest timer row)
+  const isNonLastInSuperset = (exIndex) => {
+    const exercise = activeWorkout.exercises[exIndex];
+    if (!exercise.supersetId) return false;
+    const supersetExercises = activeWorkout.exercises
+      .map((ex, idx) => ({ ex, idx }))
+      .filter(({ ex }) => ex.supersetId === exercise.supersetId);
+    const posInSuperset = supersetExercises.findIndex(({ idx }) => idx === exIndex);
+    return posInSuperset < supersetExercises.length - 1;
+  };
+
+  // Bug #2/#16/#18: Get the rest time that should display above a given exercise/set
+  // This represents the TARGET rest time for the rest period BEFORE this set.
+  // Once a set is completed, its rest time is locked in via restTimeAtCompletion
+  // so changing the exercise's rest time mid-rest won't retroactively update the target.
   const getDisplayRestTime = (exIndex, setIndex) => {
     const exercise = activeWorkout.exercises[exIndex];
-    if (setIndex > 0) return exercise.restTime || 90;
-    // Set 0: find the previous exercise's rest time
-    if (exIndex > 0) {
-      return activeWorkout.exercises[exIndex - 1].restTime || 90;
+
+    // Helper: get the locked-in rest time for a completed set, or the live value
+    const getLockedOrLive = (ex, sIdx) => {
+      const set = ex.sets?.[sIdx];
+      if (set?.completed && set.restTimeAtCompletion !== undefined) {
+        return set.restTimeAtCompletion;
+      }
+      return ex.restTime ?? 60;
+    };
+
+    // Non-last superset exercises
+    if (isNonLastInSuperset(exIndex)) {
+      // Set 0: if the previous exercise is NOT in this superset,
+      // the rest period came from that previous exercise (outside the superset)
+      if (setIndex === 0 && exIndex > 0) {
+        const prevExercise = activeWorkout.exercises[exIndex - 1];
+        if (!prevExercise.supersetId || prevExercise.supersetId !== exercise.supersetId) {
+          const lastSetIdx = (prevExercise.sets?.length || 1) - 1;
+          return getLockedOrLive(prevExercise, lastSetIdx);
+        }
+      }
+      // Sets > 0: rest came from the round transition (last superset exercise completed previous round)
+      // e.g. superset [A, B]: flow is A1→B1→(rest)→A2→B2→(rest)→A3
+      // Above A2, the rest target should be B's rest time from round 1
+      if (setIndex > 0) {
+        const supersetExercises = activeWorkout.exercises.filter(
+          ex => ex.supersetId === exercise.supersetId
+        );
+        const lastEx = supersetExercises[supersetExercises.length - 1];
+        const prevRoundSetIdx = setIndex - 1;
+        return getLockedOrLive(lastEx, prevRoundSetIdx);
+      }
+      return 0;
     }
-    return exercise.restTime || 90;
+
+    // Last exercise in superset, set > 0: rest came from this exercise completing the previous round
+    // e.g. superset [A, B]: above B2, the rest target is B's rest time from round 1
+    if (exercise.supersetId && setIndex > 0) {
+      const prevRoundSetIdx = setIndex - 1;
+      return getLockedOrLive(exercise, prevRoundSetIdx);
+    }
+
+    // For set 1+ of any non-superset exercise: use the previous set's locked-in value if completed
+    if (setIndex > 0) {
+      const prevSet = exercise.sets?.[setIndex - 1];
+      if (prevSet?.completed && prevSet.restTimeAtCompletion !== undefined) {
+        return prevSet.restTimeAtCompletion;
+      }
+      return exercise.restTime ?? 60;
+    }
+
+    // For set 0: the target rest is whatever rest period happened BEFORE this exercise
+    // That means the previous exercise's last set's rest time
+    if (exIndex > 0) {
+      const prevExercise = activeWorkout.exercises[exIndex - 1];
+      const lastSetIdx = (prevExercise.sets?.length || 1) - 1;
+      return getLockedOrLive(prevExercise, lastSetIdx);
+    }
+
+    return exercise.restTime ?? 60;
   };
 
   // Add exercises (individually or as superset) - pre-fill with previous workout data
   // Bug #12: Now supports adding to specific phases via addToPhase state
-  const addExercises = (selectedExercises, asSuperset) => {
+  const addExercises = async (selectedExercises, asSuperset) => {
     const updated = { ...activeWorkout };
     const targetPhase = addToPhase || 'workout'; // Default to 'workout' phase
 
+    // Fetch previous data for all exercises in parallel
+    const prevDataMap = new Map();
+    await Promise.all(selectedExercises.map(async (ex) => {
+      const prevData = getPreviousData ? await getPreviousData(ex.name) : null;
+      prevDataMap.set(ex.name, prevData);
+    }));
+
     if (asSuperset && selectedExercises.length >= 2) {
       const supersetId = `superset-${Date.now()}`;
-      selectedExercises.forEach(ex => {
-        const prevData = getPreviousExerciseData(ex.name);
+      selectedExercises.forEach((ex, i) => {
+        const prevData = prevDataMap.get(ex.name);
         const sets = prevData?.sets?.length > 0
           ? prevData.sets.map(s => ({ ...s, completed: false, completedAt: undefined }))
           : [getDefaultSetForCategory(ex.category)];
+        const isLast = i === selectedExercises.length - 1;
         updated.exercises.push({
           ...ex,
           supersetId,
-          phase: targetPhase, // Bug #12: Assign to target phase
-          restTime: prevData?.restTime || 90,
+          phase: targetPhase,
+          // Non-last superset exercises: zero rest time (user can manually add back)
+          restTime: isLast ? (prevData?.restTime || 60) : 0,
           notes: prevData?.notes || '',
           sets,
           previousSets: prevData?.sets
@@ -266,14 +439,14 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       });
     } else {
       selectedExercises.forEach(ex => {
-        const prevData = getPreviousExerciseData(ex.name);
+        const prevData = prevDataMap.get(ex.name);
         const sets = prevData?.sets?.length > 0
           ? prevData.sets.map(s => ({ ...s, completed: false, completedAt: undefined }))
           : [getDefaultSetForCategory(ex.category)];
         updated.exercises.push({
           ...ex,
-          phase: targetPhase, // Bug #12: Assign to target phase
-          restTime: prevData?.restTime || 90,
+          phase: targetPhase,
+          restTime: prevData?.restTime || 60,
           notes: prevData?.notes || '',
           sets,
           previousSets: prevData?.sets
@@ -299,7 +472,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     exercise.sets[setIndex].manuallyEdited = true;
 
     // Propagate to subsequent sets if enabled
-    if (propagate && value && (field === 'weight' || field === 'reps' || field === 'duration' || field === 'distance' || field === 'assistedWeight')) {
+    if (propagate && value && (field === 'weight' || field === 'reps' || field === 'duration' || field === 'distance' || field === 'assistedWeight' || field === 'bandColor')) {
       for (let i = setIndex + 1; i < exercise.sets.length; i++) {
         const set = exercise.sets[i];
         // Only propagate if: not completed, not manually edited, and value is empty or same as previous
@@ -362,6 +535,21 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     setEditingRestTime(null);
   };
 
+  const setExercisePhase = (exIndex, newPhase) => {
+    const updated = { ...activeWorkout };
+    const exercise = updated.exercises[exIndex];
+    exercise.phase = newPhase;
+    // If exercise is in a superset, update all exercises in the same superset
+    if (exercise.supersetId) {
+      updated.exercises.forEach(ex => {
+        if (ex.supersetId === exercise.supersetId) {
+          ex.phase = newPhase;
+        }
+      });
+    }
+    setActiveWorkout(updated);
+  };
+
   // Bug #10: Smart multi-set completion - detects rapid completions and distributes time evenly
   const RAPID_COMPLETION_THRESHOLD = 4000; // 4 seconds
 
@@ -372,8 +560,12 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     set.completed = !set.completed;
 
     if (set.completed) {
+      playBeep();
       const now = Date.now();
       set.completedAt = now;
+      // Lock in the rest time that was active when this set was completed
+      // so changing rest time mid-rest doesn't retroactively update the target
+      set.restTimeAtCompletion = exercise.restTime ?? 60;
 
       // Bug #10: Check for rapid completions and redistribute time
       const recentCompletions = [];
@@ -404,26 +596,68 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
           updated.exercises[comp.exIndex].sets[comp.setIndex].completedAt = newTime;
         });
         set.completedAt = anchorTime + (timePerSet * numSets);
+
+        // Bug #16: After redistribution, recalculate frozenElapsed for all affected sets
+        // so display times reflect the redistributed timestamps, not stale values
+        const redistributedFrozen = {};
+        let prevTime = anchorTime;
+        recentCompletions.forEach((comp) => {
+          const newTime = updated.exercises[comp.exIndex].sets[comp.setIndex].completedAt;
+          redistributedFrozen[`${comp.exIndex}-${comp.setIndex}`] = Math.round((newTime - prevTime) / 1000);
+          prevTime = newTime;
+        });
+        redistributedFrozen[`${exIndex}-${setIndex}`] = Math.round((set.completedAt - prevTime) / 1000);
+        setFrozenElapsed(prev => ({ ...prev, ...redistributedFrozen }));
+      } else {
+        // Freeze the elapsed time for the set being completed (non-rapid path)
+        // Use actual completedAt timestamps for reliability instead of potentially stale state
+        const existingFrozen = frozenElapsed[`${exIndex}-${setIndex}`];
+        let baseTimestamp;
+        if (existingFrozen !== undefined && existingFrozen < 0) {
+          baseTimestamp = Math.abs(existingFrozen);
+        } else {
+          // Find the most recent completedAt among all other completed sets
+          let mostRecentCompletion = activeWorkout.startTime;
+          updated.exercises.forEach((ex, eIdx) => {
+            ex.sets?.forEach((s, sIdx) => {
+              if (s.completed && s.completedAt && !(eIdx === exIndex && sIdx === setIndex)) {
+                if (s.completedAt > mostRecentCompletion) {
+                  mostRecentCompletion = s.completedAt;
+                }
+              }
+            });
+          });
+          baseTimestamp = mostRecentCompletion;
+        }
+        if (baseTimestamp) {
+          const elapsed = Math.round((now - baseTimestamp) / 1000);
+          setFrozenElapsed(prev => ({
+            ...prev,
+            [`${exIndex}-${setIndex}`]: elapsed
+          }));
+        }
       }
 
-      // Bug #2: Freeze the elapsed time for the set being completed
-      if (lastCompletionTimestamp) {
-        const elapsed = Math.round((now - lastCompletionTimestamp) / 1000);
-        setFrozenElapsed(prev => ({
-          ...prev,
-          [`${exIndex}-${setIndex}`]: elapsed
-        }));
-      }
-
-      // Bug #3/#10: If user completed a set that wasn't the expected next, freeze the skipped timer
+      // Bug #3/#10: If user completed a set that wasn't the expected next, handle the skipped set's timer
       if (expectedNext &&
           (expectedNext.exIndex !== exIndex || expectedNext.setIndex !== setIndex) &&
           lastCompletionTimestamp) {
-        const elapsedSinceLastCompletion = Math.round((now - lastCompletionTimestamp) / 1000);
-        setFrozenElapsed(prev => ({
-          ...prev,
-          [`${expectedNext.exIndex}-${expectedNext.setIndex}`]: elapsedSinceLastCompletion
-        }));
+        const key = `${expectedNext.exIndex}-${expectedNext.setIndex}`;
+        if (expectedNext.exIndex !== exIndex) {
+          // Different exercise: keep a live timer anchor (negative timestamp)
+          // Timer restarts from now (when the other exercise's set was completed)
+          setFrozenElapsed(prev => ({
+            ...prev,
+            [key]: -now
+          }));
+        } else {
+          // Same exercise, different set: freeze at the current elapsed (truly skipped)
+          const elapsedSinceLastCompletion = Math.round((now - lastCompletionTimestamp) / 1000);
+          setFrozenElapsed(prev => ({
+            ...prev,
+            [key]: elapsedSinceLastCompletion
+          }));
+        }
       }
 
       // Calculate the next expected set from what was just completed
@@ -431,12 +665,43 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       setExpectedNext(newExpected);
       setLastCompletionTimestamp(now);
 
-      // Bug #15: Only start rest timer if appropriate (not within superset forward movement)
+      // Bug #17: If the new expected set was previously frozen (e.g. skipped then looped back via superset),
+      // clear its frozen value so the live timer takes over instead of showing a stale frozen time
+      if (newExpected) {
+        setFrozenElapsed(prev => {
+          const key = `${newExpected.exIndex}-${newExpected.setIndex}`;
+          if (prev[key] !== undefined) {
+            const copy = { ...prev };
+            delete copy[key];
+            return copy;
+          }
+          return prev;
+        });
+      }
+
+      // Start rest timer if appropriate
       if (newExpected && shouldStartRestTimer(exIndex, newExpected)) {
-        // Bug #2: Use the just-completed exercise's rest time for the timer
-        startRestTimer(exercise.name, exercise.restTime || 90);
+        const nextExName = updated.exercises[newExpected.exIndex]?.name || exercise.name;
+        const nextExercise = updated.exercises[newExpected.exIndex];
+        // Determine rest time based on context:
+        // - Round transition in superset → use last exercise's rest time
+        // - Same round with manual rest time → use the just-completed exercise's rest time
+        // - Non-superset → use the just-completed exercise's rest time
+        let restTime;
+        if (exercise.supersetId && nextExercise?.supersetId === exercise.supersetId) {
+          if (newExpected.setIndex > setIndex) {
+            // Round transition → use last exercise's rest time
+            restTime = getSupersetRestTime(exercise.supersetId);
+          } else {
+            // Same round, manual rest time on this exercise
+            restTime = exercise.restTime ?? 0;
+          }
+        } else {
+          restTime = exercise.restTime ?? 60;
+        }
+        startRestTimer(nextExName, restTime);
       } else if (restTimer.active) {
-        // Within superset - cancel any active rest timer
+        // No rest timer needed - cancel any active one
         setRestTimer({ active: false, time: 0, totalTime: 0, startedAt: null, exerciseName: '' });
       }
     } else {
@@ -514,6 +779,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     longPressTimerRef.current = setTimeout(() => {
       // Haptic feedback
       if (navigator.vibrate) navigator.vibrate(50);
+      closeNumpad(); // Dismiss number pad when starting drag
       setDragTouch({ exIndex, startY, currentY: startY, insertBefore: null });
       // Prevent scrolling while dragging
       e.target.closest('.workout-scroll-container')?.style.setProperty('overflow', 'hidden');
@@ -574,6 +840,12 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       const [movedExercise] = updated.exercises.splice(fromIndex, 1);
       updated.exercises.splice(toIndex, 0, movedExercise);
       setActiveWorkout(updated);
+
+      // Auto-scroll to moved exercise after render
+      setTimeout(() => {
+        const el = dragRefs.current[toIndex];
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
     }
     setDragTouch(null);
     // Re-enable scrolling
@@ -583,11 +855,17 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   // Legacy drag functions (kept for backward compatibility with grip handle)
   const startDrag = (exIndex) => {
     const exercise = activeWorkout.exercises[exIndex];
+    closeNumpad(); // Dismiss number pad
     setDragState({
       exIndex,
       phase: exercise.phase || 'workout',
       originalIndex: exIndex
     });
+    // Auto-scroll to the exercise being moved
+    setTimeout(() => {
+      const el = dragRefs.current[exIndex];
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
   };
 
   const cancelDrag = () => {
@@ -603,6 +881,12 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     updated.exercises.splice(adjustedTarget, 0, movedExercise);
     setActiveWorkout(updated);
     setDragState(null);
+
+    // Auto-scroll to the moved exercise's new position
+    setTimeout(() => {
+      const el = dragRefs.current[adjustedTarget];
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
   };
 
   const moveExercise = (fromIndex, toIndex, newPhase) => {
@@ -634,8 +918,13 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
 
   // Bug #5: Unlink restores original rest time
   const unlinkSuperset = (exIndex) => {
-    const updated = { ...activeWorkout };
+    // Deep clone to prevent stale state and position revert issues
+    const updated = {
+      ...activeWorkout,
+      exercises: activeWorkout.exercises.map(ex => ({ ...ex, sets: ex.sets.map(s => ({ ...s })) }))
+    };
     const exercise = updated.exercises[exIndex];
+    const oldSupersetId = exercise.supersetId;
 
     // Restore original rest time if it was saved before superset linking
     if (exercise._preSupersetRestTime) {
@@ -644,6 +933,19 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     }
 
     delete exercise.supersetId;
+
+    // Auto-disconnect if only one exercise remains in the superset
+    if (oldSupersetId) {
+      const remaining = updated.exercises.filter(ex => ex.supersetId === oldSupersetId);
+      if (remaining.length === 1) {
+        if (remaining[0]._preSupersetRestTime) {
+          remaining[0].restTime = remaining[0]._preSupersetRestTime;
+          delete remaining[0]._preSupersetRestTime;
+        }
+        delete remaining[0].supersetId;
+      }
+    }
+
     setActiveWorkout(updated);
   };
 
@@ -667,7 +969,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       if (i < supersetExercises.length - 1) {
         // Save original rest time before zeroing (for restore on unlink)
         if (!ex._preSupersetRestTime) {
-          ex._preSupersetRestTime = ex.restTime || 90;
+          ex._preSupersetRestTime = ex.restTime || 60;
         }
         ex.restTime = 0;
       }
@@ -735,7 +1037,15 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
 
   // Bug #15: Calculate pace tracking
   const getPaceInfo = () => {
-    if (!activeWorkout?.estimatedTime || !activeWorkout?.exercises?.length) return null;
+    if (!activeWorkout?.exercises?.length) return null;
+    // Calculate estimated time if not explicitly set
+    if (!activeWorkout.estimatedTime) {
+      activeWorkout.estimatedTime = Math.round(activeWorkout.exercises.reduce((total, ex) => {
+        const setTime = (ex.sets?.length || 3) * 45;
+        const restTime = (ex.sets?.length || 3) * (ex.restTime || 60);
+        return total + setTime + restTime;
+      }, 0) / 60);
+    }
 
     const totalSets = activeWorkout.exercises.reduce((sum, ex) => sum + (ex.sets?.length || 0), 0);
     const completedSets = activeWorkout.exercises.reduce((sum, ex) =>
@@ -811,7 +1121,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   const restTimePresets = [30, 45, 60, 90, 120, 180, 300];
 
   const renderExerciseCard = (exercise, exIndex, isSuperset = false, isFirst = true, isLast = true, supersetColorDot = null) => {
-    const exerciseRestTime = exercise.restTime || 90;
+    const exerciseRestTime = exercise.restTime ?? 60;
     const typeInfo = exercise.exerciseType ? EXERCISE_TYPES[exercise.exerciseType] : null;
     const phaseInfo = exercise.phase && exercise.phase !== 'workout' ? EXERCISE_PHASES[exercise.phase] : null;
 
@@ -829,7 +1139,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
           onClick={() => dropExercise(exIndex, exercise.phase || 'workout')}
         >
           <div className="flex items-center gap-3">
-            <span className="text-gray-500 text-sm">↓ Drop here</span>
+            <span className="text-cyan-500 text-sm">↓ Drop in front of:</span>
             <span className="text-white font-medium">{exercise.name}</span>
             <span className="text-gray-500 text-xs">({exercise.sets?.length || 0} sets)</span>
           </div>
@@ -864,18 +1174,36 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
             )}
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <button onClick={() => {
+                <button onClick={async () => {
                   setShowExerciseDetailModal(exercise);
-                  setExerciseDetailHistory(history);
+                  try {
+                    const workouts = await workoutDb.getAll();
+                    workouts.sort((a, b) => (b.date || b.startTime) - (a.date || a.startTime));
+                    setExerciseDetailHistory(workouts);
+                  } catch (err) {
+                    console.error('Error loading history:', err);
+                    setExerciseDetailHistory([]);
+                  }
                 }} className={`${c('font-semibold','text-sm font-medium')} text-white hover:text-cyan-400 transition-colors text-left`}>{exercise.name}</button>
                 {typeInfo && (
                   <span className={`text-xs px-2 py-0.5 rounded-full ${typeInfo.color}`}>{typeInfo.label}</span>
                 )}
-                {phaseInfo && !isSuperset && (
-                  <span className={`text-xs px-1.5 py-0.5 rounded ${phaseInfo.textColor} bg-white/5`}>{phaseInfo.icon}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-gray-400">{exercise.bodyPart}</span>
+                {(!isSuperset || isFirst) && (
+                  <select
+                    value={exercise.phase || 'workout'}
+                    onChange={(e) => setExercisePhase(exIndex, e.target.value)}
+                    className={`text-[10px] pl-1 pr-0 py-0.5 rounded bg-white/5 border-none outline-none appearance-none cursor-pointer ${EXERCISE_PHASES[exercise.phase || 'workout'].textColor}`}
+                    style={{ WebkitAppearance: 'none', backgroundImage: 'none' }}
+                  >
+                    {Object.entries(EXERCISE_PHASES).map(([key, phase]) => (
+                      <option key={key} value={key}>{phase.icon} {phase.label}</option>
+                    ))}
+                  </select>
                 )}
               </div>
-              <span className="text-xs text-gray-400">{exercise.bodyPart}</span>
             </div>
           </div>
           <div className="flex items-center gap-1">
@@ -1067,11 +1395,17 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70"></div>
       </div>
       <div className="relative z-10 flex flex-col h-full overflow-hidden">
-      <RestTimerBanner isActive={restTimer.active && !restTimerMinimized} timeRemaining={restTimer.time} totalTime={restTimer.totalTime}
+      <RestTimerBanner
+        isActive={restTimer.active}
+        isMinimized={restTimerMinimized}
+        timeRemaining={restTimer.time}
+        totalTime={restTimer.totalTime}
         exerciseName={restTimer.exerciseName}
         onSkip={() => setRestTimer({ active: false, time: 0, totalTime: 0, startedAt: null, exerciseName: '' })}
         onMinimize={() => setRestTimerMinimized(true)}
-        onAddTime={(delta) => setRestTimer(prev => ({ ...prev, totalTime: Math.max(0, prev.totalTime + delta) }))} />
+        onExpand={() => setRestTimerMinimized(false)}
+        onAddTime={(delta) => setRestTimer(prev => ({ ...prev, totalTime: Math.max(0, prev.totalTime + delta) }))}
+      />
 
       <div className="p-4 border-b border-white/10 bg-white/5 backdrop-blur-sm flex-shrink-0" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1rem)' }}>
         <div className="flex items-center justify-between">
@@ -1099,7 +1433,14 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
             <button onClick={() => setShowCancelConfirm(true)} className="text-red-400 hover:text-red-300 px-3 py-2 text-sm whitespace-nowrap">Cancel</button>
-            <button onClick={() => onFinish(activeWorkout)} className="bg-green-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-600 whitespace-nowrap">Finish</button>
+            <button onClick={() => {
+              const hasIncomplete = activeWorkout.exercises.some(ex => ex.sets.some(s => !s.completed));
+              if (hasIncomplete) {
+                setShowFinishConfirm(true);
+              } else {
+                onFinish(activeWorkout);
+              }
+            }} className="bg-green-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-600 whitespace-nowrap">Finish</button>
           </div>
         </div>
         {activeWorkout.notes && (
@@ -1221,6 +1562,64 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
           </div>
         </div>
       )}
+
+      {/* Finish Confirmation Modal (incomplete sets) */}
+      {showFinishConfirm && (() => {
+        const incompleteSets = activeWorkout.exercises.reduce((sum, ex) =>
+          sum + ex.sets.filter(s => !s.completed).length, 0);
+        return (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-sm">
+              <h3 className="text-lg font-semibold text-white mb-2">Incomplete Sets</h3>
+              <p className="text-gray-400 text-sm mb-6">
+                You have {incompleteSets} incomplete {incompleteSets === 1 ? 'set' : 'sets'}. How would you like to proceed?
+              </p>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => {
+                    // Remove incomplete sets and finish
+                    const cleaned = {
+                      ...activeWorkout,
+                      exercises: activeWorkout.exercises.map(ex => ({
+                        ...ex,
+                        sets: ex.sets.filter(s => s.completed)
+                      })).filter(ex => ex.sets.length > 0)
+                    };
+                    setShowFinishConfirm(false);
+                    onFinish(cleaned);
+                  }}
+                  className="w-full bg-green-600 text-white py-3 rounded-xl font-medium hover:bg-green-700"
+                >
+                  Finish &amp; Remove Incomplete
+                </button>
+                <button
+                  onClick={() => {
+                    // Auto-complete all incomplete sets and finish
+                    const autoCompleted = {
+                      ...activeWorkout,
+                      exercises: activeWorkout.exercises.map(ex => ({
+                        ...ex,
+                        sets: ex.sets.map(s => s.completed ? s : { ...s, completed: true, completedAt: Date.now() })
+                      }))
+                    };
+                    setShowFinishConfirm(false);
+                    onFinish(autoCompleted);
+                  }}
+                  className="w-full bg-cyan-600 text-white py-3 rounded-xl font-medium hover:bg-cyan-700"
+                >
+                  Auto-Complete All &amp; Finish
+                </button>
+                <button
+                  onClick={() => setShowFinishConfirm(false)}
+                  className="w-full bg-gray-800 text-gray-300 py-3 rounded-xl font-medium hover:bg-gray-700"
+                >
+                  Go Back
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {showExerciseModal && (
         <ExerciseSearchModal

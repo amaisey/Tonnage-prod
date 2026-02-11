@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Icons } from './components/Icons';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { defaultExercises } from './data/defaultExercises';
-import { defaultFolders, sampleTemplates } from './data/defaultTemplates';
+import { defaultFolders, sampleTemplates, TEMPLATE_VERSION } from './data/defaultTemplates';
 import { WorkoutScreen } from './components/WorkoutScreen';
 import { ExercisesScreen } from './components/ExercisesScreen';
 import { TemplatesScreen } from './components/TemplatesScreen';
@@ -12,9 +12,6 @@ import { SettingsModal } from './components/SettingsModal';
 import { WorkoutCompleteModal } from './components/SharedComponents';
 import { workoutDb } from './db/workoutDb';
 import { usePreviousExerciseData } from './hooks/useWorkoutDb';
-import { useAuth } from './hooks/useAuth';
-import { useSyncManager } from './hooks/useSyncManager';
-import { queueSyncEntry } from './lib/syncService';
 
 function App() {
   const [activeTab, setActiveTab] = useState('workout');
@@ -29,12 +26,30 @@ function App() {
   const [navbarHiddenByScroll, setNavbarHiddenByScroll] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false);
+  // Bug #3: Compact mode
   const [compactMode, setCompactMode] = useLocalStorage('compactMode', false);
   const lastScrollY = useRef(0);
 
-  // Auth & Sync
-  const { user, isFirstLogin, clearFirstLogin } = useAuth();
-  const { syncStatus, lastSynced, pendingCount, syncNow } = useSyncManager(user, isFirstLogin, clearFirstLogin);
+  // Bug #8: Check if default templates need updating when app loads
+  useEffect(() => {
+    const storedVersion = parseInt(localStorage.getItem('template-version') || '0', 10);
+    if (storedVersion < TEMPLATE_VERSION) {
+      // Remove old default templates (those with IDs starting with 'sbcp-', 'cc-', or 'ex-')
+      setTemplates(prev => prev.filter(t => {
+        const id = String(t.id);
+        return !id.startsWith('sbcp-') && !id.startsWith('cc-') && !id.startsWith('ex-');
+      }));
+      // Remove old default folders
+      setFolders(prev => prev.filter(f => {
+        const id = String(f.id);
+        return !id.startsWith('sbcp') && !id.startsWith('cc-') && !id.startsWith('examples');
+      }));
+      // Add fresh defaults
+      setTemplates(prev => [...prev, ...sampleTemplates]);
+      setFolders(prev => [...prev, ...defaultFolders]);
+      localStorage.setItem('template-version', String(TEMPLATE_VERSION));
+    }
+  }, []);
 
   // Reset navbar and numpad state when there's no active workout (empty state shouldn't hide navbar)
   useEffect(() => {
@@ -69,8 +84,9 @@ function App() {
   // Hook for getting previous exercise data from IndexedDB
   const { getPreviousData, clearCache } = usePreviousExerciseData();
 
-  // Start a workout from a template
+  // Start a workout from a template (blocked if one is already active)
   const startTemplate = useCallback(async (template) => {
+    if (activeWorkout) return; // Guard: don't overwrite an active workout
     // Bug #4: Auto-add template exercises not in library
     const exerciseNames = new Set(exercises.map(e => e.name));
     const newExercises = template.exercises
@@ -89,26 +105,30 @@ function App() {
     const exercisesWithPrevData = await Promise.all(
       template.exercises.map(async (ex) => {
         const prevData = await getPreviousData(ex.name);
-        // Mark all pre-filled values as proposed (50% opacity) until user edits them
-        const sets = prevData?.sets?.length > 0
-          ? prevData.sets.map(s => ({ ...s, completed: false, completedAt: undefined, proposed: true, manuallyEdited: false }))
-          : ex.sets.map(s => ({ ...s, completed: false, proposed: true, manuallyEdited: false }));
+        // Template is the source of truth for set count, values, and rest times.
+        // Previous data is only used for the PREV column display.
+        const sets = ex.sets.map(s => ({ ...s, completed: false, proposed: true, manuallyEdited: false }));
         return {
           ...ex,
-          // Use previous rest time if available, otherwise template's, otherwise default
-          restTime: prevData?.restTime || ex.restTime || 90,
-          // Preserve previous notes if they exist
-          notes: prevData?.notes || ex.notes || '',
+          restTime: ex.restTime ?? 60,
+          notes: ex.notes || '',
           sets,
           previousSets: prevData?.sets
         };
       })
     );
 
+    // Calculate estimated time if not explicitly set on template
+    const estimatedTime = template.estimatedTime || Math.round(template.exercises.reduce((total, ex) => {
+      const setTime = (ex.sets?.length || 3) * 45;
+      const restTime = (ex.sets?.length || 3) * (ex.restTime || 60);
+      return total + setTime + restTime;
+    }, 0) / 60);
+
     setActiveWorkout({
       name: template.name,
-      notes: template.notes || '', // Bug #5: Pass template notes to workout
-      estimatedTime: template.estimatedTime, // For pace tracking (Bug #15)
+      notes: template.notes || '',
+      estimatedTime,
       exercises: exercisesWithPrevData,
       startTime: Date.now()
     });
@@ -129,17 +149,11 @@ function App() {
 
     try {
       // Save to IndexedDB
-      const localId = await workoutDb.add(completedWorkoutData);
+      await workoutDb.add(completedWorkoutData);
       // Clear the previous data cache so next workout gets fresh data
       clearCache();
       // Trigger history refresh
       setHistoryRefreshKey(k => k + 1);
-
-      // Queue for cloud sync if logged in
-      if (user) {
-        await queueSyncEntry('workout', localId, 'create', completedWorkoutData);
-        syncNow();
-      }
     } catch (err) {
       console.error('Error saving workout:', err);
     }
@@ -171,6 +185,74 @@ function App() {
     setTemplates(prev => [...prev, newTemplate]);
   };
 
+  // Merge duplicate exercise into primary: rename in templates + history, delete duplicate
+  const handleMergeExercise = useCallback(async (primaryExercise, duplicateExercise) => {
+    const oldName = duplicateExercise.name;
+    const newName = primaryExercise.name;
+
+    // 1. Update templates: rename exercise references
+    setTemplates(prev => prev.map(template => ({
+      ...template,
+      exercises: template.exercises.map(ex =>
+        ex.name === oldName ? { ...ex, name: newName, bodyPart: primaryExercise.bodyPart, category: primaryExercise.category } : ex
+      )
+    })));
+
+    // 2. Update workout history in IndexedDB
+    try {
+      const allWorkouts = await workoutDb.getAll();
+      for (const workout of allWorkouts) {
+        const hasMatch = workout.exercises?.some(ex => ex.name === oldName);
+        if (hasMatch) {
+          const updated = {
+            ...workout,
+            exercises: workout.exercises.map(ex =>
+              ex.name === oldName ? { ...ex, name: newName } : ex
+            )
+          };
+          await workoutDb.put(updated);
+        }
+      }
+    } catch (err) {
+      console.error('Error updating history during merge:', err);
+    }
+
+    // 3. Remove the duplicate from exercises list
+    setExercises(prev => prev.filter(e => e.id !== duplicateExercise.id));
+
+    // 4. Refresh history view
+    setHistoryRefreshKey(k => k + 1);
+  }, [setTemplates, setExercises]);
+
+  // Refresh defaults: merge in new/updated default exercises and templates without touching user data
+  const handleRefreshDefaults = useCallback(() => {
+    // 1. Exercises: add any new defaults not already in the list (match by name, case-insensitive)
+    const existingNames = new Set(exercises.map(e => e.name.toLowerCase()));
+    const newExercises = defaultExercises.filter(de => !existingNames.has(de.name.toLowerCase()));
+    if (newExercises.length > 0) {
+      setExercises(prev => [...prev, ...newExercises]);
+    }
+
+    // 2. Templates & folders: remove old defaults and add fresh ones (same logic as version check)
+    setTemplates(prev => {
+      const userTemplates = prev.filter(t => {
+        const id = String(t.id);
+        return !id.startsWith('sbcp-') && !id.startsWith('cc-') && !id.startsWith('ex-');
+      });
+      return [...userTemplates, ...sampleTemplates];
+    });
+    setFolders(prev => {
+      const userFolders = prev.filter(f => {
+        const id = String(f.id);
+        return !id.startsWith('sbcp') && !id.startsWith('cc-') && !id.startsWith('examples');
+      });
+      return [...userFolders, ...defaultFolders];
+    });
+    localStorage.setItem('template-version', String(TEMPLATE_VERSION));
+
+    return { newExercises: newExercises.length };
+  }, [exercises, setExercises, setTemplates, setFolders]);
+
   // Handle restoring data from backup
   const handleRestoreData = useCallback((data) => {
     if (data.exercises?.length > 0) setExercises(data.exercises);
@@ -188,8 +270,8 @@ function App() {
     { id: 'settings', icon: Icons.Settings, label: 'Settings' },
   ];
 
-  // Hide navbar when numpad is open, scrolling down, or history modal is open
-  const shouldHideNavbar = isNumpadOpen || navbarHiddenByScroll || isHistoryModalOpen || isTemplatesModalOpen;
+  // Hide navbar only during active workout interactions (numpad, scroll) or when modals are fullscreen
+  const shouldHideNavbar = isNumpadOpen || (navbarHiddenByScroll && activeTab === 'workout') || isHistoryModalOpen || isTemplatesModalOpen;
 
   return (
     <HistoryMigration>
@@ -214,8 +296,7 @@ function App() {
               onAddExercise={ex => setExercises([...exercises, ex])}
               onUpdateExercise={ex => setExercises(exercises.map(e => e.id === ex.id ? ex : e))}
               onDeleteExercise={id => setExercises(exercises.filter(e => e.id !== id))}
-              onScroll={handleScroll}
-              navVisible={!shouldHideNavbar}
+              onMergeExercise={handleMergeExercise}
             />
           )}
           {activeTab === 'templates' && (
@@ -223,6 +304,7 @@ function App() {
               templates={templates}
               folders={folders}
               onStartTemplate={startTemplate}
+              hasActiveWorkout={!!activeWorkout}
               onImport={t => setTemplates(prev => [...prev, t])}
               onBulkImport={arr => setTemplates(prev => [...prev, ...arr])}
               onUpdateTemplate={t => setTemplates(prev => prev.map(x => x.id === t.id ? t : x))}
@@ -232,16 +314,12 @@ function App() {
               onDeleteFolder={id => setFolders(prev => prev.filter(f => f.id !== id))}
               onAddExercises={arr => setExercises(prev => [...prev, ...arr])}
               exercises={exercises}
-              onScroll={handleScroll}
-              navVisible={!shouldHideNavbar}
               onModalStateChange={setIsTemplatesModalOpen}
             />
           )}
           {activeTab === 'history' && (
             <HistoryScreen
               onRefreshNeeded={historyRefreshKey}
-              onScroll={handleScroll}
-              navVisible={!shouldHideNavbar}
               onModalStateChange={setIsHistoryModalOpen}
             />
           )}
@@ -289,14 +367,7 @@ function App() {
             templates={templates}
             folders={folders}
             onRestoreData={handleRestoreData}
-            compactMode={compactMode}
-            setCompactMode={setCompactMode}
-            user={user}
-            syncStatus={syncStatus}
-            lastSynced={lastSynced}
-            pendingCount={pendingCount}
-            onSyncNow={syncNow}
-            onHistoryRefresh={() => setHistoryRefreshKey(k => k + 1)}
+            onRefreshDefaults={handleRefreshDefaults}
           />
         )}
       </div>

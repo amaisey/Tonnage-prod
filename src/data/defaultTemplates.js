@@ -1,6895 +1,4290 @@
-// Correcting Course - Full 4-Week Phase 1 Program
+// Examples and Shoulder & Back Correction Program - Default Templates
+// Auto-generated from JSON source files
+// CRITICAL: All exercise sets arrays are preserved from source
+
+export const TEMPLATE_VERSION = 3;
 
 export const defaultFolders = [
-  // Correcting Course - Phase 1 (4 weeks)
-  { id: 'correcting-course', name: 'Correcting Course', parentId: 'root' },
-  { id: 'cc-p1-w1', name: 'P1 - Week 1', parentId: 'correcting-course' },
-  { id: 'cc-p1-w2', name: 'P1 - Week 2', parentId: 'correcting-course' },
-  { id: 'cc-p1-w3', name: 'P1 - Week 3', parentId: 'correcting-course' },
-  { id: 'cc-p1-w4', name: 'P1 - Week 4', parentId: 'correcting-course' },
+  { id: 'examples', name: 'Examples', parentId: 'root' },
+  { id: 'examples-focused', name: 'Focused Splits', parentId: 'examples' },
+  { id: 'examples-balanced', name: 'Balanced Splits', parentId: 'examples' },
+  { id: 'examples-minimal', name: 'Minimal Equipment', parentId: 'examples' },
+  {"id": "sbcp", "name": "Shoulder and Back Correction Program", "parentId": null, "type": "program"},
+  {"id": "sbcp-p1", "name": "Phase 1", "parentId": "sbcp", "type": "phase"},
+  {"id": "sbcp-p2", "name": "Phase 2", "parentId": "sbcp", "type": "phase"},
+  {"id": "sbcp-p3", "name": "Phase 3", "parentId": "sbcp", "type": "phase"},
+  {"id": "sbcp-p1-w1", "name": "Week 1", "parentId": "sbcp-p1", "type": "week"},
+  {"id": "sbcp-p1-w2", "name": "Week 2", "parentId": "sbcp-p1", "type": "week"},
+  {"id": "sbcp-p1-w3", "name": "Week 3", "parentId": "sbcp-p1", "type": "week"},
+  {"id": "sbcp-p1-w4", "name": "Week 4", "parentId": "sbcp-p1", "type": "week"},
+  {"id": "sbcp-p2-w5", "name": "Week 5", "parentId": "sbcp-p2", "type": "week"},
+  {"id": "sbcp-p2-w6", "name": "Week 6", "parentId": "sbcp-p2", "type": "week"},
+  {"id": "sbcp-p2-w7", "name": "Week 7", "parentId": "sbcp-p2", "type": "week"},
+  {"id": "sbcp-p2-w8", "name": "Week 8", "parentId": "sbcp-p2", "type": "week"},
+  {"id": "sbcp-p3-w9", "name": "Week 9", "parentId": "sbcp-p3", "type": "week"},
+  {"id": "sbcp-p3-w10", "name": "Week 10", "parentId": "sbcp-p3", "type": "week"},
+  {"id": "sbcp-p3-w11", "name": "Week 11", "parentId": "sbcp-p3", "type": "week"},
+  {"id": "sbcp-p3-w12", "name": "Week 12", "parentId": "sbcp-p3", "type": "week"}
 ];
 
 export const sampleTemplates = [
   {
-    "id": "cc-1000",
-    "name": "P1/W1/D1 - Push",
-    "folderId": "cc-p1-w1",
-    "estimatedTime": 65,
-    "notes": "75% intensity. Incline Dumbbell Press, Cable Fly. Red band.",
+    id: 'ex-1000',
+    name: 'Push Day',
+    folderId: 'examples-focused',
+    estimatedTime: 60,
+    exercises: [
+      {
+        name: 'Jumping Jacks',
+        bodyPart: 'Full Body',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 30 },
+        ],
+      },
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Band Pull-Aparts',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+        ],
+      },
+      {
+        name: 'Push-Ups',
+        bodyPart: 'Chest',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Bench Press',
+        bodyPart: 'Chest',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+        ],
+        highlight: true,
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Face Pull',
+        bodyPart: 'Shoulders',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 50, reps: 12 },
+          { weight: 50, reps: 12 },
+          { weight: 50, reps: 12 },
+          { weight: 50, reps: 12 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Incline DB Press',
+        bodyPart: 'Chest',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 50, reps: 10 },
+          { weight: 50, reps: 10 },
+          { weight: 50, reps: 10 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Cable Fly',
+        bodyPart: 'Chest',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 30, reps: 12 },
+          { weight: 30, reps: 12 },
+          { weight: 30, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Overhead Press',
+        bodyPart: 'Shoulders',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 95, reps: 8 },
+          { weight: 95, reps: 8 },
+          { weight: 95, reps: 8 },
+        ],
+      },
+      {
+        name: 'Lateral Raise',
+        bodyPart: 'Shoulders',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Overhead Triceps Extension',
+        bodyPart: 'Arms',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 35, reps: 12 },
+          { weight: 35, reps: 12 },
+          { weight: 35, reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Triceps Pushdown',
+        bodyPart: 'Arms',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 40, reps: 12 },
+          { weight: 40, reps: 12 },
+          { weight: 40, reps: 12 },
+        ],
+      },
+      {
+        name: 'Doorway Pec Stretch',
+        bodyPart: 'Chest',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Triceps Stretch',
+        bodyPart: 'Arms',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-1001',
+    name: 'Pull Day',
+    folderId: 'examples-focused',
+    estimatedTime: 60,
+    exercises: [
+      {
+        name: 'Band Pull-Aparts',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+        ],
+      },
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Cat-Cow',
+        bodyPart: 'Back',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 10 },
+        ],
+      },
+      {
+        name: 'Scapular Pull-Ups',
+        bodyPart: 'Back',
+        category: 'assisted_bodyweight',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 8 },
+        ],
+      },
+      {
+        name: 'Barbell Row',
+        bodyPart: 'Back',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+        ],
+        highlight: true,
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Pull-Ups',
+        bodyPart: 'Back',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { reps: 8 },
+          { reps: 8 },
+          { reps: 8 },
+          { reps: 8 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Seated Cable Row',
+        bodyPart: 'Back',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 90, reps: 12 },
+          { weight: 90, reps: 12 },
+          { weight: 90, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Face Pull',
+        bodyPart: 'Shoulders',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Lat Pulldown',
+        bodyPart: 'Back',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 100, reps: 10 },
+          { weight: 100, reps: 10 },
+          { weight: 100, reps: 10 },
+        ],
+      },
+      {
+        name: 'Dumbbell Curl',
+        bodyPart: 'Arms',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Hammer Curl',
+        bodyPart: 'Arms',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Child\'s Pose',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Lat Stretch',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-1002',
+    name: 'Leg Day - Quads',
+    folderId: 'examples-focused',
+    estimatedTime: 65,
+    exercises: [
+      {
+        name: 'Bodyweight Squat',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Leg Swings',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Walking Lunges',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 10 },
+        ],
+      },
+      {
+        name: 'Barbell Squat',
+        bodyPart: 'Legs',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 185, reps: 6 },
+          { weight: 185, reps: 6 },
+          { weight: 185, reps: 6 },
+          { weight: 185, reps: 6 },
+        ],
+        highlight: true,
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Leg Curl',
+        bodyPart: 'Legs',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 70, reps: 12 },
+          { weight: 70, reps: 12 },
+          { weight: 70, reps: 12 },
+          { weight: 70, reps: 12 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Leg Press',
+        bodyPart: 'Legs',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 225, reps: 12 },
+          { weight: 225, reps: 12 },
+          { weight: 225, reps: 12 },
+        ],
+      },
+      {
+        name: 'Bulgarian Split Squat',
+        bodyPart: 'Legs',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+        ],
+      },
+      {
+        name: 'Leg Extension',
+        bodyPart: 'Legs',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 80, reps: 12 },
+          { weight: 80, reps: 12 },
+          { weight: 80, reps: 12 },
+          { weight: 80, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Standing Calf Raise',
+        bodyPart: 'Legs',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 80, reps: 15 },
+          { weight: 80, reps: 15 },
+          { weight: 80, reps: 15 },
+          { weight: 80, reps: 15 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Quad Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Pigeon Pose',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 90 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-1003',
+    name: 'Leg Day - Posterior',
+    folderId: 'examples-focused',
+    estimatedTime: 65,
+    exercises: [
+      {
+        name: 'Hip Circles',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Band Pull-Throughs',
+        bodyPart: 'Legs',
+        category: 'band',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+        ],
+      },
+      {
+        name: 'Bodyweight Glute Bridge',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Deadlift',
+        bodyPart: 'Legs',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 180,
+        sets: [
+          { weight: 225, reps: 5 },
+          { weight: 225, reps: 5 },
+          { weight: 225, reps: 5 },
+          { weight: 225, reps: 5 },
+        ],
+        highlight: true,
+      },
+      {
+        name: 'Romanian Deadlift',
+        bodyPart: 'Legs',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 135, reps: 10 },
+          { weight: 135, reps: 10 },
+          { weight: 135, reps: 10 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Dead Bug',
+        bodyPart: 'Core',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { reps: 15 },
+          { reps: 15 },
+          { reps: 15 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Hip Thrust',
+        bodyPart: 'Legs',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 155, reps: 10 },
+          { weight: 155, reps: 10 },
+          { weight: 155, reps: 10 },
+        ],
+      },
+      {
+        name: 'Seated Leg Curl',
+        bodyPart: 'Legs',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 80, reps: 12 },
+          { weight: 80, reps: 12 },
+          { weight: 80, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Pallof Press',
+        bodyPart: 'Core',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 50, reps: 15 },
+          { weight: 50, reps: 15 },
+          { weight: 50, reps: 15 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Hamstring Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Hip Flexor Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 90 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-1004',
+    name: 'Shoulders & Arms',
+    folderId: 'examples-focused',
+    estimatedTime: 55,
+    exercises: [
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Band Dislocates',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { bandColor: 'red', reps: 10 },
+        ],
+      },
+      {
+        name: 'Band External Rotation',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+        ],
+      },
+      {
+        name: 'Overhead Press',
+        bodyPart: 'Shoulders',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 95, reps: 8 },
+          { weight: 95, reps: 8 },
+          { weight: 95, reps: 8 },
+        ],
+        highlight: true,
+      },
+      {
+        name: 'Arnold Press',
+        bodyPart: 'Shoulders',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Face Pull',
+        bodyPart: 'Shoulders',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Lateral Raise',
+        bodyPart: 'Shoulders',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Rear Delt Fly',
+        bodyPart: 'Shoulders',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Barbell Curl',
+        bodyPart: 'Arms',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 55, reps: 10 },
+          { weight: 55, reps: 10 },
+          { weight: 55, reps: 10 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Skullcrusher',
+        bodyPart: 'Arms',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 55, reps: 10 },
+          { weight: 55, reps: 10 },
+          { weight: 55, reps: 10 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Incline Dumbbell Curl',
+        bodyPart: 'Arms',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 20, reps: 12 },
+          { weight: 20, reps: 12 },
+          { weight: 20, reps: 12 },
+        ],
+        supersetId: 'SS4',
+      },
+      {
+        name: 'Triceps Pushdown',
+        bodyPart: 'Arms',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 40, reps: 12 },
+          { weight: 40, reps: 12 },
+          { weight: 40, reps: 12 },
+        ],
+        supersetId: 'SS4',
+      },
+      {
+        name: 'Shoulder Stretch',
+        bodyPart: 'Shoulders',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Triceps Stretch',
+        bodyPart: 'Arms',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-1005',
+    name: 'Full Body Strength',
+    folderId: 'examples-focused',
+    estimatedTime: 70,
+    exercises: [
+      {
+        name: 'Jumping Jacks',
+        bodyPart: 'Full Body',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 30 },
+        ],
+      },
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Bodyweight Squat',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Band Pull-Aparts',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+        ],
+      },
+      {
+        name: 'Barbell Squat',
+        bodyPart: 'Legs',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 180,
+        sets: [
+          { weight: 185, reps: 6 },
+          { weight: 185, reps: 6 },
+          { weight: 185, reps: 6 },
+        ],
+        highlight: true,
+      },
+      {
+        name: 'Bench Press',
+        bodyPart: 'Chest',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 150,
+        sets: [
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+        ],
+        highlight: true,
+      },
+      {
+        name: 'Barbell Row',
+        bodyPart: 'Back',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Pull-Ups',
+        bodyPart: 'Back',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { reps: 8 },
+          { reps: 8 },
+          { reps: 8 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Romanian Deadlift',
+        bodyPart: 'Legs',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 135, reps: 10 },
+          { weight: 135, reps: 10 },
+          { weight: 135, reps: 10 },
+        ],
+      },
+      {
+        name: 'Plank',
+        bodyPart: 'Core',
+        category: 'duration',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { duration: 45 },
+          { duration: 45 },
+          { duration: 45 },
+        ],
+      },
+      {
+        name: 'Child\'s Pose',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Quad Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Chest Stretch',
+        bodyPart: 'Chest',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-2000',
+    name: 'Upper Push + Pull Accessories',
+    folderId: 'examples-balanced',
+    estimatedTime: 60,
+    exercises: [
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Band Pull-Aparts',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+        ],
+      },
+      {
+        name: 'Push-Ups',
+        bodyPart: 'Chest',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Bench Press',
+        bodyPart: 'Chest',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+        ],
+        highlight: true,
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Face Pull',
+        bodyPart: 'Shoulders',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Overhead Press',
+        bodyPart: 'Shoulders',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 95, reps: 8 },
+          { weight: 95, reps: 8 },
+          { weight: 95, reps: 8 },
+        ],
+      },
+      {
+        name: 'Incline DB Press',
+        bodyPart: 'Chest',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 50, reps: 10 },
+          { weight: 50, reps: 10 },
+          { weight: 50, reps: 10 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Seated Cable Row',
+        bodyPart: 'Back',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 90, reps: 12 },
+          { weight: 90, reps: 12 },
+          { weight: 90, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Lateral Raise',
+        bodyPart: 'Shoulders',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Dumbbell Curl',
+        bodyPart: 'Arms',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Triceps Pushdown',
+        bodyPart: 'Arms',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 40, reps: 12 },
+          { weight: 40, reps: 12 },
+          { weight: 40, reps: 12 },
+        ],
+      },
+      {
+        name: 'Doorway Pec Stretch',
+        bodyPart: 'Chest',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Lat Stretch',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-2001',
+    name: 'Upper Pull + Push Accessories',
+    folderId: 'examples-balanced',
+    estimatedTime: 60,
+    exercises: [
+      {
+        name: 'Band Pull-Aparts',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+        ],
+      },
+      {
+        name: 'Cat-Cow',
+        bodyPart: 'Back',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 10 },
+        ],
+      },
+      {
+        name: 'Scapular Pull-Ups',
+        bodyPart: 'Back',
+        category: 'assisted_bodyweight',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 8 },
+        ],
+      },
+      {
+        name: 'Barbell Row',
+        bodyPart: 'Back',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+        ],
+        highlight: true,
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Pull-Ups',
+        bodyPart: 'Back',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { reps: 8 },
+          { reps: 8 },
+          { reps: 8 },
+          { reps: 8 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Lat Pulldown',
+        bodyPart: 'Back',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 100, reps: 10 },
+          { weight: 100, reps: 10 },
+          { weight: 100, reps: 10 },
+        ],
+      },
+      {
+        name: 'Seated Cable Row',
+        bodyPart: 'Back',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 90, reps: 12 },
+          { weight: 90, reps: 12 },
+          { weight: 90, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Chest Fly',
+        bodyPart: 'Chest',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Face Pull',
+        bodyPart: 'Shoulders',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Triceps Pushdown',
+        bodyPart: 'Arms',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 40, reps: 12 },
+          { weight: 40, reps: 12 },
+          { weight: 40, reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Hammer Curl',
+        bodyPart: 'Arms',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+        ],
+      },
+      {
+        name: 'Child\'s Pose',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Doorway Pec Stretch',
+        bodyPart: 'Chest',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-2002',
+    name: 'Lower Body + Core',
+    folderId: 'examples-balanced',
+    estimatedTime: 65,
+    exercises: [
+      {
+        name: 'Bodyweight Squat',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Leg Swings',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Hip Circles',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Barbell Squat',
+        bodyPart: 'Legs',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 180,
+        sets: [
+          { weight: 185, reps: 6 },
+          { weight: 185, reps: 6 },
+          { weight: 185, reps: 6 },
+          { weight: 185, reps: 6 },
+        ],
+        highlight: true,
+      },
+      {
+        name: 'Romanian Deadlift',
+        bodyPart: 'Legs',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 135, reps: 10 },
+          { weight: 135, reps: 10 },
+          { weight: 135, reps: 10 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Hanging Leg Raise',
+        bodyPart: 'Core',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { reps: 12 },
+          { reps: 12 },
+          { reps: 12 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Leg Press',
+        bodyPart: 'Legs',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 225, reps: 12 },
+          { weight: 225, reps: 12 },
+          { weight: 225, reps: 12 },
+        ],
+      },
+      {
+        name: 'Walking Lunges',
+        bodyPart: 'Legs',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Russian Twist',
+        bodyPart: 'Core',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { reps: 15 },
+          { reps: 15 },
+          { reps: 15 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Standing Calf Raise',
+        bodyPart: 'Legs',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 80, reps: 15 },
+          { weight: 80, reps: 15 },
+          { weight: 80, reps: 15 },
+          { weight: 80, reps: 15 },
+        ],
+      },
+      {
+        name: 'Quad Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Hamstring Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Hip Flexor Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 90 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-2003',
+    name: 'Push/Pull Combo',
+    folderId: 'examples-balanced',
+    estimatedTime: 60,
+    exercises: [
+      {
+        name: 'Jumping Jacks',
+        bodyPart: 'Full Body',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 30 },
+        ],
+      },
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Band Pull-Aparts',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+        ],
+      },
+      {
+        name: 'Bench Press',
+        bodyPart: 'Chest',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+        ],
+        highlight: true,
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Barbell Row',
+        bodyPart: 'Back',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Overhead Press',
+        bodyPart: 'Shoulders',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 95, reps: 8 },
+          { weight: 95, reps: 8 },
+          { weight: 95, reps: 8 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Lat Pulldown',
+        bodyPart: 'Back',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 100, reps: 10 },
+          { weight: 100, reps: 10 },
+          { weight: 100, reps: 10 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Incline DB Press',
+        bodyPart: 'Chest',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 50, reps: 10 },
+          { weight: 50, reps: 10 },
+          { weight: 50, reps: 10 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Seated Cable Row',
+        bodyPart: 'Back',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 90, reps: 12 },
+          { weight: 90, reps: 12 },
+          { weight: 90, reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Lateral Raise',
+        bodyPart: 'Shoulders',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+        ],
+        supersetId: 'SS4',
+      },
+      {
+        name: 'Face Pull',
+        bodyPart: 'Shoulders',
+        category: 'machine',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+          { weight: 55, reps: 15 },
+        ],
+        supersetId: 'SS4',
+      },
+      {
+        name: 'Doorway Pec Stretch',
+        bodyPart: 'Chest',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Child\'s Pose',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-2004',
+    name: 'Full Body Balanced',
+    folderId: 'examples-balanced',
+    estimatedTime: 70,
+    exercises: [
+      {
+        name: 'Jumping Jacks',
+        bodyPart: 'Full Body',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 30 },
+        ],
+      },
+      {
+        name: 'Bodyweight Squat',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Cat-Cow',
+        bodyPart: 'Back',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 10 },
+        ],
+      },
+      {
+        name: 'Barbell Squat',
+        bodyPart: 'Legs',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 180,
+        sets: [
+          { weight: 185, reps: 8 },
+          { weight: 185, reps: 8 },
+          { weight: 185, reps: 8 },
+        ],
+        highlight: true,
+      },
+      {
+        name: 'Bench Press',
+        bodyPart: 'Chest',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+          { weight: 155, reps: 8 },
+        ],
+        highlight: true,
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Barbell Row',
+        bodyPart: 'Back',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Romanian Deadlift',
+        bodyPart: 'Legs',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 120,
+        sets: [
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+          { weight: 135, reps: 8 },
+        ],
+      },
+      {
+        name: 'Overhead Press',
+        bodyPart: 'Shoulders',
+        category: 'barbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 95, reps: 8 },
+          { weight: 95, reps: 8 },
+          { weight: 95, reps: 8 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Pull-Ups',
+        bodyPart: 'Back',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { reps: 8 },
+          { reps: 8 },
+          { reps: 8 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Plank',
+        bodyPart: 'Core',
+        category: 'duration',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { duration: 45 },
+          { duration: 45 },
+        ],
+      },
+      {
+        name: 'Quad Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Chest Stretch',
+        bodyPart: 'Chest',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Child\'s Pose',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-3000',
+    name: 'DB Upper Body',
+    folderId: 'examples-minimal',
+    estimatedTime: 50,
+    exercises: [
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Band Pull-Aparts',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+        ],
+      },
+      {
+        name: 'Push-Ups',
+        bodyPart: 'Chest',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Dumbbell Bench Press',
+        bodyPart: 'Chest',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+        ],
+        highlight: true,
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Dumbbell Row',
+        bodyPart: 'Back',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Dumbbell Overhead Press',
+        bodyPart: 'Shoulders',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+        ],
+      },
+      {
+        name: 'Incline DB Fly',
+        bodyPart: 'Chest',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 20, reps: 12 },
+          { weight: 20, reps: 12 },
+          { weight: 20, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Reverse Fly',
+        bodyPart: 'Shoulders',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Dumbbell Curl',
+        bodyPart: 'Arms',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Overhead Triceps Extension',
+        bodyPart: 'Arms',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 30, reps: 12 },
+          { weight: 30, reps: 12 },
+          { weight: 30, reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Doorway Pec Stretch',
+        bodyPart: 'Chest',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Shoulder Stretch',
+        bodyPart: 'Shoulders',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-3001',
+    name: 'DB Lower Body',
+    folderId: 'examples-minimal',
+    estimatedTime: 50,
+    exercises: [
+      {
+        name: 'Bodyweight Squat',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Leg Swings',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Glute Bridge',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Goblet Squat',
+        bodyPart: 'Legs',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 50, reps: 12 },
+          { weight: 50, reps: 12 },
+          { weight: 50, reps: 12 },
+          { weight: 50, reps: 12 },
+        ],
+        highlight: true,
+      },
+      {
+        name: 'Dumbbell Romanian Deadlift',
+        bodyPart: 'Legs',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Walking Lunges',
+        bodyPart: 'Legs',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 25, reps: 10 },
+          { weight: 25, reps: 10 },
+          { weight: 25, reps: 10 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Step-Ups',
+        bodyPart: 'Legs',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+        ],
+      },
+      {
+        name: 'Dumbbell Calf Raise',
+        bodyPart: 'Legs',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 40, reps: 15 },
+          { weight: 40, reps: 15 },
+          { weight: 40, reps: 15 },
+          { weight: 40, reps: 15 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Bodyweight Glute Bridge',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { reps: 15 },
+          { reps: 15 },
+          { reps: 15 },
+          { reps: 15 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Quad Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Hamstring Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Hip Flexor Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 90 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-3002',
+    name: 'Bodyweight & Bands',
+    folderId: 'examples-minimal',
+    estimatedTime: 45,
+    exercises: [
+      {
+        name: 'Jumping Jacks',
+        bodyPart: 'Full Body',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 30 },
+        ],
+      },
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Hip Circles',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Push-Ups',
+        bodyPart: 'Chest',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+          { reps: 15 },
+          { reps: 15 },
+          { reps: 15 },
+        ],
+        highlight: true,
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Band Row',
+        bodyPart: 'Back',
+        category: 'band',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+          { bandColor: 'red', reps: 15 },
+          { bandColor: 'red', reps: 15 },
+          { bandColor: 'red', reps: 15 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Bodyweight Squat',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { reps: 20 },
+          { reps: 20 },
+          { reps: 20 },
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Pike Push-Ups',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { reps: 10 },
+          { reps: 10 },
+          { reps: 10 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Band Pull-Aparts',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+          { bandColor: 'red', reps: 15 },
+          { bandColor: 'red', reps: 15 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Walking Lunges',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { reps: 12 },
+          { reps: 12 },
+          { reps: 12 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Band External Rotation',
+        bodyPart: 'Shoulders',
+        category: 'band',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { bandColor: 'red', reps: 15 },
+          { bandColor: 'red', reps: 15 },
+          { bandColor: 'red', reps: 15 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Plank',
+        bodyPart: 'Core',
+        category: 'duration',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { duration: 45 },
+          { duration: 45 },
+          { duration: 45 },
+        ],
+      },
+      {
+        name: 'Glute Bridge',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { reps: 15 },
+          { reps: 15 },
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Child\'s Pose',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Quad Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Chest Stretch',
+        bodyPart: 'Chest',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-3003',
+    name: 'Full Body Dumbbell',
+    folderId: 'examples-minimal',
+    estimatedTime: 55,
+    exercises: [
+      {
+        name: 'Jumping Jacks',
+        bodyPart: 'Full Body',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 30 },
+        ],
+      },
+      {
+        name: 'Bodyweight Squat',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+        ],
+      },
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Goblet Squat',
+        bodyPart: 'Legs',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 45, reps: 12 },
+          { weight: 45, reps: 12 },
+          { weight: 45, reps: 12 },
+        ],
+        highlight: true,
+      },
+      {
+        name: 'Dumbbell Bench Press',
+        bodyPart: 'Chest',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Dumbbell Row',
+        bodyPart: 'Back',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Dumbbell Romanian Deadlift',
+        bodyPart: 'Legs',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 90,
+        sets: [
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+          { weight: 40, reps: 10 },
+        ],
+      },
+      {
+        name: 'Dumbbell Overhead Press',
+        bodyPart: 'Shoulders',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+          { weight: 30, reps: 10 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Dumbbell Curl',
+        bodyPart: 'Arms',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+          { weight: 25, reps: 12 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Dumbbell Lateral Raise',
+        bodyPart: 'Shoulders',
+        category: 'dumbbell',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+          { weight: 15, reps: 12 },
+        ],
+      },
+      {
+        name: 'Quad Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Chest Stretch',
+        bodyPart: 'Chest',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Child\'s Pose',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ex-3004',
+    name: 'Hotel Room HIIT',
+    folderId: 'examples-minimal',
+    estimatedTime: 40,
+    exercises: [
+      {
+        name: 'Jumping Jacks',
+        bodyPart: 'Full Body',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 30 },
+        ],
+      },
+      {
+        name: 'High Knees',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Arm Circles',
+        bodyPart: 'Shoulders',
+        category: 'reps_only',
+        phase: 'warmup',
+        restTime: 30,
+        sets: [
+          { reps: 20 },
+        ],
+      },
+      {
+        name: 'Burpees',
+        bodyPart: 'Full Body',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { reps: 10 },
+          { reps: 10 },
+          { reps: 10 },
+          { reps: 10 },
+        ],
+        highlight: true,
+      },
+      {
+        name: 'Mountain Climbers',
+        bodyPart: 'Core',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+          { reps: 20 },
+          { reps: 20 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Push-Ups',
+        bodyPart: 'Chest',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { reps: 15 },
+          { reps: 15 },
+          { reps: 15 },
+        ],
+        supersetId: 'SS1',
+      },
+      {
+        name: 'Jump Squats',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { reps: 15 },
+          { reps: 15 },
+          { reps: 15 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Plank',
+        bodyPart: 'Core',
+        category: 'duration',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { duration: 30 },
+          { duration: 30 },
+          { duration: 30 },
+        ],
+        supersetId: 'SS2',
+      },
+      {
+        name: 'Walking Lunges',
+        bodyPart: 'Legs',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { reps: 12 },
+          { reps: 12 },
+          { reps: 12 },
+        ],
+      },
+      {
+        name: 'Bicycle Crunch',
+        bodyPart: 'Core',
+        category: 'reps_only',
+        phase: 'workout',
+        restTime: 0,
+        sets: [
+          { reps: 20 },
+          { reps: 20 },
+          { reps: 20 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Superman Hold',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'workout',
+        restTime: 60,
+        sets: [
+          { duration: 30 },
+          { duration: 30 },
+          { duration: 30 },
+        ],
+        supersetId: 'SS3',
+      },
+      {
+        name: 'Child\'s Pose',
+        bodyPart: 'Back',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Quad Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+      {
+        name: 'Hamstring Stretch',
+        bodyPart: 'Legs',
+        category: 'duration',
+        phase: 'cooldown',
+        restTime: 0,
+        sets: [
+          { duration: 60 },
+        ],
+      },
+    ],
+  },
+  {
+    "id": "sbcp-1",
+    "name": "P1/W1/D1 - Pull",
+    "folderId": "sbcp-p1-w1",
+    "notes": "Week 1 (75%). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Dislocates",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Cat-Cow",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Push-Up to Down Dog",
-        "bodyPart": "Chest",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 8
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Scapular Push-Ups",
-        "bodyPart": "Back",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ]
-      },
-      {
-        "name": "Bench Press",
-        "bodyPart": "Chest",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Bench Press",
-        "bodyPart": "Chest",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 220,
-            "reps": 5
-          },
-          {
-            "weight": 220,
-            "reps": 5
-          },
-          {
-            "weight": 220,
-            "reps": 5
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "75%",
-        "highlight": true
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 150,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Overhead Press",
-        "bodyPart": "Shoulders",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 100,
-            "reps": 8
-          },
-          {
-            "weight": 100,
-            "reps": 8
-          },
-          {
-            "weight": 100,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS2",
-        "highlight": true
-      },
-      {
-        "name": "Band External Rotation",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Incline Dumbbell Press",
-        "bodyPart": "Chest",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 55,
-            "reps": 10
-          },
-          {
-            "weight": 55,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "weight": 55,
-            "reps": 20
-          },
-          {
-            "weight": 55,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Cable Fly",
-        "bodyPart": "Chest",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 35,
-            "reps": 12
-          },
-          {
-            "weight": 35,
-            "reps": 12
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 55,
-            "reps": 20
-          },
-          {
-            "weight": 55,
-            "reps": 20
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Triceps Pushdown",
-        "bodyPart": "Arms",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 12
-          },
-          {
-            "weight": 45,
-            "reps": 12
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      },
-      {
-        "name": "Upper Trap Stretch",
-        "bodyPart": "Shoulders",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 45
-          },
-          {
-            "duration": 45
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "reps_only", "phase": "workout", "highlight": true, "notes": "Bodyweight", "restTime": 120, "sets": [{"reps": 8}, {"reps": 8}, {"reps": 8}]},
+      {"name": "Barbell Row", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 135, "reps": 12}, {"weight": 135, "reps": 10}, {"weight": 135, "reps": 8}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Seated Cable Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 20, "bandColor": "red"}, {"reps": 20, "bandColor": "red"}, {"reps": 20, "bandColor": "red"}]},
+      {"name": "Hammer Curl", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 10}, {"weight": 25, "reps": 10}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 135, "reps": 12}, {"weight": 135, "reps": 12}, {"weight": 135, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1001",
-    "name": "P1/W1/D2 - Legs (Quad)",
-    "folderId": "cc-p1-w1",
-    "estimatedTime": 70,
-    "notes": "75% intensity. Front Squat, Seated Leg Curl.",
+    "id": "sbcp-2",
+    "name": "P1/W1/D2 - Hinge",
+    "folderId": "sbcp-p1-w1",
+    "notes": "Week 1 (75%). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Leg Swings (Front/Back)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Leg Swings (Lateral)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Walking Lunges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Bodyweight Squats",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Glute Bridges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Fire Hydrants",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "90/90 Hip Switches",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 16
-          }
-        ]
-      },
-      {
-        "name": "Squat",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Squat",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 180,
-        "sets": [
-          {
-            "weight": 250,
-            "reps": 5
-          },
-          {
-            "weight": 250,
-            "reps": 5
-          },
-          {
-            "weight": 250,
-            "reps": 5
-          },
-          {
-            "weight": 250,
-            "reps": 5
-          },
-          {
-            "weight": 250,
-            "reps": 5
-          }
-        ],
-        "notes": "75%",
-        "highlight": true
-      },
-      {
-        "name": "Front Squat",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 115,
-            "reps": 8
-          },
-          {
-            "weight": 115,
-            "reps": 8
-          },
-          {
-            "weight": 115,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Seated Leg Curl",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "weight": 75,
-            "reps": 12
-          },
-          {
-            "weight": 75,
-            "reps": 12
-          },
-          {
-            "weight": 75,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "Hamstring balance"
-      },
-      {
-        "name": "Leg Press",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 230,
-            "reps": 12
-          },
-          {
-            "weight": 230,
-            "reps": 12
-          },
-          {
-            "weight": 230,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Seated Leg Curl",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "weight": 75,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Standing Calf Raise",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 80,
-            "reps": 15
-          },
-          {
-            "weight": 80,
-            "reps": 15
-          },
-          {
-            "weight": 80,
-            "reps": 15
-          },
-          {
-            "weight": 80,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Hanging Leg Raise",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "reps": 15
-          },
-          {
-            "reps": 15
-          },
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Couch Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ],
-        "notes": "Hip flexor - KEY",
-        "highlight": true
-      },
-      {
-        "name": "Pigeon Pose",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ]
-      },
-      {
-        "name": "Supine Twist",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "75% intensity", "sets": [{"weight": 235, "reps": 5}, {"weight": 235, "reps": 5}, {"weight": 235, "reps": 5}, {"weight": 235, "reps": 5}]},
+      {"name": "Romanian Deadlift (Dumbbell)", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Hip Thrust (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"weight": 145, "reps": 12}, {"weight": 145, "reps": 12}, {"weight": 145, "reps": 12}]},
+      {"name": "Seated Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 20}, {"duration": 20}, {"duration": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1002",
-    "name": "P1/W1/D3 - Pull",
-    "folderId": "cc-p1-w1",
-    "estimatedTime": 65,
-    "notes": "Barbell Row, Seated Cable Row, Hammer Curl. Red band.",
+    "id": "sbcp-3",
+    "name": "P1/W1/D3 - Push",
+    "folderId": "sbcp-p1-w1",
+    "notes": "Week 1 (75%). Reduced pressing volume with corrective pairing on every push movement.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Dislocates",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Cat-Cow",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Scapular Pull-Ups",
-        "bodyPart": "Back",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Pull-Up",
-        "bodyPart": "Back",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 8
-          },
-          {
-            "reps": 8
-          },
-          {
-            "reps": 8
-          },
-          {
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "Bodyweight",
-        "highlight": true
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 120,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Barbell Row",
-        "bodyPart": "Back",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 155,
-            "reps": 8
-          },
-          {
-            "weight": 155,
-            "reps": 8
-          },
-          {
-            "weight": 155,
-            "reps": 8
-          },
-          {
-            "weight": 155,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS2",
-        "highlight": true
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "weight": 55,
-            "reps": 20
-          },
-          {
-            "weight": 55,
-            "reps": 20
-          },
-          {
-            "weight": 55,
-            "reps": 20
-          },
-          {
-            "weight": 55,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Seated Cable Row",
-        "bodyPart": "Back",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 100,
-            "reps": 12
-          },
-          {
-            "weight": 100,
-            "reps": 12
-          },
-          {
-            "weight": 100,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Reverse Pec Deck",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 75,
-            "reps": 15
-          },
-          {
-            "weight": 75,
-            "reps": 15
-          },
-          {
-            "weight": 75,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Hammer Curl",
-        "bodyPart": "Arms",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 30,
-            "reps": 12
-          },
-          {
-            "weight": 30,
-            "reps": 12
-          },
-          {
-            "weight": 30,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Shrug",
-        "bodyPart": "Back",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 155,
-            "reps": 12
-          },
-          {
-            "weight": 155,
-            "reps": 12
-          },
-          {
-            "weight": 155,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "75% intensity. Reduced volume", "sets": [{"weight": 220, "reps": 5}, {"weight": 220, "reps": 5}, {"weight": 220, "reps": 5}]},
+      {"name": "Incline Dumbbell Press", "bodyPart": "Chest", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 50, "reps": 12}, {"weight": 50, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Cable Fly", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 15}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 20, "bandColor": "red"}, {"reps": 20, "bandColor": "red"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 115, "reps": 8}, {"weight": 115, "reps": 8}, {"weight": 115, "reps": 8}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1003",
-    "name": "P1/W1/D4 - Legs (Hinge)",
-    "folderId": "cc-p1-w1",
-    "estimatedTime": 70,
-    "notes": "75% intensity. Romanian Deadlift (Dumbbell), Hip Thrust (Barbell), Seated Leg Curl.",
+    "id": "sbcp-4",
+    "name": "P1/W1/D4 - Quad",
+    "folderId": "sbcp-p1-w1",
+    "notes": "Week 1 (75%). Squat focus with hamstring balance work built in.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Leg Swings (Front/Back)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Leg Swings (Lateral)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Walking Lunges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Glute Bridges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Fire Hydrants",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "90/90 Hip Switches",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 16
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Deadlift",
-        "bodyPart": "Back",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Deadlift",
-        "bodyPart": "Back",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 180,
-        "sets": [
-          {
-            "weight": 235,
-            "reps": 5
-          },
-          {
-            "weight": 235,
-            "reps": 5
-          },
-          {
-            "weight": 235,
-            "reps": 5
-          },
-          {
-            "weight": 235,
-            "reps": 5
-          }
-        ],
-        "notes": "75%",
-        "highlight": true
-      },
-      {
-        "name": "Romanian Deadlift (Dumbbell)",
-        "bodyPart": "Legs",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 10
-          },
-          {
-            "weight": 50,
-            "reps": 10
-          },
-          {
-            "weight": 50,
-            "reps": 10
-          },
-          {
-            "weight": 50,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "Hamstring focus",
-        "highlight": true
-      },
-      {
-        "name": "Dead Bug",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "10 per side"
-      },
-      {
-        "name": "Hip Thrust (Barbell)",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 165,
-            "reps": 10
-          },
-          {
-            "weight": 165,
-            "reps": 10
-          },
-          {
-            "weight": 165,
-            "reps": 10
-          },
-          {
-            "weight": 165,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2",
-        "notes": "Glute focus",
-        "highlight": true
-      },
-      {
-        "name": "Seated Leg Curl",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "weight": 75,
-            "reps": 12
-          },
-          {
-            "weight": 75,
-            "reps": 12
-          },
-          {
-            "weight": 75,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Cable Pull Through",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 80,
-            "reps": 15
-          },
-          {
-            "weight": 80,
-            "reps": 15
-          },
-          {
-            "weight": 80,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Pallof Press",
-        "bodyPart": "Core",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 70,
-            "reps": 20
-          },
-          {
-            "weight": 70,
-            "reps": 20
-          },
-          {
-            "weight": 70,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS3",
-        "notes": "10 per side"
-      },
-      {
-        "name": "Couch Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ],
-        "notes": "Hip flexor - KEY",
-        "highlight": true
-      },
-      {
-        "name": "Supine Twist",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "75% intensity", "sets": [{"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}]},
+      {"name": "Front Squat", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 100, "reps": 10}, {"weight": 100, "reps": 10}, {"weight": 100, "reps": 10}]},
+      {"name": "Seated Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 200, "reps": 12}, {"weight": 200, "reps": 12}, {"weight": 200, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 20}, {"reps": 20}, {"reps": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1004",
+    "id": "sbcp-5",
     "name": "P1/W1/D5 - Arms/Shoulders",
-    "folderId": "cc-p1-w1",
-    "estimatedTime": 55,
-    "notes": "Arnold Press, Lateral Raise (Dumbbell), Preacher Curl (Barbell), Skullcrusher (Barbell).",
+    "folderId": "sbcp-p1-w1",
+    "notes": "Week 1 (75%). Optional - skip if fatigued. Extra rear delt and corrective work.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band External Rotation",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ]
-      },
-      {
-        "name": "Arnold Press",
-        "bodyPart": "Shoulders",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 35,
-            "reps": 12
-          },
-          {
-            "weight": 35,
-            "reps": 12
-          },
-          {
-            "weight": 35,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 55,
-            "reps": 20
-          },
-          {
-            "weight": 55,
-            "reps": 20
-          },
-          {
-            "weight": 55,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Lateral Raise (Dumbbell)",
-        "bodyPart": "Shoulders",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 45,
-        "sets": [
-          {
-            "weight": 15,
-            "reps": 12
-          },
-          {
-            "weight": 15,
-            "reps": 12
-          },
-          {
-            "weight": 15,
-            "reps": 12
-          },
-          {
-            "weight": 15,
-            "reps": 12
-          }
-        ]
-      },
-      {
-        "name": "Preacher Curl (Barbell)",
-        "bodyPart": "Arms",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          },
-          {
-            "weight": 45,
-            "reps": 10
-          },
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Skullcrusher (Barbell)",
-        "bodyPart": "Arms",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 10
-          },
-          {
-            "weight": 50,
-            "reps": 10
-          },
-          {
-            "weight": 50,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Incline Curl (Dumbbell)",
-        "bodyPart": "Arms",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 20,
-            "reps": 12
-          },
-          {
-            "weight": 20,
-            "reps": 12
-          },
-          {
-            "weight": 20,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Triceps Extension (Cable)",
-        "bodyPart": "Arms",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 15
-          },
-          {
-            "weight": 45,
-            "reps": 15
-          },
-          {
-            "weight": 45,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Cable Crunch",
-        "bodyPart": "Core",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 85,
-            "reps": 15
-          },
-          {
-            "weight": 85,
-            "reps": 15
-          },
-          {
-            "weight": 85,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "L-Sit Hold",
-        "bodyPart": "Core",
-        "category": "duration",
-        "phase": "workout",
-        "restTime": 45,
-        "sets": [
-          {
-            "duration": 15
-          },
-          {
-            "duration": 15
-          },
-          {
-            "duration": 15
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Arnold Press", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}]},
+      {"name": "Preacher Curl (Barbell)", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 10}, {"weight": 40, "reps": 10}]},
+      {"name": "Skullcrusher (Barbell)", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1005",
+    "id": "sbcp-6",
     "name": "P1/W1/D6 - Run",
-    "folderId": "cc-p1-w1",
-    "estimatedTime": 40,
-    "notes": "3 miles conversational pace.",
+    "folderId": "sbcp-p1-w1",
+    "notes": "Week 1 (75%). 3.0 miles. Conversational pace.",
     "exercises": [
-      {
-        "name": "Outdoor Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "distance": 4.8,
-            "duration": 1800
-          }
-        ],
-        "notes": "Conversational pace",
-        "highlight": true
-      },
-      {
-        "name": "Standing Quad Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Standing Hamstring Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Kneeling Hip Flexor Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Calf Stretch (Wall)",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 45
-          },
-          {
-            "duration": 45
-          }
-        ]
-      },
-      {
-        "name": "Pigeon Pose",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "3.0 miles - Conversational pace", "restTime": 0, "sets": [{"distance": 4.8, "duration": 1800}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1006",
-    "name": "P1/W2/D1 - Push",
-    "folderId": "cc-p1-w2",
-    "estimatedTime": 65,
-    "notes": "77% intensity. Incline Cable Press, Dumbbell Fly. Red band.",
+    "id": "sbcp-7",
+    "name": "P1/W2/D1 - Pull",
+    "folderId": "sbcp-p1-w2",
+    "notes": "Week 2 (77%). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Dislocates",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Cat-Cow",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Push-Up to Down Dog",
-        "bodyPart": "Chest",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 8
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Scapular Push-Ups",
-        "bodyPart": "Back",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ]
-      },
-      {
-        "name": "Bench Press",
-        "bodyPart": "Chest",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Bench Press",
-        "bodyPart": "Chest",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 225,
-            "reps": 5
-          },
-          {
-            "weight": 225,
-            "reps": 5
-          },
-          {
-            "weight": 225,
-            "reps": 5
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "77%",
-        "highlight": true
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 150,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Overhead Press",
-        "bodyPart": "Shoulders",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 105,
-            "reps": 8
-          },
-          {
-            "weight": 105,
-            "reps": 8
-          },
-          {
-            "weight": 105,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS2",
-        "highlight": true
-      },
-      {
-        "name": "Band External Rotation",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Incline Cable Press",
-        "bodyPart": "Chest",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 55,
-            "reps": 10
-          },
-          {
-            "weight": 55,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "weight": 60,
-            "reps": 20
-          },
-          {
-            "weight": 60,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Dumbbell Fly",
-        "bodyPart": "Chest",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 30,
-            "reps": 12
-          },
-          {
-            "weight": 30,
-            "reps": 12
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 60,
-            "reps": 20
-          },
-          {
-            "weight": 60,
-            "reps": 20
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Overhead Triceps Extension",
-        "bodyPart": "Arms",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 40,
-            "reps": 12
-          },
-          {
-            "weight": 40,
-            "reps": 12
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      },
-      {
-        "name": "Upper Trap Stretch",
-        "bodyPart": "Shoulders",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 45
-          },
-          {
-            "duration": 45
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "weighted_bodyweight", "phase": "workout", "highlight": true, "notes": "5 lbs added", "restTime": 120, "sets": [{"weight": 5, "reps": 8}, {"weight": 5, "reps": 8}, {"weight": 5, "reps": 8}]},
+      {"name": "T-Bar Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 135, "reps": 12}, {"weight": 135, "reps": 10}, {"weight": 135, "reps": 8}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Chest Supported Row (DB)", "bodyPart": "Back", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 20, "bandColor": "red"}, {"reps": 20, "bandColor": "red"}, {"reps": 20, "bandColor": "red"}]},
+      {"name": "EZ Bar Curl", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 10}, {"weight": 25, "reps": 10}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 135, "reps": 12}, {"weight": 135, "reps": 12}, {"weight": 135, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1007",
-    "name": "P1/W2/D2 - Legs (Quad)",
-    "folderId": "cc-p1-w2",
-    "estimatedTime": 70,
-    "notes": "77% intensity. Hack Squat, Prone Leg Curl.",
+    "id": "sbcp-8",
+    "name": "P1/W2/D2 - Hinge",
+    "folderId": "sbcp-p1-w2",
+    "notes": "Week 2 (77%). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Leg Swings (Front/Back)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Leg Swings (Lateral)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Walking Lunges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Bodyweight Squats",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Glute Bridges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Fire Hydrants",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "90/90 Hip Switches",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 16
-          }
-        ]
-      },
-      {
-        "name": "Squat",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Squat",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 180,
-        "sets": [
-          {
-            "weight": 260,
-            "reps": 5
-          },
-          {
-            "weight": 260,
-            "reps": 5
-          },
-          {
-            "weight": 260,
-            "reps": 5
-          },
-          {
-            "weight": 260,
-            "reps": 5
-          },
-          {
-            "weight": 260,
-            "reps": 5
-          }
-        ],
-        "notes": "77%",
-        "highlight": true
-      },
-      {
-        "name": "Hack Squat",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 170,
-            "reps": 8
-          },
-          {
-            "weight": 170,
-            "reps": 8
-          },
-          {
-            "weight": 170,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Prone Leg Curl",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "weight": 65,
-            "reps": 12
-          },
-          {
-            "weight": 65,
-            "reps": 12
-          },
-          {
-            "weight": 65,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "Hamstring balance"
-      },
-      {
-        "name": "Leg Press",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 240,
-            "reps": 12
-          },
-          {
-            "weight": 240,
-            "reps": 12
-          },
-          {
-            "weight": 240,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Prone Leg Curl",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "weight": 65,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Seated Calf Raise",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 65,
-            "reps": 15
-          },
-          {
-            "weight": 65,
-            "reps": 15
-          },
-          {
-            "weight": 65,
-            "reps": 15
-          },
-          {
-            "weight": 65,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Hanging Leg Raise",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "reps": 15
-          },
-          {
-            "reps": 15
-          },
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Couch Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ],
-        "notes": "Hip flexor - KEY",
-        "highlight": true
-      },
-      {
-        "name": "Pigeon Pose",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ]
-      },
-      {
-        "name": "Supine Twist",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "77% intensity", "sets": [{"weight": 245, "reps": 5}, {"weight": 245, "reps": 5}, {"weight": 245, "reps": 5}, {"weight": 245, "reps": 5}]},
+      {"name": "Romanian Deadlift (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Hip Thrust (Machine)", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"weight": 145, "reps": 12}, {"weight": 145, "reps": 12}, {"weight": 145, "reps": 12}]},
+      {"name": "Prone Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 20}, {"duration": 20}, {"duration": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1008",
-    "name": "P1/W2/D3 - Pull",
-    "folderId": "cc-p1-w2",
-    "estimatedTime": 65,
-    "notes": "T-Bar Row, Chest Supported Dumbbell Row, EZ Bar Curl. Red band.",
+    "id": "sbcp-9",
+    "name": "P1/W2/D3 - Push",
+    "folderId": "sbcp-p1-w2",
+    "notes": "Week 2 (77%). Reduced pressing volume with corrective pairing on every push movement.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Dislocates",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Cat-Cow",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Scapular Pull-Ups",
-        "bodyPart": "Back",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Pull-Up",
-        "bodyPart": "Back",
-        "category": "weighted_bodyweight",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 5,
-            "reps": 8
-          },
-          {
-            "weight": 5,
-            "reps": 8
-          },
-          {
-            "weight": 5,
-            "reps": 8
-          },
-          {
-            "weight": 5,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "+5 lbs",
-        "highlight": true
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 120,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "T-Bar Row",
-        "bodyPart": "Back",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 125,
-            "reps": 8
-          },
-          {
-            "weight": 125,
-            "reps": 8
-          },
-          {
-            "weight": 125,
-            "reps": 8
-          },
-          {
-            "weight": 125,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS2",
-        "highlight": true
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "weight": 60,
-            "reps": 20
-          },
-          {
-            "weight": 60,
-            "reps": 20
-          },
-          {
-            "weight": 60,
-            "reps": 20
-          },
-          {
-            "weight": 60,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Chest Supported Dumbbell Row",
-        "bodyPart": "Back",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 12
-          },
-          {
-            "weight": 50,
-            "reps": 12
-          },
-          {
-            "weight": 50,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Reverse Pec Deck",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 80,
-            "reps": 15
-          },
-          {
-            "weight": 80,
-            "reps": 15
-          },
-          {
-            "weight": 80,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "EZ Bar Curl",
-        "bodyPart": "Arms",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 60,
-            "reps": 12
-          },
-          {
-            "weight": 60,
-            "reps": 12
-          },
-          {
-            "weight": 60,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Shrug",
-        "bodyPart": "Back",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 165,
-            "reps": 12
-          },
-          {
-            "weight": 165,
-            "reps": 12
-          },
-          {
-            "weight": 165,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "77% intensity. Reduced volume", "sets": [{"weight": 225, "reps": 5}, {"weight": 225, "reps": 5}, {"weight": 225, "reps": 5}]},
+      {"name": "Incline Cable Press", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 50, "reps": 12}, {"weight": 50, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Dumbbell Fly", "bodyPart": "Chest", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 15}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 20, "bandColor": "red"}, {"reps": 20, "bandColor": "red"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 120, "reps": 8}, {"weight": 120, "reps": 8}, {"weight": 120, "reps": 8}]},
+      {"name": "Lateral Raise (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1009",
-    "name": "P1/W2/D4 - Legs (Hinge)",
-    "folderId": "cc-p1-w2",
-    "estimatedTime": 70,
-    "notes": "77% intensity. Romanian Deadlift (Barbell), Hip Thrust (Machine), Prone Leg Curl.",
+    "id": "sbcp-10",
+    "name": "P1/W2/D4 - Quad",
+    "folderId": "sbcp-p1-w2",
+    "notes": "Week 2 (77%). Squat focus with hamstring balance work built in.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Leg Swings (Front/Back)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Leg Swings (Lateral)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Walking Lunges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Glute Bridges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Fire Hydrants",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "90/90 Hip Switches",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 16
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Deadlift",
-        "bodyPart": "Back",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Deadlift",
-        "bodyPart": "Back",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 180,
-        "sets": [
-          {
-            "weight": 245,
-            "reps": 5
-          },
-          {
-            "weight": 245,
-            "reps": 5
-          },
-          {
-            "weight": 245,
-            "reps": 5
-          },
-          {
-            "weight": 245,
-            "reps": 5
-          }
-        ],
-        "notes": "77%",
-        "highlight": true
-      },
-      {
-        "name": "Romanian Deadlift (Barbell)",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 175,
-            "reps": 10
-          },
-          {
-            "weight": 175,
-            "reps": 10
-          },
-          {
-            "weight": 175,
-            "reps": 10
-          },
-          {
-            "weight": 175,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "Hamstring focus",
-        "highlight": true
-      },
-      {
-        "name": "Dead Bug",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "10 per side"
-      },
-      {
-        "name": "Hip Thrust (Machine)",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 185,
-            "reps": 10
-          },
-          {
-            "weight": 185,
-            "reps": 10
-          },
-          {
-            "weight": 185,
-            "reps": 10
-          },
-          {
-            "weight": 185,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2",
-        "notes": "Glute focus",
-        "highlight": true
-      },
-      {
-        "name": "Prone Leg Curl",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "weight": 65,
-            "reps": 12
-          },
-          {
-            "weight": 65,
-            "reps": 12
-          },
-          {
-            "weight": 65,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Kettlebell Swing",
-        "bodyPart": "Legs",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 15
-          },
-          {
-            "weight": 50,
-            "reps": 15
-          },
-          {
-            "weight": 50,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Pallof Press",
-        "bodyPart": "Core",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 75,
-            "reps": 20
-          },
-          {
-            "weight": 75,
-            "reps": 20
-          },
-          {
-            "weight": 75,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS3",
-        "notes": "10 per side"
-      },
-      {
-        "name": "Couch Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ],
-        "notes": "Hip flexor - KEY",
-        "highlight": true
-      },
-      {
-        "name": "Supine Twist",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "77% intensity", "sets": [{"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}]},
+      {"name": "Hack Squat", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 100, "reps": 10}, {"weight": 100, "reps": 10}, {"weight": 100, "reps": 10}]},
+      {"name": "Prone Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 205, "reps": 12}, {"weight": 205, "reps": 12}, {"weight": 205, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 20}, {"reps": 20}, {"reps": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1010",
+    "id": "sbcp-11",
     "name": "P1/W2/D5 - Arms/Shoulders",
-    "folderId": "cc-p1-w2",
-    "estimatedTime": 55,
-    "notes": "Seated Dumbbell Press, Cable Lateral Raise, Preacher Curl (Dumbbell), Skullcrusher (Dumbbell).",
+    "folderId": "sbcp-p1-w2",
+    "notes": "Week 2 (77%). Optional - skip if fatigued. Extra rear delt and corrective work.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band External Rotation",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ]
-      },
-      {
-        "name": "Seated Dumbbell Press",
-        "bodyPart": "Shoulders",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 12
-          },
-          {
-            "weight": 45,
-            "reps": 12
-          },
-          {
-            "weight": 45,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 60,
-            "reps": 20
-          },
-          {
-            "weight": 60,
-            "reps": 20
-          },
-          {
-            "weight": 60,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Cable Lateral Raise",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 45,
-        "sets": [
-          {
-            "weight": 15,
-            "reps": 12
-          },
-          {
-            "weight": 15,
-            "reps": 12
-          },
-          {
-            "weight": 15,
-            "reps": 12
-          },
-          {
-            "weight": 15,
-            "reps": 12
-          }
-        ]
-      },
-      {
-        "name": "Preacher Curl (Dumbbell)",
-        "bodyPart": "Arms",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 27.5,
-            "reps": 10
-          },
-          {
-            "weight": 27.5,
-            "reps": 10
-          },
-          {
-            "weight": 27.5,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Skullcrusher (Dumbbell)",
-        "bodyPart": "Arms",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 27.5,
-            "reps": 10
-          },
-          {
-            "weight": 27.5,
-            "reps": 10
-          },
-          {
-            "weight": 27.5,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Incline Curl (Dumbbell)",
-        "bodyPart": "Arms",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 22.5,
-            "reps": 12
-          },
-          {
-            "weight": 22.5,
-            "reps": 12
-          },
-          {
-            "weight": 22.5,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Triceps Extension (Cable)",
-        "bodyPart": "Arms",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 47.5,
-            "reps": 15
-          },
-          {
-            "weight": 47.5,
-            "reps": 15
-          },
-          {
-            "weight": 47.5,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Cable Crunch",
-        "bodyPart": "Core",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 90,
-            "reps": 15
-          },
-          {
-            "weight": 90,
-            "reps": 15
-          },
-          {
-            "weight": 90,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "L-Sit Hold",
-        "bodyPart": "Core",
-        "category": "duration",
-        "phase": "workout",
-        "restTime": 45,
-        "sets": [
-          {
-            "duration": 17
-          },
-          {
-            "duration": 17
-          },
-          {
-            "duration": 17
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Seated Dumbbell Press", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}]},
+      {"name": "Preacher Curl (Machine)", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 10}, {"weight": 40, "reps": 10}]},
+      {"name": "Tricep Pushdown", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Lateral Raise (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1011",
+    "id": "sbcp-12",
     "name": "P1/W2/D6 - Run",
-    "folderId": "cc-p1-w2",
-    "estimatedTime": 45,
-    "notes": "3.5 miles moderate pace.",
+    "folderId": "sbcp-p1-w2",
+    "notes": "Week 2 (77%). 3.5 miles. Conversational pace.",
     "exercises": [
-      {
-        "name": "Outdoor Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "distance": 5.6,
-            "duration": 2100
-          }
-        ],
-        "notes": "Moderate pace",
-        "highlight": true
-      },
-      {
-        "name": "Standing Quad Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Standing Hamstring Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Kneeling Hip Flexor Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Calf Stretch (Wall)",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 45
-          },
-          {
-            "duration": 45
-          }
-        ]
-      },
-      {
-        "name": "Pigeon Pose",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "3.5 miles - Conversational pace", "restTime": 0, "sets": [{"distance": 5.6, "duration": 2100}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1012",
-    "name": "P1/W3/D1 - Push",
-    "folderId": "cc-p1-w3",
-    "estimatedTime": 65,
-    "notes": "80% PEAK intensity. Incline Machine Press, Pec Deck. Green band.",
+    "id": "sbcp-13",
+    "name": "P1/W3/D1 - Pull",
+    "folderId": "sbcp-p1-w3",
+    "notes": "Week 3 (80% Peak P1). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "green",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Dislocates",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "bandColor": "green",
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Cat-Cow",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Push-Up to Down Dog",
-        "bodyPart": "Chest",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 8
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Scapular Push-Ups",
-        "bodyPart": "Back",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ]
-      },
-      {
-        "name": "Bench Press",
-        "bodyPart": "Chest",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Bench Press",
-        "bodyPart": "Chest",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 235,
-            "reps": 5
-          },
-          {
-            "weight": 235,
-            "reps": 5
-          },
-          {
-            "weight": 235,
-            "reps": 5
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "80% PEAK",
-        "highlight": true
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 150,
-        "sets": [
-          {
-            "bandColor": "green",
-            "reps": 15
-          },
-          {
-            "bandColor": "green",
-            "reps": 15
-          },
-          {
-            "bandColor": "green",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Overhead Press",
-        "bodyPart": "Shoulders",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 115,
-            "reps": 8
-          },
-          {
-            "weight": 115,
-            "reps": 8
-          },
-          {
-            "weight": 115,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS2",
-        "highlight": true
-      },
-      {
-        "name": "Band External Rotation",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "bandColor": "green",
-            "reps": 15
-          },
-          {
-            "bandColor": "green",
-            "reps": 15
-          },
-          {
-            "bandColor": "green",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Incline Machine Press",
-        "bodyPart": "Chest",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 90,
-            "reps": 10
-          },
-          {
-            "weight": 90,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "weight": 65,
-            "reps": 20
-          },
-          {
-            "weight": 65,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Pec Deck",
-        "bodyPart": "Chest",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 60,
-            "reps": 12
-          },
-          {
-            "weight": 60,
-            "reps": 12
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 65,
-            "reps": 20
-          },
-          {
-            "weight": 65,
-            "reps": 20
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Triceps Pushdown",
-        "bodyPart": "Arms",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 12
-          },
-          {
-            "weight": 50,
-            "reps": 12
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      },
-      {
-        "name": "Upper Trap Stretch",
-        "bodyPart": "Shoulders",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 45
-          },
-          {
-            "duration": 45
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "weighted_bodyweight", "phase": "workout", "highlight": true, "notes": "10 lbs added", "restTime": 120, "sets": [{"weight": 10, "reps": 8}, {"weight": 10, "reps": 8}, {"weight": 10, "reps": 8}]},
+      {"name": "Pendlay Row", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 140, "reps": 12}, {"weight": 140, "reps": 10}, {"weight": 140, "reps": 8}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Single Arm Cable Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 20, "bandColor": "red"}, {"reps": 20, "bandColor": "red"}, {"reps": 20, "bandColor": "red"}]},
+      {"name": "Cable Curl", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 10}, {"weight": 25, "reps": 10}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 140, "reps": 12}, {"weight": 140, "reps": 12}, {"weight": 140, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1013",
-    "name": "P1/W3/D2 - Legs (Quad)",
-    "folderId": "cc-p1-w3",
-    "estimatedTime": 70,
-    "notes": "80% PEAK intensity. Goblet Squat, Nordic Curl (Assisted).",
+    "id": "sbcp-14",
+    "name": "P1/W3/D2 - Hinge",
+    "folderId": "sbcp-p1-w3",
+    "notes": "Week 3 (80% Peak P1). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Leg Swings (Front/Back)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Leg Swings (Lateral)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Walking Lunges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Bodyweight Squats",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Glute Bridges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Fire Hydrants",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "90/90 Hip Switches",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 16
-          }
-        ]
-      },
-      {
-        "name": "Squat",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Squat",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 180,
-        "sets": [
-          {
-            "weight": 270,
-            "reps": 5
-          },
-          {
-            "weight": 270,
-            "reps": 5
-          },
-          {
-            "weight": 270,
-            "reps": 5
-          },
-          {
-            "weight": 270,
-            "reps": 5
-          },
-          {
-            "weight": 270,
-            "reps": 5
-          }
-        ],
-        "notes": "80% PEAK",
-        "highlight": true
-      },
-      {
-        "name": "Goblet Squat",
-        "bodyPart": "Legs",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 70,
-            "reps": 8
-          },
-          {
-            "weight": 70,
-            "reps": 8
-          },
-          {
-            "weight": 70,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Nordic Curl (Assisted)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "reps": 8
-          },
-          {
-            "reps": 8
-          },
-          {
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "Hamstring balance"
-      },
-      {
-        "name": "Leg Press",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 250,
-            "reps": 12
-          },
-          {
-            "weight": 250,
-            "reps": 12
-          },
-          {
-            "weight": 250,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Nordic Curl (Assisted)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Leg Press Calf Raise",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 210,
-            "reps": 15
-          },
-          {
-            "weight": 210,
-            "reps": 15
-          },
-          {
-            "weight": 210,
-            "reps": 15
-          },
-          {
-            "weight": 210,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Hanging Leg Raise",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "reps": 15
-          },
-          {
-            "reps": 15
-          },
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Couch Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ],
-        "notes": "Hip flexor - KEY",
-        "highlight": true
-      },
-      {
-        "name": "Pigeon Pose",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ]
-      },
-      {
-        "name": "Supine Twist",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "80% Peak P1 intensity", "sets": [{"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}]},
+      {"name": "Single Leg RDL", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Glute Bridge (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"weight": 150, "reps": 12}, {"weight": 150, "reps": 12}, {"weight": 150, "reps": 12}]},
+      {"name": "Nordic Curl (Assisted)", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"reps": 12}, {"reps": 12}, {"reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 20}, {"duration": 20}, {"duration": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1014",
-    "name": "P1/W3/D3 - Pull",
-    "folderId": "cc-p1-w3",
-    "estimatedTime": 65,
-    "notes": "Pendlay Row, Single Arm Cable Row, Cable Curl. Green band.",
+    "id": "sbcp-15",
+    "name": "P1/W3/D3 - Push",
+    "folderId": "sbcp-p1-w3",
+    "notes": "Week 3 (80% Peak P1). Reduced pressing volume with corrective pairing on every push movement.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "green",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Dislocates",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "bandColor": "green",
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Cat-Cow",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Scapular Pull-Ups",
-        "bodyPart": "Back",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Pull-Up",
-        "bodyPart": "Back",
-        "category": "weighted_bodyweight",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 10,
-            "reps": 8
-          },
-          {
-            "weight": 10,
-            "reps": 8
-          },
-          {
-            "weight": 10,
-            "reps": 8
-          },
-          {
-            "weight": 10,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "+10 lbs",
-        "highlight": true
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 120,
-        "sets": [
-          {
-            "bandColor": "green",
-            "reps": 15
-          },
-          {
-            "bandColor": "green",
-            "reps": 15
-          },
-          {
-            "bandColor": "green",
-            "reps": 15
-          },
-          {
-            "bandColor": "green",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Pendlay Row",
-        "bodyPart": "Back",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 175,
-            "reps": 8
-          },
-          {
-            "weight": 175,
-            "reps": 8
-          },
-          {
-            "weight": 175,
-            "reps": 8
-          },
-          {
-            "weight": 175,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS2",
-        "highlight": true
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "weight": 65,
-            "reps": 20
-          },
-          {
-            "weight": 65,
-            "reps": 20
-          },
-          {
-            "weight": 65,
-            "reps": 20
-          },
-          {
-            "weight": 65,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Single Arm Cable Row",
-        "bodyPart": "Back",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 60,
-            "reps": 12
-          },
-          {
-            "weight": 60,
-            "reps": 12
-          },
-          {
-            "weight": 60,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Reverse Pec Deck",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 85,
-            "reps": 15
-          },
-          {
-            "weight": 85,
-            "reps": 15
-          },
-          {
-            "weight": 85,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Cable Curl",
-        "bodyPart": "Arms",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 12
-          },
-          {
-            "weight": 50,
-            "reps": 12
-          },
-          {
-            "weight": 50,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Shrug",
-        "bodyPart": "Back",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 175,
-            "reps": 12
-          },
-          {
-            "weight": 175,
-            "reps": 12
-          },
-          {
-            "weight": 175,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "80% Peak P1 intensity. Reduced volume", "sets": [{"weight": 235, "reps": 5}, {"weight": 235, "reps": 5}, {"weight": 235, "reps": 5}]},
+      {"name": "Incline Chest Press (Machine)", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 50, "reps": 12}, {"weight": 50, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Pec Deck", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 15}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 20, "bandColor": "red"}, {"reps": 20, "bandColor": "red"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 125, "reps": 8}, {"weight": 125, "reps": 8}, {"weight": 125, "reps": 8}]},
+      {"name": "Lateral Raise (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1015",
-    "name": "P1/W3/D4 - Legs (Hinge)",
-    "folderId": "cc-p1-w3",
-    "estimatedTime": 70,
-    "notes": "80% PEAK intensity. Single Leg Romanian Deadlift, Glute Bridge (Barbell), Nordic Curl (Assisted).",
+    "id": "sbcp-16",
+    "name": "P1/W3/D4 - Quad",
+    "folderId": "sbcp-p1-w3",
+    "notes": "Week 3 (80% Peak P1). Squat focus with hamstring balance work built in.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Leg Swings (Front/Back)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Leg Swings (Lateral)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Walking Lunges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Glute Bridges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Fire Hydrants",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "90/90 Hip Switches",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 16
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Deadlift",
-        "bodyPart": "Back",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Deadlift",
-        "bodyPart": "Back",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 180,
-        "sets": [
-          {
-            "weight": 255,
-            "reps": 5
-          },
-          {
-            "weight": 255,
-            "reps": 5
-          },
-          {
-            "weight": 255,
-            "reps": 5
-          },
-          {
-            "weight": 255,
-            "reps": 5
-          }
-        ],
-        "notes": "80% PEAK",
-        "highlight": true
-      },
-      {
-        "name": "Single Leg Romanian Deadlift",
-        "bodyPart": "Legs",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 40,
-            "reps": 10
-          },
-          {
-            "weight": 40,
-            "reps": 10
-          },
-          {
-            "weight": 40,
-            "reps": 10
-          },
-          {
-            "weight": 40,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "Hamstring focus",
-        "highlight": true
-      },
-      {
-        "name": "Dead Bug",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "10 per side"
-      },
-      {
-        "name": "Glute Bridge (Barbell)",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 235,
-            "reps": 10
-          },
-          {
-            "weight": 235,
-            "reps": 10
-          },
-          {
-            "weight": 235,
-            "reps": 10
-          },
-          {
-            "weight": 235,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2",
-        "notes": "Glute focus",
-        "highlight": true
-      },
-      {
-        "name": "Nordic Curl (Assisted)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "reps": 8
-          },
-          {
-            "reps": 8
-          },
-          {
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Good Morning",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 95,
-            "reps": 15
-          },
-          {
-            "weight": 95,
-            "reps": 15
-          },
-          {
-            "weight": 95,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Pallof Press",
-        "bodyPart": "Core",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 85,
-            "reps": 20
-          },
-          {
-            "weight": 85,
-            "reps": 20
-          },
-          {
-            "weight": 85,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS3",
-        "notes": "10 per side"
-      },
-      {
-        "name": "Couch Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ],
-        "notes": "Hip flexor - KEY",
-        "highlight": true
-      },
-      {
-        "name": "Supine Twist",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "80% Peak P1 intensity", "sets": [{"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}]},
+      {"name": "Goblet Squat", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}]},
+      {"name": "Nordic Curl (Assisted)", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"reps": 12}, {"reps": 12}, {"reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 205, "reps": 12}, {"weight": 205, "reps": 12}, {"weight": 205, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 20}, {"reps": 20}, {"reps": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1016",
+    "id": "sbcp-17",
     "name": "P1/W3/D5 - Arms/Shoulders",
-    "folderId": "cc-p1-w3",
-    "estimatedTime": 55,
-    "notes": "Machine Shoulder Press, Machine Lateral Raise, Spider Curl, Cable Overhead Extension.",
+    "folderId": "sbcp-p1-w3",
+    "notes": "Week 3 (80% Peak P1). Optional - skip if fatigued. Extra rear delt and corrective work.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "green",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band External Rotation",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "green",
-            "reps": 15
-          },
-          {
-            "bandColor": "green",
-            "reps": 15
-          }
-        ]
-      },
-      {
-        "name": "Machine Shoulder Press",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 95,
-            "reps": 12
-          },
-          {
-            "weight": 95,
-            "reps": 12
-          },
-          {
-            "weight": 95,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 65,
-            "reps": 20
-          },
-          {
-            "weight": 65,
-            "reps": 20
-          },
-          {
-            "weight": 65,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Machine Lateral Raise",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 45,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 12
-          },
-          {
-            "weight": 50,
-            "reps": 12
-          },
-          {
-            "weight": 50,
-            "reps": 12
-          },
-          {
-            "weight": 50,
-            "reps": 12
-          }
-        ]
-      },
-      {
-        "name": "Spider Curl",
-        "bodyPart": "Arms",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 22.5,
-            "reps": 10
-          },
-          {
-            "weight": 22.5,
-            "reps": 10
-          },
-          {
-            "weight": 22.5,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Cable Overhead Extension",
-        "bodyPart": "Arms",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 10
-          },
-          {
-            "weight": 50,
-            "reps": 10
-          },
-          {
-            "weight": 50,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Incline Curl (Dumbbell)",
-        "bodyPart": "Arms",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 25,
-            "reps": 12
-          },
-          {
-            "weight": 25,
-            "reps": 12
-          },
-          {
-            "weight": 25,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Triceps Extension (Cable)",
-        "bodyPart": "Arms",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 15
-          },
-          {
-            "weight": 50,
-            "reps": 15
-          },
-          {
-            "weight": 50,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Cable Crunch",
-        "bodyPart": "Core",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 100,
-            "reps": 15
-          },
-          {
-            "weight": 100,
-            "reps": 15
-          },
-          {
-            "weight": 100,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "L-Sit Hold",
-        "bodyPart": "Core",
-        "category": "duration",
-        "phase": "workout",
-        "restTime": 45,
-        "sets": [
-          {
-            "duration": 20
-          },
-          {
-            "duration": 20
-          },
-          {
-            "duration": 20
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Shoulder Press (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}]},
+      {"name": "Spider Curl (Dumbbell)", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 10}, {"weight": 40, "reps": 10}]},
+      {"name": "Overhead Tricep Extension", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Lateral Raise (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1017",
+    "id": "sbcp-18",
     "name": "P1/W3/D6 - Run",
-    "folderId": "cc-p1-w3",
-    "estimatedTime": 50,
-    "notes": "4 miles push pace - peak.",
+    "folderId": "sbcp-p1-w3",
+    "notes": "Week 3 (80% Peak P1). 4.0 miles. Moderate pace.",
     "exercises": [
-      {
-        "name": "Outdoor Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "distance": 6.4,
-            "duration": 2400
-          }
-        ],
-        "notes": "Push pace - peak",
-        "highlight": true
-      },
-      {
-        "name": "Standing Quad Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Standing Hamstring Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Kneeling Hip Flexor Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Calf Stretch (Wall)",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 45
-          },
-          {
-            "duration": 45
-          }
-        ]
-      },
-      {
-        "name": "Pigeon Pose",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "4.0 miles - Moderate pace", "restTime": 0, "sets": [{"distance": 6.4, "duration": 2400}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1018",
-    "name": "P1/W4/D1 - Push (DELOAD)",
-    "folderId": "cc-p1-w4",
-    "estimatedTime": 55,
-    "notes": "70% DELOAD intensity. Low Incline Dumbbell Press, Cable Crossover (Low). Red band.",
+    "id": "sbcp-19",
+    "name": "P1/W4/D1 - Pull",
+    "folderId": "sbcp-p1-w4",
+    "notes": "Week 4 (70% DELOAD). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Dislocates",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Cat-Cow",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Push-Up to Down Dog",
-        "bodyPart": "Chest",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 8
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Scapular Push-Ups",
-        "bodyPart": "Back",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ]
-      },
-      {
-        "name": "Bench Press",
-        "bodyPart": "Chest",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Bench Press",
-        "bodyPart": "Chest",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 205,
-            "reps": 5
-          },
-          {
-            "weight": 205,
-            "reps": 5
-          },
-          {
-            "weight": 205,
-            "reps": 5
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "70% DELOAD",
-        "highlight": true
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 150,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Overhead Press",
-        "bodyPart": "Shoulders",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 95,
-            "reps": 8
-          },
-          {
-            "weight": 95,
-            "reps": 8
-          },
-          {
-            "weight": 95,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS2",
-        "highlight": true
-      },
-      {
-        "name": "Band External Rotation",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Low Incline Dumbbell Press",
-        "bodyPart": "Chest",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 10
-          },
-          {
-            "weight": 50,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 20
-          },
-          {
-            "weight": 50,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Cable Crossover (Low)",
-        "bodyPart": "Chest",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 25,
-            "reps": 12
-          },
-          {
-            "weight": 25,
-            "reps": 12
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 20
-          },
-          {
-            "weight": 50,
-            "reps": 20
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Overhead Triceps Extension",
-        "bodyPart": "Arms",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 40,
-            "reps": 12
-          },
-          {
-            "weight": 40,
-            "reps": 12
-          }
-        ],
-        "supersetId": "T1"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      },
-      {
-        "name": "Upper Trap Stretch",
-        "bodyPart": "Shoulders",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 45
-          },
-          {
-            "duration": 45
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "reps_only", "phase": "workout", "highlight": true, "notes": "Bodyweight", "restTime": 120, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Meadows Row", "bodyPart": "Back", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 130, "reps": 12}, {"weight": 130, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 45, "reps": 15}, {"weight": 45, "reps": 15}]},
+      {"name": "Machine Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 85, "reps": 12}, {"weight": 85, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Incline Dumbbell Curl", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 12}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 130, "reps": 12}, {"weight": 130, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 110, "reps": 12}, {"weight": 110, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1019",
-    "name": "P1/W4/D2 - Legs (Quad) (DELOAD)",
-    "folderId": "cc-p1-w4",
-    "estimatedTime": 60,
-    "notes": "70% DELOAD intensity. Bulgarian Split Squat, Stability Ball Leg Curl.",
+    "id": "sbcp-20",
+    "name": "P1/W4/D2 - Hinge",
+    "folderId": "sbcp-p1-w4",
+    "notes": "Week 4 (70% DELOAD). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Leg Swings (Front/Back)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Leg Swings (Lateral)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Walking Lunges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Bodyweight Squats",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Glute Bridges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Fire Hydrants",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "90/90 Hip Switches",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 16
-          }
-        ]
-      },
-      {
-        "name": "Squat",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Squat",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 180,
-        "sets": [
-          {
-            "weight": 235,
-            "reps": 5
-          },
-          {
-            "weight": 235,
-            "reps": 5
-          },
-          {
-            "weight": 235,
-            "reps": 5
-          },
-          {
-            "weight": 235,
-            "reps": 5
-          },
-          {
-            "weight": 235,
-            "reps": 5
-          }
-        ],
-        "notes": "70% DELOAD",
-        "highlight": true
-      },
-      {
-        "name": "Bulgarian Split Squat",
-        "bodyPart": "Legs",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 35,
-            "reps": 8
-          },
-          {
-            "weight": 35,
-            "reps": 8
-          },
-          {
-            "weight": 35,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Stability Ball Leg Curl",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "reps": 12
-          },
-          {
-            "reps": 12
-          },
-          {
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "Hamstring balance"
-      },
-      {
-        "name": "Leg Press",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 230,
-            "reps": 12
-          },
-          {
-            "weight": 230,
-            "reps": 12
-          },
-          {
-            "weight": 230,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Stability Ball Leg Curl",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Single Leg Calf Raise",
-        "bodyPart": "Legs",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 40,
-            "reps": 15
-          },
-          {
-            "weight": 40,
-            "reps": 15
-          },
-          {
-            "weight": 40,
-            "reps": 15
-          },
-          {
-            "weight": 40,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Hanging Leg Raise",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "reps": 12
-          },
-          {
-            "reps": 12
-          },
-          {
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Couch Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ],
-        "notes": "Hip flexor - KEY",
-        "highlight": true
-      },
-      {
-        "name": "Pigeon Pose",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ]
-      },
-      {
-        "name": "Supine Twist",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "70% DELOAD intensity", "sets": [{"weight": 220, "reps": 8}, {"weight": 220, "reps": 8}, {"weight": 220, "reps": 8}]},
+      {"name": "Stiff Leg Deadlift", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 12}]},
+      {"name": "Single Leg Hip Thrust", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"reps": 12}, {"reps": 12}]},
+      {"name": "Stability Ball Leg Curl", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"reps": 12}, {"reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 16}, {"weight": 60, "reps": 16}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 15}, {"duration": 15}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1020",
-    "name": "P1/W4/D3 - Pull (DELOAD)",
-    "folderId": "cc-p1-w4",
-    "estimatedTime": 55,
-    "notes": "Meadows Row, Machine Row, Incline Dumbbell Curl. Red band.",
+    "id": "sbcp-21",
+    "name": "P1/W4/D3 - Push",
+    "folderId": "sbcp-p1-w4",
+    "notes": "Week 4 (70% DELOAD). Reduced pressing volume with corrective pairing on every push movement.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Dislocates",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Cat-Cow",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Scapular Pull-Ups",
-        "bodyPart": "Back",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Pull-Up",
-        "bodyPart": "Back",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 8
-          },
-          {
-            "reps": 8
-          },
-          {
-            "reps": 8
-          },
-          {
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "Bodyweight deload",
-        "highlight": true
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 120,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Meadows Row",
-        "bodyPart": "Back",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 60,
-            "reps": 8
-          },
-          {
-            "weight": 60,
-            "reps": 8
-          },
-          {
-            "weight": 60,
-            "reps": 8
-          },
-          {
-            "weight": 60,
-            "reps": 8
-          }
-        ],
-        "supersetId": "SS2",
-        "highlight": true
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 20
-          },
-          {
-            "weight": 50,
-            "reps": 20
-          },
-          {
-            "weight": 50,
-            "reps": 20
-          },
-          {
-            "weight": 50,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Machine Row",
-        "bodyPart": "Back",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 115,
-            "reps": 12
-          },
-          {
-            "weight": 115,
-            "reps": 12
-          },
-          {
-            "weight": 115,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Reverse Pec Deck",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 70,
-            "reps": 15
-          },
-          {
-            "weight": 70,
-            "reps": 15
-          },
-          {
-            "weight": 70,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Incline Dumbbell Curl",
-        "bodyPart": "Arms",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 20,
-            "reps": 12
-          },
-          {
-            "weight": 20,
-            "reps": 12
-          },
-          {
-            "weight": 20,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Shrug",
-        "bodyPart": "Back",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 150,
-            "reps": 12
-          },
-          {
-            "weight": 150,
-            "reps": 12
-          },
-          {
-            "weight": 150,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "70% DELOAD intensity. Reduced volume", "sets": [{"weight": 205, "reps": 10}, {"weight": 205, "reps": 10}]},
+      {"name": "Low Incline Dumbbell Press", "bodyPart": "Chest", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 45, "reps": 15}, {"weight": 45, "reps": 15}]},
+      {"name": "Low Cable Crossover", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 110, "reps": 10}, {"weight": 110, "reps": 10}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1021",
-    "name": "P1/W4/D4 - Legs (Hinge) (DELOAD)",
-    "folderId": "cc-p1-w4",
-    "estimatedTime": 60,
-    "notes": "70% DELOAD intensity. Stiff Leg Deadlift, Single Leg Hip Thrust, Stability Ball Leg Curl.",
+    "id": "sbcp-22",
+    "name": "P1/W4/D4 - Quad",
+    "folderId": "sbcp-p1-w4",
+    "notes": "Week 4 (70% DELOAD). Squat focus with hamstring balance work built in.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Leg Swings (Front/Back)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Leg Swings (Lateral)",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 30
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Walking Lunges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Glute Bridges",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 15
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Fire Hydrants",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "90/90 Hip Switches",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "reps": 16
-          }
-        ],
-        "supersetId": "W2"
-      },
-      {
-        "name": "Deadlift",
-        "bodyPart": "Back",
-        "category": "barbell",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 45,
-            "reps": 10
-          }
-        ],
-        "notes": "Empty bar"
-      },
-      {
-        "name": "Deadlift",
-        "bodyPart": "Back",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 180,
-        "sets": [
-          {
-            "weight": 220,
-            "reps": 5
-          },
-          {
-            "weight": 220,
-            "reps": 5
-          },
-          {
-            "weight": 220,
-            "reps": 5
-          },
-          {
-            "weight": 220,
-            "reps": 5
-          }
-        ],
-        "notes": "70% DELOAD",
-        "highlight": true
-      },
-      {
-        "name": "Stiff Leg Deadlift",
-        "bodyPart": "Legs",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 145,
-            "reps": 10
-          },
-          {
-            "weight": 145,
-            "reps": 10
-          },
-          {
-            "weight": 145,
-            "reps": 10
-          },
-          {
-            "weight": 145,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "Hamstring focus",
-        "highlight": true
-      },
-      {
-        "name": "Dead Bug",
-        "bodyPart": "Core",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 90,
-        "sets": [
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          },
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS1",
-        "notes": "10 per side"
-      },
-      {
-        "name": "Single Leg Hip Thrust",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 10
-          },
-          {
-            "reps": 10
-          },
-          {
-            "reps": 10
-          },
-          {
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2",
-        "notes": "Glute focus",
-        "highlight": true
-      },
-      {
-        "name": "Stability Ball Leg Curl",
-        "bodyPart": "Legs",
-        "category": "reps_only",
-        "phase": "workout",
-        "restTime": 75,
-        "sets": [
-          {
-            "reps": 12
-          },
-          {
-            "reps": 12
-          },
-          {
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Band Pull Through",
-        "bodyPart": "Legs",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Pallof Press",
-        "bodyPart": "Core",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 70,
-            "reps": 20
-          },
-          {
-            "weight": 70,
-            "reps": 20
-          },
-          {
-            "weight": 70,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS3",
-        "notes": "10 per side"
-      },
-      {
-        "name": "Couch Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 90
-          },
-          {
-            "duration": 90
-          }
-        ],
-        "notes": "Hip flexor - KEY",
-        "highlight": true
-      },
-      {
-        "name": "Supine Twist",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "70% DELOAD intensity", "sets": [{"weight": 235, "reps": 8}, {"weight": 235, "reps": 8}, {"weight": 235, "reps": 8}]},
+      {"name": "Bulgarian Split Squat", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 100, "reps": 10}, {"weight": 100, "reps": 10}]},
+      {"name": "Stability Ball Leg Curl", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"reps": 12}, {"reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 195, "reps": 12}, {"weight": 195, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 75, "reps": 12}, {"weight": 75, "reps": 12}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   },
   {
-    "id": "cc-1022",
-    "name": "P1/W4/D5 - Arms/Shoulders (DELOAD)",
-    "folderId": "cc-p1-w4",
-    "estimatedTime": 50,
-    "notes": "Landmine Press, Leaning Lateral Raise, Concentration Curl, JM Press.",
+    "id": "sbcp-23",
+    "name": "P1/W4/D5 - Arms/Shoulders",
+    "folderId": "sbcp-p1-w4",
+    "notes": "Week 4 (70% DELOAD). Optional - skip if fatigued. Extra rear delt and corrective work.",
     "exercises": [
-      {
-        "name": "Treadmill Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "warmup",
-        "restTime": 60,
-        "sets": [
-          {
-            "distance": 1.6,
-            "duration": 480
-          }
-        ]
-      },
-      {
-        "name": "Arm Circles (Forward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Arm Circles (Backward)",
-        "bodyPart": "Shoulders",
-        "category": "reps_only",
-        "phase": "warmup",
-        "restTime": 0,
-        "sets": [
-          {
-            "reps": 20
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band Pull-Aparts",
-        "bodyPart": "Back",
-        "category": "band",
-        "phase": "warmup",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ],
-        "supersetId": "W1"
-      },
-      {
-        "name": "Band External Rotation",
-        "bodyPart": "Shoulders",
-        "category": "band",
-        "phase": "workout",
-        "restTime": 30,
-        "sets": [
-          {
-            "bandColor": "red",
-            "reps": 15
-          },
-          {
-            "bandColor": "red",
-            "reps": 15
-          }
-        ]
-      },
-      {
-        "name": "Landmine Press",
-        "bodyPart": "Shoulders",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 60,
-            "reps": 12
-          },
-          {
-            "weight": 60,
-            "reps": 12
-          },
-          {
-            "weight": 60,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Face Pull",
-        "bodyPart": "Shoulders",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 50,
-            "reps": 20
-          },
-          {
-            "weight": 50,
-            "reps": 20
-          },
-          {
-            "weight": 50,
-            "reps": 20
-          }
-        ],
-        "supersetId": "SS1"
-      },
-      {
-        "name": "Leaning Lateral Raise",
-        "bodyPart": "Shoulders",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 45,
-        "sets": [
-          {
-            "weight": 10,
-            "reps": 12
-          },
-          {
-            "weight": 10,
-            "reps": 12
-          },
-          {
-            "weight": 10,
-            "reps": 12
-          },
-          {
-            "weight": 10,
-            "reps": 12
-          }
-        ]
-      },
-      {
-        "name": "Concentration Curl",
-        "bodyPart": "Arms",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 20,
-            "reps": 10
-          },
-          {
-            "weight": 20,
-            "reps": 10
-          },
-          {
-            "weight": 20,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "JM Press",
-        "bodyPart": "Arms",
-        "category": "barbell",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 80,
-            "reps": 10
-          },
-          {
-            "weight": 80,
-            "reps": 10
-          },
-          {
-            "weight": 80,
-            "reps": 10
-          }
-        ],
-        "supersetId": "SS2"
-      },
-      {
-        "name": "Incline Curl (Dumbbell)",
-        "bodyPart": "Arms",
-        "category": "dumbbell",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 20,
-            "reps": 12
-          },
-          {
-            "weight": 20,
-            "reps": 12
-          },
-          {
-            "weight": 20,
-            "reps": 12
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Triceps Extension (Cable)",
-        "bodyPart": "Arms",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 60,
-        "sets": [
-          {
-            "weight": 40,
-            "reps": 15
-          },
-          {
-            "weight": 40,
-            "reps": 15
-          },
-          {
-            "weight": 40,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS3"
-      },
-      {
-        "name": "Cable Crunch",
-        "bodyPart": "Core",
-        "category": "machine",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "weight": 80,
-            "reps": 15
-          },
-          {
-            "weight": 80,
-            "reps": 15
-          },
-          {
-            "weight": 80,
-            "reps": 15
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "L-Sit Hold",
-        "bodyPart": "Core",
-        "category": "duration",
-        "phase": "workout",
-        "restTime": 45,
-        "sets": [
-          {
-            "duration": 15
-          },
-          {
-            "duration": 15
-          },
-          {
-            "duration": 15
-          }
-        ],
-        "supersetId": "SS4"
-      },
-      {
-        "name": "Doorway Pec Stretch",
-        "bodyPart": "Chest",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Foam Roller Thoracic Extension",
-        "bodyPart": "Back",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 120
-          }
-        ]
-      }
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "red"}, {"reps": 15, "bandColor": "red"}]},
+      {"name": "Landmine Press", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 45, "reps": 15}, {"weight": 45, "reps": 15}]},
+      {"name": "Concentration Curl", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 12}]},
+      {"name": "Close Grip Bench Press", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 12}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 16}, {"weight": 60, "reps": 16}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 75, "reps": 12}, {"weight": 75, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
     ]
   },
   {
-    "id": "cc-1023",
-    "name": "P1/W4/D6 - Run (DELOAD)",
-    "folderId": "cc-p1-w4",
-    "estimatedTime": 30,
-    "notes": "2.5 miles easy recovery pace.",
+    "id": "sbcp-24",
+    "name": "P1/W4/D6 - Run",
+    "folderId": "sbcp-p1-w4",
+    "notes": "Week 4 (70% DELOAD). 3.0 miles. Easy recovery pace.",
     "exercises": [
-      {
-        "name": "Outdoor Run",
-        "bodyPart": "Cardio",
-        "category": "cardio",
-        "phase": "workout",
-        "restTime": 0,
-        "sets": [
-          {
-            "distance": 4,
-            "duration": 1500
-          }
-        ],
-        "notes": "Easy recovery pace",
-        "highlight": true
-      },
-      {
-        "name": "Standing Quad Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Standing Hamstring Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Kneeling Hip Flexor Stretch",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      },
-      {
-        "name": "Calf Stretch (Wall)",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 45
-          },
-          {
-            "duration": 45
-          }
-        ]
-      },
-      {
-        "name": "Pigeon Pose",
-        "bodyPart": "Legs",
-        "category": "duration",
-        "phase": "cooldown",
-        "restTime": 0,
-        "sets": [
-          {
-            "duration": 60
-          },
-          {
-            "duration": 60
-          }
-        ]
-      }
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "3.0 miles - Easy recovery pace", "restTime": 0, "sets": [{"distance": 4.8, "duration": 1800}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-25",
+    "name": "P2/W5/D1 - Pull",
+    "folderId": "sbcp-p2-w5",
+    "notes": "Week 5 (77%). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "weighted_bodyweight", "phase": "workout", "highlight": true, "notes": "5 lbs added", "restTime": 120, "sets": [{"weight": 5, "reps": 8}, {"weight": 5, "reps": 8}, {"weight": 5, "reps": 8}]},
+      {"name": "Barbell Row", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 135, "reps": 12}, {"weight": 135, "reps": 10}, {"weight": 135, "reps": 8}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Seated Cable Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}]},
+      {"name": "Hammer Curl", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 10}, {"weight": 25, "reps": 10}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 135, "reps": 12}, {"weight": 135, "reps": 12}, {"weight": 135, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-26",
+    "name": "P2/W5/D2 - Hinge",
+    "folderId": "sbcp-p2-w5",
+    "notes": "Week 5 (77%). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "77% intensity", "sets": [{"weight": 245, "reps": 5}, {"weight": 245, "reps": 5}, {"weight": 245, "reps": 5}, {"weight": 245, "reps": 5}]},
+      {"name": "Romanian Deadlift (Dumbbell)", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Hip Thrust (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"weight": 145, "reps": 12}, {"weight": 145, "reps": 12}, {"weight": 145, "reps": 12}]},
+      {"name": "Seated Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 20}, {"duration": 20}, {"duration": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-27",
+    "name": "P2/W5/D3 - Push",
+    "folderId": "sbcp-p2-w5",
+    "notes": "Week 5 (77%). Reduced pressing volume with corrective pairing on every push movement.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "77% intensity. Reduced volume", "sets": [{"weight": 225, "reps": 5}, {"weight": 225, "reps": 5}, {"weight": 225, "reps": 5}]},
+      {"name": "Incline Dumbbell Press", "bodyPart": "Chest", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 50, "reps": 12}, {"weight": 50, "reps": 10}, {"weight": 50, "reps": 10}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Cable Fly", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 15}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 120, "reps": 8}, {"weight": 120, "reps": 8}, {"weight": 120, "reps": 8}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-28",
+    "name": "P2/W5/D4 - Quad",
+    "folderId": "sbcp-p2-w5",
+    "notes": "Week 5 (77%). Squat focus with hamstring balance work built in.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "77% intensity", "sets": [{"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}]},
+      {"name": "Front Squat", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 100, "reps": 10}, {"weight": 100, "reps": 10}, {"weight": 100, "reps": 10}]},
+      {"name": "Seated Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 205, "reps": 12}, {"weight": 205, "reps": 12}, {"weight": 205, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 20}, {"reps": 20}, {"reps": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-29",
+    "name": "P2/W5/D5 - Arms/Shoulders",
+    "folderId": "sbcp-p2-w5",
+    "notes": "Week 5 (77%). Optional - skip if fatigued. Extra rear delt and corrective work.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Arnold Press", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}]},
+      {"name": "Preacher Curl (Barbell)", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 10}, {"weight": 40, "reps": 10}]},
+      {"name": "Skullcrusher (Barbell)", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}, {"weight": 65, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}, {"weight": 60, "reps": 20}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-30",
+    "name": "P2/W5/D6 - Run",
+    "folderId": "sbcp-p2-w5",
+    "notes": "Week 5 (77%). 3.5 miles. Conversational pace.",
+    "exercises": [
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "3.5 miles - Conversational pace", "restTime": 0, "sets": [{"distance": 5.6, "duration": 2100}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-31",
+    "name": "P2/W6/D1 - Pull",
+    "folderId": "sbcp-p2-w6",
+    "notes": "Week 6 (80%). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "weighted_bodyweight", "phase": "workout", "highlight": true, "notes": "10 lbs added", "restTime": 120, "sets": [{"weight": 10, "reps": 8}, {"weight": 10, "reps": 8}, {"weight": 10, "reps": 8}]},
+      {"name": "T-Bar Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 140, "reps": 12}, {"weight": 140, "reps": 10}, {"weight": 140, "reps": 8}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Chest Supported Row (DB)", "bodyPart": "Back", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}]},
+      {"name": "EZ Bar Curl", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 10}, {"weight": 25, "reps": 10}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 140, "reps": 12}, {"weight": 140, "reps": 12}, {"weight": 140, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-32",
+    "name": "P2/W6/D2 - Hinge",
+    "folderId": "sbcp-p2-w6",
+    "notes": "Week 6 (80%). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "80% intensity", "sets": [{"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}]},
+      {"name": "Romanian Deadlift (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Hip Thrust (Machine)", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"weight": 150, "reps": 12}, {"weight": 150, "reps": 12}, {"weight": 150, "reps": 12}]},
+      {"name": "Prone Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 20}, {"duration": 20}, {"duration": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-33",
+    "name": "P2/W6/D3 - Push",
+    "folderId": "sbcp-p2-w6",
+    "notes": "Week 6 (80%). Reduced pressing volume with corrective pairing on every push movement.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "80% intensity. Reduced volume", "sets": [{"weight": 235, "reps": 5}, {"weight": 235, "reps": 5}, {"weight": 235, "reps": 5}]},
+      {"name": "Incline Cable Press", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 50, "reps": 12}, {"weight": 50, "reps": 10}, {"weight": 50, "reps": 10}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Dumbbell Fly", "bodyPart": "Chest", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 15}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 125, "reps": 8}, {"weight": 125, "reps": 8}, {"weight": 125, "reps": 8}]},
+      {"name": "Lateral Raise (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-34",
+    "name": "P2/W6/D4 - Quad",
+    "folderId": "sbcp-p2-w6",
+    "notes": "Week 6 (80%). Squat focus with hamstring balance work built in.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "80% intensity", "sets": [{"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}]},
+      {"name": "Hack Squat", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}]},
+      {"name": "Prone Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 205, "reps": 12}, {"weight": 205, "reps": 12}, {"weight": 205, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 20}, {"reps": 20}, {"reps": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-35",
+    "name": "P2/W6/D5 - Arms/Shoulders",
+    "folderId": "sbcp-p2-w6",
+    "notes": "Week 6 (80%). Optional - skip if fatigued. Extra rear delt and corrective work.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Seated Dumbbell Press", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}]},
+      {"name": "Preacher Curl (Machine)", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 10}, {"weight": 40, "reps": 10}]},
+      {"name": "Tricep Pushdown", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Lateral Raise (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-36",
+    "name": "P2/W6/D6 - Run",
+    "folderId": "sbcp-p2-w6",
+    "notes": "Week 6 (80%). 4.0 miles. Moderate pace.",
+    "exercises": [
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "4.0 miles - Moderate pace", "restTime": 0, "sets": [{"distance": 6.4, "duration": 2400}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-37",
+    "name": "P2/W7/D1 - Pull",
+    "folderId": "sbcp-p2-w7",
+    "notes": "Week 7 (82% Peak P2). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "weighted_bodyweight", "phase": "workout", "highlight": true, "notes": "20 lbs added", "restTime": 120, "sets": [{"weight": 20, "reps": 8}, {"weight": 20, "reps": 8}, {"weight": 20, "reps": 8}]},
+      {"name": "Pendlay Row", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 140, "reps": 12}, {"weight": 140, "reps": 10}, {"weight": 140, "reps": 8}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Single Arm Cable Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}]},
+      {"name": "Cable Curl", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 10}, {"weight": 25, "reps": 10}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 140, "reps": 12}, {"weight": 140, "reps": 12}, {"weight": 140, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 120, "reps": 12}, {"weight": 120, "reps": 12}, {"weight": 120, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-38",
+    "name": "P2/W7/D2 - Hinge",
+    "folderId": "sbcp-p2-w7",
+    "notes": "Week 7 (82% Peak P2). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "82% Peak P2 intensity", "sets": [{"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}]},
+      {"name": "Single Leg RDL", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Glute Bridge (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"weight": 150, "reps": 12}, {"weight": 150, "reps": 12}, {"weight": 150, "reps": 12}]},
+      {"name": "Nordic Curl (Assisted)", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"reps": 12}, {"reps": 12}, {"reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 20}, {"duration": 20}, {"duration": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-39",
+    "name": "P2/W7/D3 - Push",
+    "folderId": "sbcp-p2-w7",
+    "notes": "Week 7 (82% Peak P2). Reduced pressing volume with corrective pairing on every push movement.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "82% Peak P2 intensity. Reduced volume", "sets": [{"weight": 240, "reps": 5}, {"weight": 240, "reps": 5}, {"weight": 240, "reps": 5}]},
+      {"name": "Incline Chest Press (Machine)", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 50, "reps": 12}, {"weight": 50, "reps": 10}, {"weight": 50, "reps": 10}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Pec Deck", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 15}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 125, "reps": 8}, {"weight": 125, "reps": 8}, {"weight": 125, "reps": 8}]},
+      {"name": "Lateral Raise (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-40",
+    "name": "P2/W7/D4 - Quad",
+    "folderId": "sbcp-p2-w7",
+    "notes": "Week 7 (82% Peak P2). Squat focus with hamstring balance work built in.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "82% Peak P2 intensity", "sets": [{"weight": 275, "reps": 5}, {"weight": 275, "reps": 5}, {"weight": 275, "reps": 5}, {"weight": 275, "reps": 5}, {"weight": 275, "reps": 5}]},
+      {"name": "Goblet Squat", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}]},
+      {"name": "Nordic Curl (Assisted)", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"reps": 12}, {"reps": 12}, {"reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 210, "reps": 12}, {"weight": 210, "reps": 12}, {"weight": 210, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 20}, {"reps": 20}, {"reps": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-41",
+    "name": "P2/W7/D5 - Arms/Shoulders",
+    "folderId": "sbcp-p2-w7",
+    "notes": "Week 7 (82% Peak P2). Optional - skip if fatigued. Extra rear delt and corrective work.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Shoulder Press (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}]},
+      {"name": "Spider Curl (Dumbbell)", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 10}, {"weight": 40, "reps": 10}]},
+      {"name": "Overhead Tricep Extension", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Lateral Raise (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-42",
+    "name": "P2/W7/D6 - Run",
+    "folderId": "sbcp-p2-w7",
+    "notes": "Week 7 (82% Peak P2). 4.5 miles. Moderate pace.",
+    "exercises": [
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "4.5 miles - Moderate pace", "restTime": 0, "sets": [{"distance": 7.2, "duration": 2700}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-43",
+    "name": "P2/W8/D1 - Pull",
+    "folderId": "sbcp-p2-w8",
+    "notes": "Week 8 (72% DELOAD). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "weighted_bodyweight", "phase": "workout", "highlight": true, "notes": "5 lbs added", "restTime": 120, "sets": [{"weight": 5, "reps": 10}, {"weight": 5, "reps": 10}]},
+      {"name": "Meadows Row", "bodyPart": "Back", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 135, "reps": 12}, {"weight": 135, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 45, "reps": 15}, {"weight": 45, "reps": 15}]},
+      {"name": "Machine Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 85, "reps": 12}, {"weight": 85, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Incline Dumbbell Curl", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 12}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 135, "reps": 12}, {"weight": 135, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 110, "reps": 12}, {"weight": 110, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-44",
+    "name": "P2/W8/D2 - Hinge",
+    "folderId": "sbcp-p2-w8",
+    "notes": "Week 8 (72% DELOAD). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "72% DELOAD intensity", "sets": [{"weight": 225, "reps": 8}, {"weight": 225, "reps": 8}, {"weight": 225, "reps": 8}]},
+      {"name": "Stiff Leg Deadlift", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 12}]},
+      {"name": "Single Leg Hip Thrust", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"reps": 12}, {"reps": 12}]},
+      {"name": "Stability Ball Leg Curl", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"reps": 12}, {"reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 16}, {"weight": 60, "reps": 16}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 15}, {"duration": 15}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-45",
+    "name": "P2/W8/D3 - Push",
+    "folderId": "sbcp-p2-w8",
+    "notes": "Week 8 (72% DELOAD). Reduced pressing volume with corrective pairing on every push movement.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "72% DELOAD intensity. Reduced volume", "sets": [{"weight": 210, "reps": 10}, {"weight": 210, "reps": 10}]},
+      {"name": "Low Incline Dumbbell Press", "bodyPart": "Chest", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 45, "reps": 15}, {"weight": 45, "reps": 15}]},
+      {"name": "Low Cable Crossover", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 110, "reps": 10}, {"weight": 110, "reps": 10}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-46",
+    "name": "P2/W8/D4 - Quad",
+    "folderId": "sbcp-p2-w8",
+    "notes": "Week 8 (72% DELOAD). Squat focus with hamstring balance work built in.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "72% DELOAD intensity", "sets": [{"weight": 240, "reps": 8}, {"weight": 240, "reps": 8}, {"weight": 240, "reps": 8}]},
+      {"name": "Bulgarian Split Squat", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 100, "reps": 10}, {"weight": 100, "reps": 10}]},
+      {"name": "Stability Ball Leg Curl", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"reps": 12}, {"reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 200, "reps": 12}, {"weight": 200, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 75, "reps": 12}, {"weight": 75, "reps": 12}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-47",
+    "name": "P2/W8/D5 - Arms/Shoulders",
+    "folderId": "sbcp-p2-w8",
+    "notes": "Week 8 (72% DELOAD). Optional - skip if fatigued. Extra rear delt and corrective work.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Landmine Press", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 45, "reps": 15}, {"weight": 45, "reps": 15}]},
+      {"name": "Concentration Curl", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 12}]},
+      {"name": "Close Grip Bench Press", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 12}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 16}, {"weight": 60, "reps": 16}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 75, "reps": 12}, {"weight": 75, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-48",
+    "name": "P2/W8/D6 - Run",
+    "folderId": "sbcp-p2-w8",
+    "notes": "Week 8 (72% DELOAD). 3.0 miles. Easy recovery pace.",
+    "exercises": [
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "3.0 miles - Easy recovery pace", "restTime": 0, "sets": [{"distance": 4.8, "duration": 1800}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-49",
+    "name": "P3/W9/D1 - Pull",
+    "folderId": "sbcp-p3-w9",
+    "notes": "Week 9 (80%). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "weighted_bodyweight", "phase": "workout", "highlight": true, "notes": "10 lbs added", "restTime": 120, "sets": [{"weight": 10, "reps": 8}, {"weight": 10, "reps": 8}, {"weight": 10, "reps": 8}]},
+      {"name": "Barbell Row", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 140, "reps": 12}, {"weight": 140, "reps": 10}, {"weight": 140, "reps": 8}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Seated Cable Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}]},
+      {"name": "Hammer Curl", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 10}, {"weight": 25, "reps": 10}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 140, "reps": 12}, {"weight": 140, "reps": 12}, {"weight": 140, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}, {"weight": 115, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-50",
+    "name": "P3/W9/D2 - Hinge",
+    "folderId": "sbcp-p3-w9",
+    "notes": "Week 9 (80%). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "80% intensity", "sets": [{"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}]},
+      {"name": "Romanian Deadlift (Dumbbell)", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Hip Thrust (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"weight": 150, "reps": 12}, {"weight": 150, "reps": 12}, {"weight": 150, "reps": 12}]},
+      {"name": "Seated Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 20}, {"duration": 20}, {"duration": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-51",
+    "name": "P3/W9/D3 - Push",
+    "folderId": "sbcp-p3-w9",
+    "notes": "Week 9 (80%). Reduced pressing volume with corrective pairing on every push movement.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "80% intensity. Full volume restored", "sets": [{"weight": 235, "reps": 5}, {"weight": 235, "reps": 5}, {"weight": 235, "reps": 5}, {"weight": 235, "reps": 5}]},
+      {"name": "Incline Dumbbell Press", "bodyPart": "Chest", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 50, "reps": 12}, {"weight": 50, "reps": 10}, {"weight": 50, "reps": 10}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Cable Fly", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 15}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 125, "reps": 8}, {"weight": 125, "reps": 8}, {"weight": 125, "reps": 8}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-52",
+    "name": "P3/W9/D4 - Quad",
+    "folderId": "sbcp-p3-w9",
+    "notes": "Week 9 (80%). Squat focus with hamstring balance work built in.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "80% intensity", "sets": [{"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}]},
+      {"name": "Front Squat", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}]},
+      {"name": "Seated Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 205, "reps": 12}, {"weight": 205, "reps": 12}, {"weight": 205, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 20}, {"reps": 20}, {"reps": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-53",
+    "name": "P3/W9/D5 - Arms/Shoulders",
+    "folderId": "sbcp-p3-w9",
+    "notes": "Week 9 (80%). Optional - skip if fatigued. Extra rear delt and corrective work.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Arnold Press", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}]},
+      {"name": "Preacher Curl (Barbell)", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 10}, {"weight": 40, "reps": 10}]},
+      {"name": "Skullcrusher (Barbell)", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-54",
+    "name": "P3/W9/D6 - Run",
+    "folderId": "sbcp-p3-w9",
+    "notes": "Week 9 (80%). 4.0 miles. Moderate pace.",
+    "exercises": [
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "4.0 miles - Moderate pace", "restTime": 0, "sets": [{"distance": 6.4, "duration": 2400}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-55",
+    "name": "P3/W10/D1 - Pull",
+    "folderId": "sbcp-p3-w10",
+    "notes": "Week 10 (82%). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "weighted_bodyweight", "phase": "workout", "highlight": true, "notes": "20 lbs added", "restTime": 120, "sets": [{"weight": 20, "reps": 8}, {"weight": 20, "reps": 8}, {"weight": 20, "reps": 8}]},
+      {"name": "T-Bar Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 140, "reps": 12}, {"weight": 140, "reps": 10}, {"weight": 140, "reps": 8}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Chest Supported Row (DB)", "bodyPart": "Back", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}]},
+      {"name": "EZ Bar Curl", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 10}, {"weight": 25, "reps": 10}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 140, "reps": 12}, {"weight": 140, "reps": 12}, {"weight": 140, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 120, "reps": 12}, {"weight": 120, "reps": 12}, {"weight": 120, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-56",
+    "name": "P3/W10/D2 - Hinge",
+    "folderId": "sbcp-p3-w10",
+    "notes": "Week 10 (82%). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "82% intensity", "sets": [{"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}, {"weight": 260, "reps": 5}]},
+      {"name": "Romanian Deadlift (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Hip Thrust (Machine)", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"weight": 150, "reps": 12}, {"weight": 150, "reps": 12}, {"weight": 150, "reps": 12}]},
+      {"name": "Prone Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 20}, {"duration": 20}, {"duration": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-57",
+    "name": "P3/W10/D3 - Push",
+    "folderId": "sbcp-p3-w10",
+    "notes": "Week 10 (82%). Reduced pressing volume with corrective pairing on every push movement.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "82% intensity. Full volume restored", "sets": [{"weight": 240, "reps": 5}, {"weight": 240, "reps": 5}, {"weight": 240, "reps": 5}, {"weight": 240, "reps": 5}]},
+      {"name": "Incline Cable Press", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 50, "reps": 12}, {"weight": 50, "reps": 10}, {"weight": 50, "reps": 10}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Dumbbell Fly", "bodyPart": "Chest", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 15}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 20, "bandColor": "green"}, {"reps": 20, "bandColor": "green"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 125, "reps": 8}, {"weight": 125, "reps": 8}, {"weight": 125, "reps": 8}]},
+      {"name": "Lateral Raise (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-58",
+    "name": "P3/W10/D4 - Quad",
+    "folderId": "sbcp-p3-w10",
+    "notes": "Week 10 (82%). Squat focus with hamstring balance work built in.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "82% intensity", "sets": [{"weight": 275, "reps": 5}, {"weight": 275, "reps": 5}, {"weight": 275, "reps": 5}, {"weight": 275, "reps": 5}, {"weight": 275, "reps": 5}]},
+      {"name": "Hack Squat", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}]},
+      {"name": "Prone Leg Curl", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 210, "reps": 12}, {"weight": 210, "reps": 12}, {"weight": 210, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 20}, {"reps": 20}, {"reps": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-59",
+    "name": "P3/W10/D5 - Arms/Shoulders",
+    "folderId": "sbcp-p3-w10",
+    "notes": "Week 10 (82%). Optional - skip if fatigued. Extra rear delt and corrective work.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Seated Dumbbell Press", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}]},
+      {"name": "Preacher Curl (Machine)", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 10}, {"weight": 40, "reps": 10}]},
+      {"name": "Tricep Pushdown", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Lateral Raise (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}, {"weight": 80, "reps": 15}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-60",
+    "name": "P3/W10/D6 - Run",
+    "folderId": "sbcp-p3-w10",
+    "notes": "Week 10 (82%). 4.5 miles. Moderate pace.",
+    "exercises": [
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "4.5 miles - Moderate pace", "restTime": 0, "sets": [{"distance": 7.2, "duration": 2700}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-61",
+    "name": "P3/W11/D1 - Pull",
+    "folderId": "sbcp-p3-w11",
+    "notes": "Week 11 (85% PEAK). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "blue"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "blue"}, {"reps": 15, "bandColor": "blue"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "weighted_bodyweight", "phase": "workout", "highlight": true, "notes": "25 lbs added", "restTime": 120, "sets": [{"weight": 25, "reps": 8}, {"weight": 25, "reps": 8}, {"weight": 25, "reps": 8}]},
+      {"name": "Pendlay Row", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 145, "reps": 12}, {"weight": 145, "reps": 10}, {"weight": 145, "reps": 8}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Single Arm Cable Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}, {"weight": 90, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 20, "bandColor": "blue"}, {"reps": 20, "bandColor": "blue"}, {"reps": 20, "bandColor": "blue"}]},
+      {"name": "Cable Curl", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 10}, {"weight": 30, "reps": 10}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 145, "reps": 12}, {"weight": 145, "reps": 12}, {"weight": 145, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 120, "reps": 12}, {"weight": 120, "reps": 12}, {"weight": 120, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-62",
+    "name": "P3/W11/D2 - Hinge",
+    "folderId": "sbcp-p3-w11",
+    "notes": "Week 11 (85% PEAK). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "85% PEAK intensity", "sets": [{"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}, {"weight": 270, "reps": 5}]},
+      {"name": "Single Leg RDL", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Glute Bridge (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"weight": 155, "reps": 12}, {"weight": 155, "reps": 12}, {"weight": 155, "reps": 12}]},
+      {"name": "Nordic Curl (Assisted)", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"reps": 12}, {"reps": 12}, {"reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 20}, {"duration": 20}, {"duration": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-63",
+    "name": "P3/W11/D3 - Push",
+    "folderId": "sbcp-p3-w11",
+    "notes": "Week 11 (85% PEAK). Reduced pressing volume with corrective pairing on every push movement.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "blue"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "blue"}, {"reps": 15, "bandColor": "blue"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "85% PEAK intensity. Full volume restored", "sets": [{"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}, {"weight": 250, "reps": 5}]},
+      {"name": "Incline Chest Press (Machine)", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 50, "reps": 12}, {"weight": 50, "reps": 10}, {"weight": 50, "reps": 10}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}, {"weight": 50, "reps": 15}]},
+      {"name": "Pec Deck", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 15}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 20, "bandColor": "blue"}, {"reps": 20, "bandColor": "blue"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 130, "reps": 8}, {"weight": 130, "reps": 8}, {"weight": 130, "reps": 8}]},
+      {"name": "Lateral Raise (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-64",
+    "name": "P3/W11/D4 - Quad",
+    "folderId": "sbcp-p3-w11",
+    "notes": "Week 11 (85% PEAK). Squat focus with hamstring balance work built in.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "85% PEAK intensity", "sets": [{"weight": 285, "reps": 5}, {"weight": 285, "reps": 5}, {"weight": 285, "reps": 5}, {"weight": 285, "reps": 5}, {"weight": 285, "reps": 5}]},
+      {"name": "Goblet Squat", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}, {"weight": 105, "reps": 10}]},
+      {"name": "Nordic Curl (Assisted)", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"reps": 12}, {"reps": 12}, {"reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 215, "reps": 12}, {"weight": 215, "reps": 12}, {"weight": 215, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}, {"weight": 75, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 85, "reps": 15}, {"weight": 85, "reps": 15}, {"weight": 85, "reps": 15}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 20}, {"reps": 20}, {"reps": 20}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-65",
+    "name": "P3/W11/D5 - Arms/Shoulders",
+    "folderId": "sbcp-p3-w11",
+    "notes": "Week 11 (85% PEAK). Optional - skip if fatigued. Extra rear delt and corrective work.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "blue"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "blue"}, {"reps": 15, "bandColor": "blue"}]},
+      {"name": "Shoulder Press (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}, {"weight": 50, "reps": 20}]},
+      {"name": "Spider Curl (Dumbbell)", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 10}, {"weight": 40, "reps": 10}]},
+      {"name": "Overhead Tricep Extension", "bodyPart": "Arms", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 10}, {"weight": 45, "reps": 10}]},
+      {"name": "Lateral Raise (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}, {"weight": 15, "reps": 15}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}, {"weight": 65, "reps": 20}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 85, "reps": 15}, {"weight": 85, "reps": 15}, {"weight": 85, "reps": 15}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-66",
+    "name": "P3/W11/D6 - Run",
+    "folderId": "sbcp-p3-w11",
+    "notes": "Week 11 (85% PEAK). 5.0 miles. Push the pace.",
+    "exercises": [
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "5.0 miles - Push the pace", "restTime": 0, "sets": [{"distance": 8.0, "duration": 3000}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-67",
+    "name": "P3/W12/D1 - Pull",
+    "folderId": "sbcp-p3-w12",
+    "notes": "Week 12 (72% DELOAD). Rear delt emphasis - corrective priority day. Front-loaded for max freshness.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Pull-Up", "bodyPart": "Back", "category": "weighted_bodyweight", "phase": "workout", "highlight": true, "notes": "5 lbs added", "restTime": 120, "sets": [{"weight": 5, "reps": 10}, {"weight": 5, "reps": 10}]},
+      {"name": "Meadows Row", "bodyPart": "Back", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 135, "reps": 12}, {"weight": 135, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze rear delts at top - KEY corrective", "restTime": 90, "sets": [{"weight": 45, "reps": 15}, {"weight": 45, "reps": 15}]},
+      {"name": "Machine Row", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 85, "reps": 12}, {"weight": 85, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "highlight": true, "notes": "Corrective - external rotation focus", "restTime": 60, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Incline Dumbbell Curl", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 25, "reps": 12}, {"weight": 25, "reps": 12}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Barbell Shrug", "bodyPart": "Back", "category": "barbell", "phase": "workout", "supersetId": "SS4", "restTime": 0, "sets": [{"weight": 135, "reps": 12}, {"weight": 135, "reps": 12}]},
+      {"name": "Lat Pulldown (Cable)", "bodyPart": "Back", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 90, "sets": [{"weight": 110, "reps": 12}, {"weight": 110, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-68",
+    "name": "P3/W12/D2 - Hinge",
+    "folderId": "sbcp-p3-w12",
+    "notes": "Week 12 (72% DELOAD). Posterior chain focus - hamstrings, glutes, erectors. High corrective priority.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Deadlift (Barbell)", "bodyPart": "Back", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "72% DELOAD intensity", "sets": [{"weight": 225, "reps": 8}, {"weight": 225, "reps": 8}, {"weight": 225, "reps": 8}]},
+      {"name": "Stiff Leg Deadlift", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 12}]},
+      {"name": "Single Leg Hip Thrust", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Squeeze glutes at top - 2s hold", "restTime": 90, "sets": [{"reps": 12}, {"reps": 12}]},
+      {"name": "Stability Ball Leg Curl", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"reps": 12}, {"reps": 12}]},
+      {"name": "Cable Pull Through", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "notes": "Hinge pattern - squeeze glutes", "restTime": 60, "sets": [{"weight": 70, "reps": 12}, {"weight": 70, "reps": 12}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 16}, {"weight": 60, "reps": 16}]},
+      {"name": "L-Sit Hold", "bodyPart": "Core", "category": "duration", "phase": "workout", "supersetId": "SS3", "notes": "Hold as long as possible", "restTime": 60, "sets": [{"duration": 15}, {"duration": 15}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-69",
+    "name": "P3/W12/D3 - Push",
+    "folderId": "sbcp-p3-w12",
+    "notes": "Week 12 (72% DELOAD). Reduced pressing volume with corrective pairing on every push movement.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Bench Press (Barbell)", "bodyPart": "Chest", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 120, "notes": "72% DELOAD intensity. Full volume restored", "sets": [{"weight": 210, "reps": 10}, {"weight": 210, "reps": 10}]},
+      {"name": "Low Incline Dumbbell Press", "bodyPart": "Chest", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Corrective pairing - rear delts counter pressing", "restTime": 90, "sets": [{"weight": 45, "reps": 15}, {"weight": 45, "reps": 15}]},
+      {"name": "Low Cable Crossover", "bodyPart": "Chest", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "workout", "supersetId": "SS2", "notes": "Corrective - counterbalance pressing", "restTime": 60, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Overhead Press (Barbell)", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 110, "reps": 10}, {"weight": 110, "reps": 10}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 60, "sets": [{"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-70",
+    "name": "P3/W12/D4 - Quad",
+    "folderId": "sbcp-p3-w12",
+    "notes": "Week 12 (72% DELOAD). Squat focus with hamstring balance work built in.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Leg Swings (Front/Back)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Leg Swings (Lateral)", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Cat-Cow", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 10}]},
+      {"name": "Glute Bridges", "bodyPart": "Legs", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 15}, {"reps": 15}]},
+      {"name": "Bird Dog", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 0, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Dead Bug", "bodyPart": "Core", "category": "reps_only", "phase": "warmup", "supersetId": "W2", "restTime": 30, "sets": [{"reps": 10}, {"reps": 10}]},
+      {"name": "Squat (Barbell)", "bodyPart": "Legs", "category": "barbell", "phase": "workout", "highlight": true, "restTime": 180, "notes": "72% DELOAD intensity", "sets": [{"weight": 240, "reps": 8}, {"weight": 240, "reps": 8}, {"weight": 240, "reps": 8}]},
+      {"name": "Bulgarian Split Squat", "bodyPart": "Legs", "category": "dumbbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 100, "reps": 10}, {"weight": 100, "reps": 10}]},
+      {"name": "Stability Ball Leg Curl", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS1", "notes": "Hamstring balance work", "restTime": 90, "sets": [{"reps": 12}, {"reps": 12}]},
+      {"name": "Leg Press", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 200, "reps": 12}, {"weight": 200, "reps": 12}]},
+      {"name": "Standing Calf Raise", "bodyPart": "Legs", "category": "machine", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 70, "reps": 15}, {"weight": 70, "reps": 15}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 75, "reps": 12}, {"weight": 75, "reps": 12}]},
+      {"name": "Walking Lunge", "bodyPart": "Legs", "category": "reps_only", "phase": "workout", "supersetId": "SS3", "notes": "20 steps total", "restTime": 60, "sets": [{"reps": 16}, {"reps": 16}]},
+      {"name": "Couch Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Hip flexor - KEY corrective", "restTime": 0, "sets": [{"duration": 90}, {"duration": 90}]},
+      {"name": "Child's Pose with Reach", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 90}]},
+      {"name": "Foam Roll Erectors", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "notes": "Light pressure", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Supine Twist", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
+    ]
+  },
+  {
+    "id": "sbcp-71",
+    "name": "P3/W12/D5 - Arms/Shoulders",
+    "folderId": "sbcp-p3-w12",
+    "notes": "Week 12 (72% DELOAD). Optional - skip if fatigued. Extra rear delt and corrective work.",
+    "exercises": [
+      {"name": "Treadmill Run", "bodyPart": "Cardio", "category": "cardio", "phase": "warmup", "restTime": 60, "sets": [{"distance": 1.0, "duration": 480}]},
+      {"name": "Arm Circles (Forward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Arm Circles (Backward)", "bodyPart": "Shoulders", "category": "reps_only", "phase": "warmup", "supersetId": "W1", "restTime": 0, "sets": [{"reps": 20}]},
+      {"name": "Band Pull-Apart", "bodyPart": "Back", "category": "band", "phase": "warmup", "supersetId": "W1", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}]},
+      {"name": "Band External Rotation", "bodyPart": "Shoulders", "category": "band", "phase": "warmup", "notes": "Per arm", "restTime": 30, "sets": [{"reps": 15, "bandColor": "green"}, {"reps": 15, "bandColor": "green"}]},
+      {"name": "Landmine Press", "bodyPart": "Shoulders", "category": "barbell", "phase": "workout", "supersetId": "SS1", "restTime": 0, "sets": [{"weight": 30, "reps": 12}, {"weight": 30, "reps": 12}]},
+      {"name": "Face Pull (Cable)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS1", "highlight": true, "notes": "Extra rear delt volume", "restTime": 60, "sets": [{"weight": 45, "reps": 15}, {"weight": 45, "reps": 15}]},
+      {"name": "Concentration Curl", "bodyPart": "Arms", "category": "dumbbell", "phase": "workout", "supersetId": "SS2", "restTime": 0, "sets": [{"weight": 40, "reps": 12}, {"weight": 40, "reps": 12}]},
+      {"name": "Close Grip Bench Press", "bodyPart": "Arms", "category": "barbell", "phase": "workout", "supersetId": "SS2", "restTime": 60, "sets": [{"weight": 45, "reps": 12}, {"weight": 45, "reps": 12}]},
+      {"name": "Lateral Raise (Dumbbell)", "bodyPart": "Shoulders", "category": "dumbbell", "phase": "workout", "supersetId": "SS3", "restTime": 0, "sets": [{"weight": 15, "reps": 12}, {"weight": 15, "reps": 12}]},
+      {"name": "Reverse Fly (Machine)", "bodyPart": "Shoulders", "category": "machine", "phase": "workout", "supersetId": "SS3", "highlight": true, "notes": "Rear delt corrective", "restTime": 60, "sets": [{"weight": 65, "reps": 12}, {"weight": 65, "reps": 12}]},
+      {"name": "Pallof Press", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "notes": "10 per side", "restTime": 0, "sets": [{"weight": 60, "reps": 16}, {"weight": 60, "reps": 16}]},
+      {"name": "Cable Crunch", "bodyPart": "Core", "category": "machine", "phase": "workout", "supersetId": "SS4", "restTime": 60, "sets": [{"weight": 75, "reps": 12}, {"weight": 75, "reps": 12}]},
+      {"name": "Doorway Pec Stretch", "bodyPart": "Chest", "category": "duration", "phase": "cooldown", "notes": "60s per side", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Foam Roller Thoracic Extension", "bodyPart": "Back", "category": "duration", "phase": "cooldown", "restTime": 0, "sets": [{"duration": 120}]},
+      {"name": "Upper Trap Stretch", "bodyPart": "Shoulders", "category": "duration", "phase": "cooldown", "notes": "45s per side", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Thread the Needle", "bodyPart": "Back", "category": "reps_only", "phase": "cooldown", "notes": "8 per side", "restTime": 0, "sets": [{"reps": 8}, {"reps": 8}]}
+    ]
+  },
+  {
+    "id": "sbcp-72",
+    "name": "P3/W12/D6 - Run",
+    "folderId": "sbcp-p3-w12",
+    "notes": "Week 12 (72% DELOAD). 3.0 miles. Easy recovery pace.",
+    "exercises": [
+      {"name": "Outdoor Run", "bodyPart": "Cardio", "category": "cardio", "phase": "workout", "highlight": true, "notes": "3.0 miles - Easy recovery pace", "restTime": 0, "sets": [{"distance": 4.8, "duration": 1800}]},
+      {"name": "Standing Quad Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Standing Hamstring Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per leg", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Kneeling Hip Flexor Stretch", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "highlight": true, "notes": "Key for anterior pelvic tilt", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]},
+      {"name": "Calf Stretch (Wall)", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "45s per leg", "restTime": 0, "sets": [{"duration": 45}, {"duration": 45}]},
+      {"name": "Pigeon Pose", "bodyPart": "Legs", "category": "duration", "phase": "cooldown", "notes": "60s per side - glutes/piriformis", "restTime": 0, "sets": [{"duration": 60}, {"duration": 60}]}
     ]
   }
 ];

@@ -1,13 +1,25 @@
 import { useState, useEffect, useRef, Fragment } from 'react';
 import { Icons } from './Icons';
 import { BODY_PARTS, CATEGORIES, BAND_COLORS, EXERCISE_TYPES, EXERCISE_PHASES } from '../data/constants';
-import { formatDuration, getDefaultSetForCategory } from '../utils/helpers';
+import { formatDuration, getDefaultSetForCategory, generateTemplateAIExport, generateTemplateSummary } from '../utils/helpers';
 import { ExerciseSearchModal, CreateFolderModal } from './SharedComponents';
 import { CreateTemplateModal, ImportModal } from './ExercisesScreen';
 
 // Template Detail Modal - shows full template when clicking on summary
-const TemplateDetailModal = ({ template, onClose, onStart, onEdit }) => {
+const TemplateDetailModal = ({ template, onClose, onStart, onEdit, hasActiveWorkout }) => {
   const [collapsedPhases, setCollapsedPhases] = useState({});
+  const [copySuccess, setCopySuccess] = useState(''); // '' | 'ai' | 'text'
+
+  const copyToClipboard = async (type) => {
+    try {
+      const text = type === 'ai' ? generateTemplateAIExport(template) : generateTemplateSummary(template);
+      await navigator.clipboard.writeText(text);
+      setCopySuccess(type);
+      setTimeout(() => setCopySuccess(''), 2000);
+    } catch (err) {
+      console.error('Copy failed:', err);
+    }
+  };
 
   const togglePhase = (phase) => {
     setCollapsedPhases(prev => ({ ...prev, [phase]: !prev[phase] }));
@@ -49,11 +61,21 @@ const TemplateDetailModal = ({ template, onClose, onStart, onEdit }) => {
           <button onClick={onClose} className="text-gray-400 hover:text-white"><Icons.X /></button>
           <h3 className="text-lg font-semibold text-white">{template.name}</h3>
           <div className="flex items-center gap-2">
+            <button onClick={() => copyToClipboard('text')} className="text-gray-400 hover:text-white p-2" title="Copy summary">
+              {copySuccess === 'text' ? <span className="text-green-400 text-xs font-medium">Copied!</span> : <Icons.Copy />}
+            </button>
+            <button onClick={() => copyToClipboard('ai')} className="text-gray-400 hover:text-white p-2" title="Copy JSON for AI">
+              {copySuccess === 'ai' ? <span className="text-green-400 text-xs font-medium">Copied!</span> : <Icons.Code />}
+            </button>
             <button onClick={() => { onEdit(template); onClose(); }} className="text-cyan-400 hover:text-cyan-300 p-2">
               <Icons.Edit />
             </button>
-            <button onClick={() => { onStart(template); onClose(); }} className="bg-rose-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-rose-700 text-sm">
-              Start
+            <button
+              onClick={() => { if (!hasActiveWorkout) { onStart(template); onClose(); } }}
+              disabled={hasActiveWorkout}
+              className={`px-4 py-2 rounded-lg font-medium text-sm ${hasActiveWorkout ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-rose-600 text-white hover:bg-rose-700'}`}
+            >
+              {hasActiveWorkout ? 'In Progress' : 'Start'}
             </button>
           </div>
         </div>
@@ -617,7 +639,7 @@ const EditTemplateModal = ({ template, onSave, onDelete, onClose, allExercises }
   );
 };
 
-const TemplatesScreen = ({ templates, folders, onStartTemplate, onImport, onBulkImport, onUpdateTemplate, onDeleteTemplate, onAddFolder, onBulkAddFolders, onDeleteFolder, onAddExercises, exercises, onScroll, navVisible, onModalStateChange }) => {
+const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout, onImport, onBulkImport, onUpdateTemplate, onDeleteTemplate, onAddFolder, onBulkAddFolders, onDeleteFolder, onAddExercises, exercises, onScroll, navVisible, onModalStateChange }) => {
   const [currentFolderId, setCurrentFolderId] = useState('root');
   const [showImport, setShowImport] = useState(false);
   const [showCreateFolder, setShowCreateFolder] = useState(false);
@@ -789,7 +811,12 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, onImport, onBulk
                   </div>
                   <div className="flex items-center gap-2">
                     <button onClick={() => setEditingTemplate(template)} className="p-2 text-cyan-400/70 hover:text-cyan-300 rounded-lg hover:bg-gray-800"><Icons.Edit /></button>
-                    <button onClick={() => onStartTemplate(template)} className="bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-rose-800">Start</button>
+                    <button
+                      onClick={() => !hasActiveWorkout && onStartTemplate(template)}
+                      disabled={hasActiveWorkout}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium ${hasActiveWorkout ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-rose-700 text-white hover:bg-rose-800'}`}
+                      title={hasActiveWorkout ? 'Finish or cancel your current workout first' : ''}
+                    >{hasActiveWorkout ? 'In Progress' : 'Start'}</button>
                   </div>
                 </div>
 
@@ -826,7 +853,7 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, onImport, onBulk
       {showCreateFolder && <CreateFolderModal parentId={currentFolderId} onSave={onAddFolder} onClose={() => setShowCreateFolder(false)} />}
       {showCreateTemplate && <CreateTemplateModal folderId={currentFolderId} allExercises={exercises} onSave={t => { onImport(t); setShowCreateTemplate(false); }} onClose={() => setShowCreateTemplate(false)} />}
       {editingTemplate && <EditTemplateModal template={editingTemplate} onSave={onUpdateTemplate} onDelete={onDeleteTemplate} onClose={() => setEditingTemplate(null)} allExercises={exercises} />}
-      {viewingTemplate && <TemplateDetailModal template={viewingTemplate} onClose={() => setViewingTemplate(null)} onStart={onStartTemplate} onEdit={setEditingTemplate} />}
+      {viewingTemplate && <TemplateDetailModal template={viewingTemplate} onClose={() => setViewingTemplate(null)} onStart={onStartTemplate} onEdit={setEditingTemplate} hasActiveWorkout={hasActiveWorkout} />}
 
       {deleteFolderConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">

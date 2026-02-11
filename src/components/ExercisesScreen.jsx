@@ -2,15 +2,16 @@ import { useState, useEffect } from 'react';
 import { Icons } from './Icons';
 import { BODY_PARTS, CATEGORIES, BAND_COLORS, EXERCISE_TYPES } from '../data/constants';
 import { formatDuration, getDefaultSetForCategory } from '../utils/helpers';
-import { EditExerciseModal, ExerciseSearchModal, ExerciseDetailModal } from './SharedComponents';
+import { EditExerciseModal, ExerciseSearchModal, ExerciseDetailModal, MergeExerciseModal } from './SharedComponents';
 import { workoutDb } from '../db/workoutDb';
 
-const ExercisesScreen = ({ exercises, onAddExercise, onUpdateExercise, onDeleteExercise, onScroll, navVisible }) => {
+const ExercisesScreen = ({ exercises, onAddExercise, onUpdateExercise, onDeleteExercise, onMergeExercise, onScroll, navVisible }) => {
   const [search, setSearch] = useState('');
   const [selectedBodyPart, setSelectedBodyPart] = useState('All');
   const [editingExercise, setEditingExercise] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState(null);
+  const [mergingExercise, setMergingExercise] = useState(null);
   const [history, setHistory] = useState([]);
 
   // Load history from IndexedDB when component mounts
@@ -106,7 +107,19 @@ const ExercisesScreen = ({ exercises, onAddExercise, onUpdateExercise, onDeleteE
           exercise={selectedExercise}
           history={history}
           onEdit={() => { setEditingExercise(selectedExercise); setSelectedExercise(null); }}
+          onMerge={() => { setMergingExercise(selectedExercise); setSelectedExercise(null); }}
           onClose={() => setSelectedExercise(null)}
+        />
+      )}
+      {mergingExercise && (
+        <MergeExerciseModal
+          exercise={mergingExercise}
+          allExercises={exercises}
+          onMerge={(primary, duplicate) => {
+            onMergeExercise(primary, duplicate);
+            setMergingExercise(null);
+          }}
+          onClose={() => setMergingExercise(null)}
         />
       )}
     </div>
@@ -166,11 +179,35 @@ const ImportModal = ({ folders, currentFolderId, onAddFolder, onBulkAddFolders, 
     return parts.join('/');
   };
 
+  // Bug #16: Handle file picker for template import
+  const handleFileSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const content = await file.text();
+      setText(content);
+      setError('');
+    } catch (err) {
+      setError('Failed to read file: ' + err.message);
+    }
+  };
+
+  // Bug #16: Sanitize smart quotes and other iOS text substitutions before JSON parse
+  const sanitizeJSON = (input) => {
+    return input
+      .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')  // Smart double quotes → straight
+      .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'")  // Smart single quotes → straight
+      .replace(/\u2014/g, '-')  // Em dash → hyphen
+      .replace(/\u2013/g, '-')  // En dash → hyphen
+      .replace(/\u2026/g, '...'); // Ellipsis → three dots
+  };
+
   const handleImport = () => {
     setError(''); setSuccess(''); setPendingImport(null);
     if (!text.trim()) { setError('Please paste JSON data'); return; }
     try {
-      const data = JSON.parse(text);
+      const sanitized = sanitizeJSON(text);
+      const data = JSON.parse(sanitized);
       let allFolders = [...folders];
       let newFoldersToAdd = [];
       const processTemplates = (templatesData) => {
@@ -200,7 +237,7 @@ const ImportModal = ({ folders, currentFolderId, onAddFolder, onBulkAddFolders, 
       const exercisesToAdd = addNewExercises ? collectNewExercises(templatesData) : [];
       if (duplicates.length > 0) { setPendingImport({ duplicates, newTemplates, foldersToAdd: newFoldersToAdd, exercisesToAdd }); }
       else { executeImport(newTemplates, [], newFoldersToAdd, exercisesToAdd); }
-    } catch (err) { setError(`Invalid JSON: ${err.message}`); }
+    } catch (err) { setError(`Invalid JSON: ${err.message}. If you copied from a phone, try using the "Choose File" option instead.`); }
   };
 
   const executeImport = (newTemplates, templatesToUpdate, foldersToAdd, exercisesToAdd) => {
@@ -270,6 +307,12 @@ const ImportModal = ({ folders, currentFolderId, onAddFolder, onBulkAddFolders, 
         <p className="text-xs text-gray-400 mb-3">Paste a single workout or bulk import with folders.</p>
         {error && <div className="bg-red-900/30 border border-red-700 rounded-lg p-3 mb-3"><div className="text-sm text-red-400">❌ {error}</div></div>}
         {success && <div className="bg-green-900/30 border border-green-700 rounded-lg p-3 mb-3"><div className="text-sm text-green-400">✅ {success}</div></div>}
+        {/* Bug #16: File picker for template import (avoids mobile paste issues) */}
+        <label className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 border-dashed border-gray-600 hover:border-teal-500 cursor-pointer bg-gray-800/50 mb-3 transition-colors">
+          <input type="file" accept=".json" onChange={handleFileSelect} className="hidden" />
+          <Icons.Import />
+          <span className="text-sm text-gray-400">Choose JSON File</span>
+        </label>
         <textarea value={text} onChange={e => { setText(e.target.value); setError(''); }} placeholder='{"name": "Push Day", "exercises": [...]}'
           className="flex-1 min-h-[200px] bg-gray-800 text-white p-3 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-rose-600 resize-none mb-3" />
         <label className="flex items-center gap-3 mb-4 cursor-pointer">
@@ -291,10 +334,10 @@ const CreateTemplateModal = ({ folderId, allExercises, onSave, onClose }) => {
   const addExercises = (exercises, asSuperset) => {
     if (asSuperset && exercises.length >= 2) {
       const supersetId = `superset-${Date.now()}`;
-      const newExercises = exercises.map(ex => ({ ...ex, supersetId, restTime: 90, sets: [getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category)] }));
+      const newExercises = exercises.map(ex => ({ ...ex, supersetId, restTime: 60, sets: [getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category)] }));
       setTemplateExercises([...templateExercises, ...newExercises]);
     } else {
-      const newExercises = exercises.map(ex => ({ ...ex, restTime: 90, sets: [getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category)] }));
+      const newExercises = exercises.map(ex => ({ ...ex, restTime: 60, sets: [getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category)] }));
       setTemplateExercises([...templateExercises, ...newExercises]);
     }
     setShowExercisePicker(false);
@@ -318,7 +361,7 @@ const CreateTemplateModal = ({ folderId, allExercises, onSave, onClose }) => {
     onSave({
       id: Date.now(), name: name.trim(), folderId,
       exercises: templateExercises.map(ex => ({
-        name: ex.name, bodyPart: ex.bodyPart, category: ex.category, supersetId: ex.supersetId, restTime: ex.restTime || 90,
+        name: ex.name, bodyPart: ex.bodyPart, category: ex.category, supersetId: ex.supersetId, restTime: ex.restTime || 60,
         sets: ex.sets.map(s => { const newSet = {}; Object.keys(s).forEach(k => { if (k !== 'completed') newSet[k] = s[k] || 0; }); return newSet; })
       }))
     });
@@ -360,7 +403,7 @@ const CreateTemplateModal = ({ folderId, allExercises, onSave, onClose }) => {
       </div>
       <div className="flex items-center gap-2">
         <span className="text-xs text-gray-400">Rest:</span>
-        <div className="flex gap-1">{restTimePresets.map(t => (<button key={t} onClick={() => updateRestTime(i, t)} className={`px-2 py-1 rounded text-xs font-medium ${(ex.restTime || 90) === t ? 'bg-rose-700 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>{formatDuration(t)}</button>))}</div>
+        <div className="flex gap-1">{restTimePresets.map(t => (<button key={t} onClick={() => updateRestTime(i, t)} className={`px-2 py-1 rounded text-xs font-medium ${(ex.restTime || 60) === t ? 'bg-rose-700 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>{formatDuration(t)}</button>))}</div>
       </div>
     </div>
   );

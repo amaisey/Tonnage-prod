@@ -1,281 +1,16 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Icons } from './Icons';
-import { workoutDb, db } from '../db/workoutDb';
+import { workoutDb } from '../db/workoutDb';
 import { defaultExercises } from '../data/defaultExercises';
-import AuthModal from './AuthModal';
-import SyncStatus from './SyncStatus';
-import { useAuth } from '../hooks/useAuth';
-import { queueSyncEntry } from '../lib/syncService';
 
-export function SettingsModal({ onClose, exercises, templates, folders, onRestoreData, compactMode, setCompactMode, user, syncStatus, lastSynced, pendingCount, onSyncNow, onHistoryRefresh }) {
-  const [exporting, setExporting] = useState(false);
-  const [importing, setImporting] = useState(false);
-  const [reimporting, setReimporting] = useState(false);
+export function SettingsModal({ onClose, exercises, templates, folders, onRestoreData, onRefreshDefaults }) {
   const [message, setMessage] = useState(null);
   const [workoutCount, setWorkoutCount] = useState(0);
-  const fileInputRef = useRef(null);
-  const [showAuth, setShowAuth] = useState(false);
-  const [importingHistory, setImportingHistory] = useState(false);
-  const [importProgress, setImportProgress] = useState({ current: 0, total: 0 });
-  const [importResult, setImportResult] = useState(null);
-  const { signOut } = useAuth();
 
   // Get workout count on mount
   useEffect(() => {
     workoutDb.count().then(setWorkoutCount);
   }, []);
-
-  // Re-import Strong history from JSON file
-  const handleReimportHistory = async () => {
-    if (!confirm('This will clear your current workout history and re-import from the Strong export. Continue?')) {
-      return;
-    }
-
-    setReimporting(true);
-    setMessage(null);
-
-    try {
-      // Clear existing workouts
-      await workoutDb.clear();
-
-      // Reset the import flag
-      await db.metadata.delete('strongHistoryImported');
-
-      setMessage({ type: 'success', text: 'Database cleared. Reloading to import history...' });
-
-      // Reload after a short delay to trigger migration
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-
-    } catch (err) {
-      console.error('Re-import error:', err);
-      setMessage({ type: 'error', text: 'Re-import failed: ' + err.message });
-      setReimporting(false);
-    }
-  };
-
-  // Export all data to JSON file
-  const handleExport = async () => {
-    setExporting(true);
-    setMessage(null);
-
-    try {
-      // Get all workouts from IndexedDB
-      const workouts = await workoutDb.getAll();
-
-      const backup = {
-        version: 1,
-        exportDate: new Date().toISOString(),
-        data: {
-          workouts,
-          exercises,
-          templates,
-          folders
-        },
-        stats: {
-          workoutCount: workouts.length,
-          exerciseCount: exercises.length,
-          templateCount: templates.length
-        }
-      };
-
-      // Create and download file
-      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `workout-backup-${new Date().toISOString().split('T')[0]}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      setMessage({ type: 'success', text: `Exported ${workouts.length} workouts, ${templates.length} templates` });
-    } catch (err) {
-      console.error('Export error:', err);
-      setMessage({ type: 'error', text: 'Export failed: ' + err.message });
-    } finally {
-      setExporting(false);
-    }
-  };
-
-  // Import data from JSON file
-  const handleImport = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setImporting(true);
-    setMessage(null);
-
-    try {
-      const text = await file.text();
-      const backup = JSON.parse(text);
-
-      // Validate backup structure
-      if (!backup.data || !backup.version) {
-        throw new Error('Invalid backup file format');
-      }
-
-      const { workouts = [], exercises: importedExercises = [], templates: importedTemplates = [], folders: importedFolders = [] } = backup.data;
-
-      // Import workouts to IndexedDB
-      if (workouts.length > 0) {
-        // Clear existing and import new
-        await workoutDb.clear();
-        await workoutDb.bulkAdd(workouts);
-      }
-
-      // Restore other data via callback
-      if (onRestoreData) {
-        onRestoreData({
-          exercises: importedExercises,
-          templates: importedTemplates,
-          folders: importedFolders
-        });
-      }
-
-      setMessage({
-        type: 'success',
-        text: `Restored ${workouts.length} workouts, ${importedTemplates.length} templates, ${importedExercises.length} exercises`
-      });
-
-    } catch (err) {
-      console.error('Import error:', err);
-      setMessage({ type: 'error', text: 'Import failed: ' + err.message });
-    } finally {
-      setImporting(false);
-      // Reset file input
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    }
-  };
-
-  // Import handler function
-  const handleHistoryImport = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setImportingHistory(true);
-    setImportResult(null);
-
-    try {
-      const text = await file.text();
-      let workouts = [];
-
-      if (file.name.endsWith('.json')) {
-        const data = JSON.parse(text);
-        workouts = data.workouts || (Array.isArray(data) ? data : []);
-      } else if (file.name.endsWith('.csv')) {
-        // Parse Strong CSV
-        const lines = text.split('\n');
-        const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-        const workoutMap = new Map();
-
-        for (let i = 1; i < lines.length; i++) {
-          const line = lines[i].trim();
-          if (!line) continue;
-
-          // Simple CSV parse (handles quoted fields)
-          const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)?.map(v => v.replace(/^"|"$/g, '').trim()) || [];
-
-          const dateStr = values[0];
-          const workoutName = values[1] || 'Workout';
-          const duration = values[2];
-          const exerciseName = values[3];
-          const setOrder = parseInt(values[4]) || 1;
-          const weight = parseFloat(values[5]) || 0;
-          const reps = parseInt(values[6]) || 0;
-
-          const key = `${dateStr}|${workoutName}`;
-
-          if (!workoutMap.has(key)) {
-            const dateMs = new Date(dateStr).getTime();
-            // Parse duration like "12m" or "1h 30m"
-            let durationMs = 0;
-            if (duration) {
-              const hours = duration.match(/(\d+)h/);
-              const mins = duration.match(/(\d+)m/);
-              durationMs = ((hours ? parseInt(hours[1]) * 60 : 0) + (mins ? parseInt(mins[1]) : 0)) * 60000;
-            }
-
-            workoutMap.set(key, {
-              name: workoutName,
-              date: dateMs,
-              startTime: dateMs,
-              duration: durationMs,
-              exercises: []
-            });
-          }
-
-          const workout = workoutMap.get(key);
-          let exercise = workout.exercises.find(ex => ex.name === exerciseName);
-          if (!exercise) {
-            exercise = {
-              name: exerciseName,
-              bodyPart: 'Other',
-              category: 'barbell',
-              sets: []
-            };
-            workout.exercises.push(exercise);
-          }
-
-          exercise.sets.push({
-            completed: true,
-            weight,
-            reps,
-            ...(parseFloat(values[7]) ? { distance: parseFloat(values[7]) } : {}),
-            ...(parseInt(values[8]) ? { duration: parseInt(values[8]) } : {})
-          });
-        }
-
-        workouts = Array.from(workoutMap.values());
-      }
-
-      if (workouts.length === 0) {
-        setImportResult({ success: false, message: 'No workouts found in file' });
-        setImportingHistory(false);
-        return;
-      }
-
-      setImportProgress({ current: 0, total: workouts.length });
-
-      // Batch import
-      const BATCH = 100;
-      for (let i = 0; i < workouts.length; i += BATCH) {
-        const batch = workouts.slice(i, i + BATCH);
-        await workoutDb.bulkAdd(batch);
-        setImportProgress({ current: Math.min(i + BATCH, workouts.length), total: workouts.length });
-        await new Promise(r => setTimeout(r, 10));
-      }
-
-      // Queue for cloud sync if logged in
-      if (user) {
-        const allWorkouts = await workoutDb.getAll();
-        for (const w of allWorkouts) {
-          if (!w.cloudId) {
-            await db.syncQueue.add({
-              entityType: 'workout',
-              entityId: w.id,
-              action: 'create',
-              payload: w,
-              createdAt: Date.now()
-            });
-          }
-        }
-        onSyncNow?.();
-      }
-
-      onHistoryRefresh?.();
-      setImportResult({ success: true, message: `Imported ${workouts.length.toLocaleString()} workouts` });
-    } catch (err) {
-      console.error('Import error:', err);
-      setImportResult({ success: false, message: err.message });
-    } finally {
-      setImportingHistory(false);
-      // Reset file input
-      e.target.value = '';
-    }
-  };
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -290,94 +25,13 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
 
         {/* Content */}
         <div className="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
-          {/* Account & Sync */}
-          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-            <h3 className="text-white font-medium mb-3">Account & Sync</h3>
-            {user ? (
-              <>
-                <div className="text-sm text-gray-300 mb-2">{user.email}</div>
-                <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
-                  <SyncStatus status={syncStatus} />
-                  <span>Last synced: {lastSynced ? new Date(lastSynced).toLocaleString() : 'Never'}</span>
-                  {pendingCount > 0 && <span className="text-amber-400">{pendingCount} pending</span>}
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={onSyncNow} className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white py-2.5 px-4 rounded-xl text-sm font-medium transition-colors">
-                    Sync Now
-                  </button>
-                  <button onClick={signOut} className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2.5 px-4 rounded-xl text-sm font-medium transition-colors">
-                    Sign Out
-                  </button>
-                </div>
-              </>
-            ) : (
-              <button onClick={() => setShowAuth(true)} className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 px-4 rounded-xl font-medium transition-colors">
-                Sign In to Sync
-              </button>
-            )}
-          </div>
 
-          {/* Bug #3: Compact Mode Toggle */}
-          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-white font-medium">Compact Mode</h3>
-                <p className="text-gray-500 text-xs mt-1">Reduce padding and font sizes for more exercises on screen</p>
-              </div>
-              <button
-                onClick={() => setCompactMode(!compactMode)}
-                className={`w-12 h-7 rounded-full transition-colors relative ${compactMode ? 'bg-cyan-600' : 'bg-gray-700'}`}
-              >
-                <div className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${compactMode ? 'translate-x-5' : 'translate-x-0.5'}`} />
-              </button>
+          {/* Status message */}
+          {message && (
+            <div className={`rounded-xl p-3 text-sm ${message.type === 'error' ? 'bg-red-900/50 text-red-300 border border-red-500/30' : 'bg-green-900/50 text-green-300 border border-green-500/30'}`}>
+              {message.text}
             </div>
-          </div>
-
-          {/* Backup Section */}
-          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-            <h3 className="text-white font-medium mb-3">Backup & Restore</h3>
-
-            <div className="space-y-3">
-              {/* Export Button */}
-              <button
-                onClick={handleExport}
-                disabled={exporting}
-                className="w-full flex items-center justify-center gap-2 bg-cyan-600 hover:bg-cyan-700 disabled:bg-cyan-800 disabled:opacity-50 text-white py-3 px-4 rounded-xl font-medium transition-colors"
-              >
-                <Icons.Export />
-                {exporting ? 'Exporting...' : 'Export Backup'}
-              </button>
-
-              {/* Import Button */}
-              <label className="w-full flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-xl font-medium transition-colors cursor-pointer border border-white/20">
-                <Icons.Import />
-                {importing ? 'Importing...' : 'Import Backup'}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".json"
-                  onChange={handleImport}
-                  disabled={importing}
-                  className="hidden"
-                />
-              </label>
-            </div>
-
-            {/* Status Message */}
-            {message && (
-              <div className={`mt-3 p-3 rounded-lg text-sm ${
-                message.type === 'success'
-                  ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                  : 'bg-red-500/20 text-red-400 border border-red-500/30'
-              }`}>
-                {message.text}
-              </div>
-            )}
-
-            <p className="text-gray-500 text-xs mt-3">
-              Backups include all workouts, templates, exercises, and folders. Save to iCloud Drive or email to yourself for safekeeping.
-            </p>
-          </div>
+          )}
 
           {/* Data Stats */}
           <div className="bg-white/5 rounded-xl p-4 border border-white/10">
@@ -402,7 +56,61 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
             </div>
           </div>
 
-          {/* Bug #5: Export Custom Exercises */}
+          {/* Refresh Defaults */}
+          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+            <h3 className="text-white font-medium mb-2">Refresh Defaults</h3>
+            <p className="text-gray-500 text-xs mb-3">
+              Adds any new built-in exercises to your library and resets default templates/folders to the latest versions. Your custom exercises, custom templates, and workout history stay untouched. This does not update app code — redeploy the app for code changes.
+            </p>
+            <button
+              onClick={() => {
+                try {
+                  const result = onRefreshDefaults();
+                  const parts = [];
+                  if (result.newExercises > 0) parts.push(`${result.newExercises} new exercises added`);
+                  parts.push('default templates & folders refreshed');
+                  setMessage({ type: 'success', text: parts.join(', ') });
+                } catch (err) {
+                  setMessage({ type: 'error', text: 'Refresh failed: ' + err.message });
+                }
+              }}
+              className="w-full flex items-center justify-center gap-2 bg-cyan-700 hover:bg-cyan-800 text-white py-3 px-4 rounded-xl font-medium transition-colors"
+            >
+              Refresh Defaults
+            </button>
+          </div>
+
+          {/* Reset App Data */}
+          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+            <h3 className="text-white font-medium mb-2">Reset App</h3>
+            <p className="text-gray-500 text-xs mb-3">
+              Clears all local data (exercises, templates, folders, history) and reloads with defaults. This cannot be undone.
+            </p>
+            <button
+              onClick={async () => {
+                if (!confirm('This will permanently delete ALL your data — exercises, templates, folders, and workout history. Continue?')) return;
+                try {
+                  // Clear IndexedDB (workout history)
+                  await workoutDb.clear();
+                  // Clear all localStorage keys used by the app
+                  localStorage.removeItem('workout-exercises');
+                  localStorage.removeItem('workout-templates');
+                  localStorage.removeItem('workout-folders');
+                  localStorage.removeItem('compactMode');
+                  localStorage.removeItem('template-version');
+                  setMessage({ type: 'success', text: 'Data cleared. Reloading...' });
+                  setTimeout(() => window.location.reload(), 1000);
+                } catch (err) {
+                  setMessage({ type: 'error', text: 'Reset failed: ' + err.message });
+                }
+              }}
+              className="w-full flex items-center justify-center gap-2 bg-red-800 hover:bg-red-900 text-white py-3 px-4 rounded-xl font-medium transition-colors"
+            >
+              Reset All Data
+            </button>
+          </div>
+
+          {/* Export Custom Exercises */}
           <div className="bg-white/5 rounded-xl p-4 border border-white/10">
             <h3 className="text-white font-medium mb-2">Custom Exercises</h3>
             <p className="text-gray-500 text-xs mb-3">
@@ -416,16 +124,24 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
                   setMessage({ type: 'error', text: 'No custom exercises found. All exercises are defaults.' });
                   return;
                 }
-                const blob = new Blob([JSON.stringify(customExercises, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `custom-exercises-${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                setMessage({ type: 'success', text: `Exported ${customExercises.length} custom exercises` });
+                try {
+                  const blob = new Blob([JSON.stringify(customExercises, null, 2)], { type: 'application/json' });
+                  const url = URL.createObjectURL(blob);
+                  // Use window.open as primary (works in iOS PWA), fall back to anchor click
+                  const opened = window.open(url, '_blank');
+                  if (!opened) {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `custom-exercises-${new Date().toISOString().split('T')[0]}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                  }
+                  setTimeout(() => URL.revokeObjectURL(url), 5000);
+                  setMessage({ type: 'success', text: `Exported ${customExercises.length} custom exercises` });
+                } catch (err) {
+                  setMessage({ type: 'error', text: 'Export failed: ' + err.message });
+                }
               }}
               className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white py-3 px-4 rounded-xl font-medium transition-colors"
             >
@@ -433,42 +149,8 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
               Export Custom Exercises
             </button>
           </div>
-
-          {/* Re-import Strong History */}
-          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-            <h3 className="text-white font-medium mb-2">Strong History Import</h3>
-            <p className="text-gray-500 text-xs mb-3">
-              If your workout history didn't import correctly, use this to re-import from the Strong export file.
-            </p>
-            <button
-              onClick={handleReimportHistory}
-              disabled={reimporting}
-              className="w-full flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 disabled:bg-amber-800 disabled:opacity-50 text-white py-3 px-4 rounded-xl font-medium transition-colors"
-            >
-              <Icons.History />
-              {reimporting ? 'Re-importing...' : 'Re-import Strong History'}
-            </button>
-          </div>
-
-          {/* Import History */}
-          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-            <h3 className="text-white font-medium mb-2">Import Workout History</h3>
-            <p className="text-gray-500 text-xs mb-3">
-              Import from a Tonnage JSON export or Strong CSV export.
-            </p>
-            {importResult && (
-              <div className={`text-sm rounded-xl p-3 mb-3 ${importResult.success ? 'bg-green-500/10 border border-green-500/30 text-green-400' : 'bg-red-500/10 border border-red-500/30 text-red-400'}`}>
-                {importResult.message}
-              </div>
-            )}
-            <label className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white py-3 px-4 rounded-xl font-medium transition-colors cursor-pointer">
-              {importingHistory ? `Importing... (${importProgress.current}/${importProgress.total})` : 'Import History File'}
-              <input type="file" accept=".json,.csv" onChange={handleHistoryImport} className="hidden" disabled={importingHistory} />
-            </label>
-          </div>
         </div>
       </div>
-      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
     </div>
   );
 }

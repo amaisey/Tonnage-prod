@@ -9,6 +9,7 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
   const [collapsedPhases, setCollapsedPhases] = useState({});
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [stravaCopied, setStravaCopied] = useState(false);
+  const [jsonCopied, setJsonCopied] = useState(false); // Bug #16: React state for copy button
 
   const togglePhase = (phase) => {
     setCollapsedPhases(prev => ({ ...prev, [phase]: !prev[phase] }));
@@ -230,14 +231,19 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
         </button>
 
         <button onClick={async () => {
-          await navigator.clipboard.writeText(exportWorkoutJSON(workout));
-          const btn = document.activeElement;
-          btn.textContent = '✓ Copied!';
-          setTimeout(() => {
-            btn.innerHTML = '<span class="flex items-center justify-center gap-2">Copy Workout JSON</span>';
-          }, 1500);
-        }} className="w-full bg-teal-600 text-white py-3 rounded-xl font-medium hover:bg-teal-700 flex items-center justify-center gap-2">
-          <Icons.Export /> Copy Workout JSON
+          try {
+            await navigator.clipboard.writeText(exportWorkoutJSON(workout));
+            setJsonCopied(true);
+            setTimeout(() => setJsonCopied(false), 2000);
+          } catch (err) {
+            console.error('Clipboard write failed:', err);
+          }
+        }} className={`w-full py-3 rounded-xl font-medium flex items-center justify-center gap-2 ${
+          jsonCopied
+            ? 'bg-green-600 text-white'
+            : 'bg-teal-600 text-white hover:bg-teal-700'
+        }`}>
+          {jsonCopied ? '✓ Copied!' : <><Icons.Export /> Copy Workout JSON</>}
         </button>
       </div>
 

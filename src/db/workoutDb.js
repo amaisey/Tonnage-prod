@@ -14,13 +14,6 @@ db.version(1).stores({
   metadata: 'key'
 });
 
-// Version 2: Add sync support
-db.version(2).stores({
-  workouts: '++id, date, name, duration, cloudId',
-  metadata: 'key',
-  syncQueue: '++id, entityType, entityId, action, createdAt'
-});
-
 // Helper to check if Strong history has been imported
 export async function isHistoryImported() {
   const record = await db.metadata.get('strongHistoryImported');
