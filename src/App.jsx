@@ -12,6 +12,9 @@ import { SettingsModal } from './components/SettingsModal';
 import { WorkoutCompleteModal } from './components/SharedComponents';
 import { workoutDb } from './db/workoutDb';
 import { usePreviousExerciseData } from './hooks/useWorkoutDb';
+import { useAuth } from './hooks/useAuth';
+import { useSyncManager } from './hooks/useSyncManager';
+import { queueSyncEntry } from './lib/syncService';
 
 function App() {
   const [activeTab, setActiveTab] = useState('workout');
@@ -29,6 +32,10 @@ function App() {
   // Bug #3: Compact mode
   const [compactMode, setCompactMode] = useLocalStorage('compactMode', false);
   const lastScrollY = useRef(0);
+
+  // Auth & Sync
+  const { user, isFirstLogin, clearFirstLogin } = useAuth();
+  const { syncStatus, lastSynced, pendingCount, syncNow } = useSyncManager(user, isFirstLogin, clearFirstLogin);
 
   // Bug #8: Check if default templates need updating when app loads
   useEffect(() => {
@@ -149,11 +156,17 @@ function App() {
 
     try {
       // Save to IndexedDB
-      await workoutDb.add(completedWorkoutData);
+      const localId = await workoutDb.add(completedWorkoutData);
       // Clear the previous data cache so next workout gets fresh data
       clearCache();
       // Trigger history refresh
       setHistoryRefreshKey(k => k + 1);
+
+      // Queue for cloud sync if logged in
+      if (user) {
+        await queueSyncEntry('workout', localId, 'create', completedWorkoutData);
+        syncNow();
+      }
     } catch (err) {
       console.error('Error saving workout:', err);
     }
@@ -368,6 +381,14 @@ function App() {
             folders={folders}
             onRestoreData={handleRestoreData}
             onRefreshDefaults={handleRefreshDefaults}
+            compactMode={compactMode}
+            setCompactMode={setCompactMode}
+            user={user}
+            syncStatus={syncStatus}
+            lastSynced={lastSynced}
+            pendingCount={pendingCount}
+            onSyncNow={syncNow}
+            onHistoryRefresh={() => setHistoryRefreshKey(k => k + 1)}
           />
         )}
       </div>
