@@ -16,6 +16,28 @@ import { useAuth } from './hooks/useAuth';
 import { useSyncManager } from './hooks/useSyncManager';
 import { queueSyncEntry } from './lib/syncService';
 
+// Update Toast Component
+function UpdateToast({ onUpdate, onDismiss }) {
+  return (
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[300] animate-slide-down" style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
+      <div className="flex items-center gap-3 bg-cyan-600 text-white px-4 py-3 rounded-2xl shadow-lg shadow-black/30 border border-cyan-400/30">
+        <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span className="text-sm font-medium">Update available</span>
+        <button onClick={onUpdate} className="bg-white text-cyan-700 px-3 py-1 rounded-lg text-sm font-bold hover:bg-cyan-50">
+          Refresh
+        </button>
+        <button onClick={onDismiss} className="text-white/70 hover:text-white">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [activeTab, setActiveTab] = useState('workout');
   const [activeWorkout, setActiveWorkout] = useState(null);
@@ -29,9 +51,17 @@ function App() {
   const [navbarHiddenByScroll, setNavbarHiddenByScroll] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false);
+  const [showUpdateToast, setShowUpdateToast] = useState(false);
   // Bug #3: Compact mode
   const [compactMode, setCompactMode] = useLocalStorage('compactMode', false);
   const lastScrollY = useRef(0);
+
+  // Listen for service worker updates
+  useEffect(() => {
+    const handleUpdate = () => setShowUpdateToast(true);
+    window.addEventListener('swUpdated', handleUpdate);
+    return () => window.removeEventListener('swUpdated', handleUpdate);
+  }, []);
 
   // Auth & Sync
   const { user, isFirstLogin, clearFirstLogin } = useAuth();
@@ -370,6 +400,13 @@ function App() {
             workout={completedWorkout}
             onClose={() => setCompletedWorkout(null)}
             onSaveAsTemplate={saveAsTemplate}
+          />
+        )}
+
+        {showUpdateToast && (
+          <UpdateToast
+            onUpdate={() => window.location.reload()}
+            onDismiss={() => setShowUpdateToast(false)}
           />
         )}
 

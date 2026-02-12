@@ -75,16 +75,6 @@ export function AuthProvider({ children }) {
     return data
   }, [])
 
-  const signInWithApple = useCallback(async () => {
-    if (!supabase) throw new Error('Supabase not configured')
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'apple',
-      options: { redirectTo: window.location.origin }
-    })
-    if (error) throw error
-    return data
-  }, [])
-
   const signOut = useCallback(async () => {
     if (!supabase) return
     const { error } = await supabase.auth.signOut()
@@ -103,7 +93,6 @@ export function AuthProvider({ children }) {
     signUp,
     signIn,
     signInWithGoogle,
-    signInWithApple,
     signOut,
     supabaseConfigured: !!supabase
   }
