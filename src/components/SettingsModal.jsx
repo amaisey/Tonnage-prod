@@ -251,8 +251,8 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Background Image */}
       <div className="fixed inset-0 z-0 bg-black">
-        <img src="/backgrounds/bg-7.jpg" alt="" className="w-full h-full object-cover opacity-40" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80"></div>
+        <img src="/backgrounds/bg-7.jpg" alt="" className="w-full h-full object-cover opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70"></div>
       </div>
 
       {/* Backdrop */}
