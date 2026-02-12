@@ -19,7 +19,9 @@ if ('serviceWorker' in navigator) {
         // Listen for new service worker installing
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
-          if (newWorker) {
+          // Only show update toast if the page is already controlled by a SW
+          // (i.e., this is a genuine update, not the very first installation)
+          if (newWorker && navigator.serviceWorker.controller) {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'activated') {
                 // New SW activated — dispatch event so App can show toast
