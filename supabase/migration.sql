@@ -1,16 +1,16 @@
 -- ============================================================
 -- Tonnage Supabase Migration
--- Run this in the Supabase SQL Editor (Dashboard → SQL Editor)
+-- Run this in the Supabase SQL Editor (Dashboard > SQL Editor)
 -- ============================================================
 
 -- User Profiles
 CREATE TABLE IF NOT EXISTS public.user_profiles (
-  id            UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  display_name  TEXT,
-  created_at    TIMESTAMPTZ DEFAULT now(),
-  updated_at    TIMESTAMPTZ DEFAULT now(),
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  display_name TEXT,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
   last_synced_at TIMESTAMPTZ,
-  settings      JSONB DEFAULT '{}'::jsonb
+  settings JSONB DEFAULT '{}'::jsonb
 );
 
 ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
@@ -34,22 +34,22 @@ CREATE TRIGGER on_auth_user_created
 
 -- Workouts
 CREATE TABLE IF NOT EXISTS public.workouts (
-  id            BIGSERIAL PRIMARY KEY,
-  user_id       UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  local_id      BIGINT,
-  name          TEXT NOT NULL,
-  notes         TEXT,
-  start_time    BIGINT NOT NULL,
-  date          BIGINT NOT NULL,
-  duration_ms   BIGINT NOT NULL,
-  exercises     JSONB NOT NULL DEFAULT '[]'::jsonb,
-  created_at    TIMESTAMPTZ DEFAULT now(),
-  updated_at    TIMESTAMPTZ DEFAULT now(),
-  deleted_at    TIMESTAMPTZ
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  local_id TEXT,
+  name TEXT NOT NULL,
+  notes TEXT,
+  start_time BIGINT NOT NULL,
+  date BIGINT NOT NULL,
+  duration_ms BIGINT NOT NULL,
+  exercises JSONB NOT NULL DEFAULT '[]'::jsonb,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  deleted_at TIMESTAMPTZ
 );
 
 CREATE INDEX idx_workouts_user_date ON public.workouts(user_id, date DESC) WHERE deleted_at IS NULL;
-CREATE UNIQUE INDEX idx_workouts_user_local ON public.workouts(user_id, local_id) WHERE deleted_at IS NULL;
+ALTER TABLE public.workouts ADD CONSTRAINT workouts_user_local_unique UNIQUE (user_id, local_id);
 
 ALTER TABLE public.workouts ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "select_own_workouts" ON public.workouts FOR SELECT USING (auth.uid() = user_id);
@@ -59,19 +59,19 @@ CREATE POLICY "delete_own_workouts" ON public.workouts FOR DELETE USING (auth.ui
 
 -- Exercises
 CREATE TABLE IF NOT EXISTS public.exercises (
-  id            BIGSERIAL PRIMARY KEY,
-  user_id       UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  local_id      BIGINT,
-  name          TEXT NOT NULL,
-  body_part     TEXT NOT NULL,
-  category      TEXT NOT NULL,
-  created_at    TIMESTAMPTZ DEFAULT now(),
-  updated_at    TIMESTAMPTZ DEFAULT now(),
-  deleted_at    TIMESTAMPTZ
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  local_id BIGINT,
+  name TEXT NOT NULL,
+  body_part TEXT NOT NULL,
+  category TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  deleted_at TIMESTAMPTZ
 );
 
 CREATE INDEX idx_exercises_user ON public.exercises(user_id) WHERE deleted_at IS NULL;
-CREATE UNIQUE INDEX idx_exercises_user_name ON public.exercises(user_id, name) WHERE deleted_at IS NULL;
+ALTER TABLE public.exercises ADD CONSTRAINT exercises_user_name_unique UNIQUE (user_id, name);
 
 ALTER TABLE public.exercises ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "select_own_exercises" ON public.exercises FOR SELECT USING (auth.uid() = user_id);
@@ -81,14 +81,14 @@ CREATE POLICY "delete_own_exercises" ON public.exercises FOR DELETE USING (auth.
 
 -- Folders
 CREATE TABLE IF NOT EXISTS public.folders (
-  id            BIGSERIAL PRIMARY KEY,
-  user_id       UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  local_id      TEXT,
-  name          TEXT NOT NULL,
-  parent_id     TEXT,
-  created_at    TIMESTAMPTZ DEFAULT now(),
-  updated_at    TIMESTAMPTZ DEFAULT now(),
-  deleted_at    TIMESTAMPTZ
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  local_id TEXT,
+  name TEXT NOT NULL,
+  parent_id TEXT,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  deleted_at TIMESTAMPTZ
 );
 
 CREATE INDEX idx_folders_user ON public.folders(user_id) WHERE deleted_at IS NULL;
@@ -101,17 +101,17 @@ CREATE POLICY "delete_own_folders" ON public.folders FOR DELETE USING (auth.uid(
 
 -- Templates
 CREATE TABLE IF NOT EXISTS public.templates (
-  id            BIGSERIAL PRIMARY KEY,
-  user_id       UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  local_id      BIGINT,
-  name          TEXT NOT NULL,
-  folder_id     TEXT,
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  local_id TEXT,
+  name TEXT NOT NULL,
+  folder_id TEXT,
   estimated_time INT,
-  notes         TEXT,
-  exercises     JSONB NOT NULL DEFAULT '[]'::jsonb,
-  created_at    TIMESTAMPTZ DEFAULT now(),
-  updated_at    TIMESTAMPTZ DEFAULT now(),
-  deleted_at    TIMESTAMPTZ
+  notes TEXT,
+  exercises JSONB NOT NULL DEFAULT '[]'::jsonb,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  deleted_at TIMESTAMPTZ
 );
 
 CREATE INDEX idx_templates_user ON public.templates(user_id) WHERE deleted_at IS NULL;
@@ -123,5 +123,5 @@ CREATE POLICY "update_own_templates" ON public.templates FOR UPDATE USING (auth.
 CREATE POLICY "delete_own_templates" ON public.templates FOR DELETE USING (auth.uid() = user_id);
 
 -- ============================================================
--- Done. Configure auth providers in Dashboard → Authentication
+-- Done. Configure auth providers in Dashboard > Authentication
 -- ============================================================
