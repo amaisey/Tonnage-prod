@@ -8,6 +8,7 @@ export async function pushToCloud(userId) {
   if (!supabase || !userId) return { pushed: 0, errors: [] }
 
   const queue = await db.syncQueue.toArray()
+  console.log('[SYNC] pushToCloud: queue has', queue.length, 'items')
   if (queue.length === 0) return { pushed: 0, errors: [] }
 
   let pushed = 0
@@ -23,7 +24,7 @@ export async function pushToCloud(userId) {
           .upsert({
             ...item.payload,
             user_id: userId,
-            local_id: item.entityId,
+            local_id: String(item.entityId),
             updated_at: new Date().toISOString()
           }, {
             onConflict: 'user_id,local_id',
@@ -45,7 +46,7 @@ export async function pushToCloud(userId) {
           .from(table)
           .update({ ...item.payload, updated_at: new Date().toISOString() })
           .eq('user_id', userId)
-          .eq('local_id', item.entityId)
+          .eq('local_id', String(item.entityId))
 
         if (error) throw error
       }
@@ -55,7 +56,7 @@ export async function pushToCloud(userId) {
           .from(table)
           .update({ deleted_at: new Date().toISOString() })
           .eq('user_id', userId)
-          .eq('local_id', item.entityId)
+          .eq('local_id', String(item.entityId))
 
         if (error) throw error
       }
@@ -79,6 +80,7 @@ export async function pullFromCloud(userId, lastSyncedAt) {
   if (!supabase || !userId) return { pulled: 0 }
 
   const since = lastSyncedAt || '1970-01-01T00:00:00Z'
+  console.log('[SYNC] pullFromCloud: since =', since)
 
   // Paginated fetch helper — Supabase caps at 1000 rows per query
   async function fetchAll(table, filters = {}) {
@@ -87,6 +89,7 @@ export async function pullFromCloud(userId, lastSyncedAt) {
     let from = 0
 
     while (true) {
+      console.log(`[SYNC] fetchAll(${table}): fetching range ${from}-${from + PAGE_SIZE - 1}`)
       let query = supabase.from(table).select('*')
         .eq('user_id', userId)
         .gt('updated_at', since)
@@ -98,6 +101,7 @@ export async function pullFromCloud(userId, lastSyncedAt) {
       }
 
       const { data, error } = await query
+      console.log(`[SYNC] fetchAll(${table}): got ${data?.length ?? 0} rows, error:`, error)
       if (error) throw error
       if (!data || data.length === 0) break
 
@@ -106,29 +110,39 @@ export async function pullFromCloud(userId, lastSyncedAt) {
       from += PAGE_SIZE
     }
 
+    console.log(`[SYNC] fetchAll(${table}): total ${allData.length} rows`)
     return allData
   }
 
   // Fetch all updated records in parallel (paginated)
+  console.log('[SYNC] Starting parallel fetch of all tables...')
   const [workoutsData, exercisesData, templatesData, foldersData] = await Promise.all([
     fetchAll('workouts', { order: { column: 'date', ascending: false } }),
     fetchAll('exercises'),
     fetchAll('templates'),
     fetchAll('folders'),
   ])
+  console.log('[SYNC] All tables fetched:', {
+    workouts: workoutsData.length,
+    exercises: exercisesData.length,
+    templates: templatesData.length,
+    folders: foldersData.length
+  })
 
   let pulled = 0
 
   // Merge workouts into Dexie
+  console.log('[SYNC] Merging workouts into IndexedDB...')
   for (const w of workoutsData || []) {
     const existing = await db.workouts
       .where('cloudId').equals(w.id)
       .first()
 
     if (!existing) {
-      // Check if we have it by local_id
-      const byLocalId = w.local_id
-        ? await db.workouts.get(w.local_id)
+      // Check if we have it by local_id — coerce to number since Dexie uses ++id (integer)
+      const localIdNum = w.local_id ? Number(w.local_id) : null
+      const byLocalId = (localIdNum && !isNaN(localIdNum))
+        ? await db.workouts.get(localIdNum)
         : null
 
       if (byLocalId && !byLocalId.cloudId) {
@@ -149,6 +163,7 @@ export async function pullFromCloud(userId, lastSyncedAt) {
       }
     }
   }
+  console.log('[SYNC] Workout merge done. Pulled:', pulled)
 
   // Merge exercises into localStorage
   pulled += mergeIntoLocalStorage('workout-exercises', exercisesData || [], 'name')
@@ -159,11 +174,18 @@ export async function pullFromCloud(userId, lastSyncedAt) {
   // Merge folders
   pulled += mergeIntoLocalStorage('workout-folders', foldersData || [], 'name')
 
-  // Update last synced timestamp
-  await supabase.from('user_profiles')
-    .update({ last_synced_at: new Date().toISOString() })
-    .eq('id', userId)
+  // Update last synced timestamp on server (best-effort, don't block on failure)
+  console.log('[SYNC] Updating user_profiles last_synced_at...')
+  try {
+    await supabase.from('user_profiles')
+      .update({ last_synced_at: new Date().toISOString() })
+      .eq('id', userId)
+    console.log('[SYNC] user_profiles updated')
+  } catch (profileErr) {
+    console.warn('[SYNC] user_profiles update failed (non-fatal):', profileErr)
+  }
 
+  console.log('[SYNC] pullFromCloud complete. Total pulled:', pulled)
   return { pulled }
 }
 
@@ -183,7 +205,7 @@ export async function mergeOnFirstLogin(userId) {
     for (let i = 0; i < allWorkouts.length; i += BATCH_SIZE) {
       const batch = allWorkouts.slice(i, i + BATCH_SIZE).map(w => ({
         user_id: userId,
-        local_id: w.id,
+        local_id: String(w.id),
         name: w.name,
         notes: w.notes || null,
         start_time: w.startTime || w.date,
@@ -201,10 +223,13 @@ export async function mergeOnFirstLogin(userId) {
       if (error) {
         console.error('Batch upload error:', error)
       } else if (data) {
-        // Store cloud IDs back on local records
+        // Store cloud IDs back on local records — coerce local_id back to number
         for (const row of data) {
           if (row.local_id) {
-            await db.workouts.update(row.local_id, { cloudId: row.id })
+            const localIdNum = Number(row.local_id)
+            if (!isNaN(localIdNum)) {
+              await db.workouts.update(localIdNum, { cloudId: row.id })
+            }
           }
         }
       }
@@ -271,9 +296,13 @@ export async function mergeOnFirstLogin(userId) {
   }
 
   // Update sync timestamp
-  await supabase.from('user_profiles')
-    .update({ last_synced_at: new Date().toISOString() })
-    .eq('id', userId)
+  try {
+    await supabase.from('user_profiles')
+      .update({ last_synced_at: new Date().toISOString() })
+      .eq('id', userId)
+  } catch (err) {
+    console.warn('user_profiles update failed (non-fatal):', err)
+  }
 
   console.log('First login merge complete')
 }
