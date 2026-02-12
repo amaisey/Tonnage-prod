@@ -63,7 +63,11 @@ function App() {
 
   // Auth & Sync
   const { user, isFirstLogin, clearFirstLogin } = useAuth();
-  const { syncStatus, lastSynced, pendingCount, syncNow } = useSyncManager(user, isFirstLogin, clearFirstLogin);
+  const handleSyncDataChanged = useCallback(() => {
+    // Refresh history and any other data-dependent UI after sync pulls new data
+    setHistoryRefreshKey(k => k + 1);
+  }, []);
+  const { syncStatus, lastSynced, pendingCount, syncNow } = useSyncManager(user, isFirstLogin, clearFirstLogin, handleSyncDataChanged);
 
   // Bug #8: Check if default templates need updating when app loads
   useEffect(() => {

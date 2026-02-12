@@ -20,10 +20,10 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
   const [showAdvanced, setShowAdvanced] = useState(false);
   const { signOut } = useAuth();
 
-  // Get workout count on mount
+  // Get workout count on mount and when sync status changes (e.g. after pull adds data)
   useEffect(() => {
     workoutDb.count().then(setWorkoutCount);
-  }, []);
+  }, [syncStatus]);
 
   // Export all data to JSON file
   const handleExport = async () => {

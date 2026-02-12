@@ -163,6 +163,7 @@ export async function mergeOnFirstLogin(userId) {
   const allWorkouts = await db.workouts.toArray()
   if (allWorkouts.length > 0) {
     const BATCH_SIZE = 100
+    const mergeTimestamp = new Date().toISOString()
     for (let i = 0; i < allWorkouts.length; i += BATCH_SIZE) {
       const batch = allWorkouts.slice(i, i + BATCH_SIZE).map(w => ({
         user_id: userId,
@@ -173,6 +174,7 @@ export async function mergeOnFirstLogin(userId) {
         date: w.date,
         duration_ms: w.duration || 0,
         exercises: w.exercises || [],
+        updated_at: mergeTimestamp,
       }))
 
       const { data, error } = await supabase
