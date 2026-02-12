@@ -23,10 +23,16 @@ export function AuthProvider({ children }) {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        const previousUser = user
-        setUser(session?.user ?? null)
+        // Only update user state when the identity actually changes,
+        // not on TOKEN_REFRESHED or other events that return the same user.
+        // Avoids creating a new object reference that restarts the sync loop.
+        setUser(prev => {
+          const incoming = session?.user ?? null
+          if (prev?.id === incoming?.id) return prev
+          return incoming
+        })
 
-        if (event === 'SIGNED_IN' && !previousUser && session?.user) {
+        if (event === 'SIGNED_IN' && session?.user) {
           // Check if this is first login (no cloud data yet)
           try {
             const { count } = await supabase
