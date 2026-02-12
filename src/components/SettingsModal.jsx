@@ -7,7 +7,7 @@ import SyncStatus from './SyncStatus';
 import { useAuth } from '../hooks/useAuth';
 import { queueSyncEntry } from '../lib/syncService';
 
-export function SettingsModal({ onClose, exercises, templates, folders, onRestoreData, compactMode, setCompactMode, user, syncStatus, lastSynced, pendingCount, onSyncNow, onHistoryRefresh }) {
+export function SettingsModal({ onClose, exercises, templates, folders, onRestoreData, user, syncStatus, lastSynced, pendingCount, onSyncNow, onHistoryRefresh }) {
   const [exporting, setExporting] = useState(false);
   const [importing, setImporting] = useState(false);
   const [message, setMessage] = useState(null);
@@ -294,22 +294,6 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
                 Sign In to Sync
               </button>
             )}
-          </div>
-
-          {/* Compact Mode Toggle */}
-          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-white font-medium">Compact Mode</h3>
-                <p className="text-gray-500 text-xs mt-1">Reduce padding and font sizes for more exercises on screen</p>
-              </div>
-              <button
-                onClick={() => setCompactMode(!compactMode)}
-                className={`w-12 h-7 rounded-full transition-colors relative ${compactMode ? 'bg-cyan-600' : 'bg-gray-700'}`}
-              >
-                <div className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${compactMode ? 'translate-x-5' : 'translate-x-0.5'}`} />
-              </button>
-            </div>
           </div>
 
           {/* Data Stats */}

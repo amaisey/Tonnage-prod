@@ -52,8 +52,6 @@ function App() {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false);
   const [showUpdateToast, setShowUpdateToast] = useState(false);
-  // Bug #3: Compact mode
-  const [compactMode, setCompactMode] = useLocalStorage('compactMode', false);
   const lastScrollY = useRef(0);
 
   // Listen for service worker updates
@@ -330,7 +328,6 @@ function App() {
               getPreviousData={getPreviousData}
               onNumpadStateChange={setIsNumpadOpen}
               onScroll={handleScroll}
-              compactMode={compactMode}
             />
           )}
           {activeTab === 'exercises' && (
@@ -418,8 +415,6 @@ function App() {
             folders={folders}
             onRestoreData={handleRestoreData}
             onRefreshDefaults={handleRefreshDefaults}
-            compactMode={compactMode}
-            setCompactMode={setCompactMode}
             user={user}
             syncStatus={syncStatus}
             lastSynced={lastSynced}

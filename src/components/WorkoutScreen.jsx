@@ -5,9 +5,7 @@ import { formatDuration, getDefaultSetForCategory } from '../utils/helpers';
 import { NumberPad, DurationPad, SetInputRow, ExerciseSearchModal, ExerciseDetailModal, RestTimerBanner } from './SharedComponents';
 import { workoutDb } from '../db/workoutDb';
 
-const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, exercises, getPreviousData, onNumpadStateChange, onScroll, compactMode }) => {
-  // Bug #3: Compact mode class helper
-  const c = (normal, compact) => compactMode ? compact : normal;
+const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, exercises, getPreviousData, onNumpadStateChange, onScroll }) => {
   const [showExerciseModal, setShowExerciseModal] = useState(false);
   const [restTimer, setRestTimer] = useState({ active: false, time: 0, totalTime: 0, exerciseName: '' });
   const [editingRestTime, setEditingRestTime] = useState(null); // exercise index
@@ -1158,8 +1156,8 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
         onTouchStart={(e) => handleExerciseTouchStart(exIndex, e)}
         onTouchMove={handleExerciseTouchMove}
         onTouchEnd={handleExerciseTouchEnd}
-        className={`${exercise.highlight ? 'ring-2 ring-rose-500' : ''} ${dragState?.exIndex === exIndex ? 'ring-2 ring-cyan-400 opacity-75' : ''} ${dragTouch?.exIndex === exIndex ? 'opacity-50 ring-2 ring-cyan-400 scale-[1.02]' : ''} bg-white/10 backdrop-blur-md border border-white/20 ${isSuperset ? `${c('p-3','p-2')} ${isFirst ? 'rounded-t-2xl' : isLast ? 'rounded-b-2xl' : ''}` : `${c('p-4','p-2')} rounded-2xl ${c('mb-4','mb-2')}`} transition-transform`}>
-        <div className={`flex items-center justify-between ${c('mb-2','mb-1')}`}>
+        className={`${exercise.highlight ? 'ring-2 ring-rose-500' : ''} ${dragState?.exIndex === exIndex ? 'ring-2 ring-cyan-400 opacity-75' : ''} ${dragTouch?.exIndex === exIndex ? 'opacity-50 ring-2 ring-cyan-400 scale-[1.02]' : ''} bg-white/10 backdrop-blur-md border border-white/20 ${isSuperset ? `p-3 ${isFirst ? 'rounded-t-2xl' : isLast ? 'rounded-b-2xl' : ''}` : `p-4 rounded-2xl mb-4`} transition-transform`}>
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             {/* Bug #9/#11: Drag handle — visible for all exercises including supersets */}
             <button
@@ -1184,7 +1182,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
                     console.error('Error loading history:', err);
                     setExerciseDetailHistory([]);
                   }
-                }} className={`${c('font-semibold','text-sm font-medium')} text-white hover:text-cyan-400 transition-colors text-left`}>{exercise.name}</button>
+                }} className="font-semibold text-white hover:text-cyan-400 transition-colors text-left">{exercise.name}</button>
                 {typeInfo && (
                   <span className={`text-xs px-2 py-0.5 rounded-full ${typeInfo.color}`}>{typeInfo.label}</span>
                 )}
@@ -1319,7 +1317,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
             frozenElapsed={getFrozenElapsed(exIndex, setIndex)} />
         ))}
         <button onClick={() => addSet(exIndex)}
-          className={`w-full ${c('mt-2 py-2','mt-1 py-1')} bg-gray-800/50 hover:bg-gray-800 rounded-lg text-teal-400 font-medium flex items-center justify-center gap-1 text-sm`}>
+          className="w-full mt-2 py-2 bg-gray-800/50 hover:bg-gray-800 rounded-lg text-teal-400 font-medium flex items-center justify-center gap-1 text-sm">
           <Icons.Plus /> Add Set ({formatDuration(exerciseRestTime)})
         </button>
       </div>
