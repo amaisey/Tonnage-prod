@@ -33,12 +33,14 @@ export function useSyncManager(user, isFirstLogin, clearFirstLogin, onDataChange
   // Core sync function — uses LOCAL timestamp so each device pulls everything it hasn't seen
   const doSync = useCallback(async () => {
     if (!supabase || !user || !isOnline || isSyncingRef.current) return
+
     isSyncingRef.current = true
     setSyncStatus('syncing')
 
     try {
       // Push local changes
       const pushResult = await pushToCloud(user.id)
+
       if (pushResult.errors.length > 0) {
         console.warn('Some sync pushes failed:', pushResult.errors)
       }
@@ -60,6 +62,10 @@ export function useSyncManager(user, isFirstLogin, clearFirstLogin, onDataChange
       }
     } catch (err) {
       console.error('Sync error:', err)
+      // Show timeout-specific feedback
+      if (err.name === 'AbortError') {
+        console.warn('Sync timed out — will retry on next interval')
+      }
       setSyncStatus('error')
     } finally {
       isSyncingRef.current = false

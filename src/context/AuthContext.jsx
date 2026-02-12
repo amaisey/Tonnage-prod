@@ -83,8 +83,16 @@ export function AuthProvider({ children }) {
 
   const signOut = useCallback(async () => {
     if (!supabase) return
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
+    try {
+      // Use scope: 'local' to clear session immediately without a network call.
+      // This avoids hanging on cross-origin POST requests in Brave/SW contexts.
+      await supabase.auth.signOut({ scope: 'local' })
+    } catch (err) {
+      console.error('Sign out error:', err)
+    }
+    // Force-clear user state immediately — don't rely solely on onAuthStateChange
+    setUser(null)
+    setIsFirstLogin(false)
   }, [])
 
   const clearFirstLogin = useCallback(() => {

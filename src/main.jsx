@@ -7,10 +7,8 @@ import './index.css';
 // Register service worker with update detection
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
       .then(registration => {
-        console.log('SW registered:', registration);
-
         // Check for updates every 5 minutes
         setInterval(() => {
           registration.update();
@@ -32,7 +30,7 @@ if ('serviceWorker' in navigator) {
         });
       })
       .catch(error => {
-        console.log('SW registration failed:', error);
+        console.error('SW registration failed:', error);
       });
   });
 

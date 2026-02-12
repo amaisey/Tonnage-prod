@@ -1,6 +1,9 @@
 import { supabase } from './supabase'
 import { db } from '../db/workoutDb'
 
+// Timeout for each fetchAll operation (covers all pages for one table)
+const FETCH_TIMEOUT_MS = 30000
+
 // ============================================================
 // Push local changes to Supabase
 // ============================================================
@@ -80,33 +83,42 @@ export async function pullFromCloud(userId, lastSyncedAt) {
 
   const since = lastSyncedAt || '1970-01-01T00:00:00Z'
 
-  // Paginated fetch helper — Supabase caps at 1000 rows per query
+  // Paginated fetch helper — Supabase caps at 1000 rows per query.
+  // Uses AbortController to timeout after FETCH_TIMEOUT_MS so requests
+  // don't hang forever (observed in Brave with SW registered).
   async function fetchAll(table, filters = {}) {
     const PAGE_SIZE = 1000
     let allData = []
     let from = 0
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
 
-    while (true) {
-      let query = supabase.from(table).select('*')
-        .eq('user_id', userId)
-        .gt('updated_at', since)
-        .is('deleted_at', null)
-        .range(from, from + PAGE_SIZE - 1)
+    try {
+      while (true) {
+        let query = supabase.from(table).select('*')
+          .eq('user_id', userId)
+          .gt('updated_at', since)
+          .is('deleted_at', null)
+          .range(from, from + PAGE_SIZE - 1)
+          .abortSignal(controller.signal)
 
-      if (filters.order) {
-        query = query.order(filters.order.column, { ascending: filters.order.ascending })
+        if (filters.order) {
+          query = query.order(filters.order.column, { ascending: filters.order.ascending })
+        }
+
+        const { data, error } = await query
+        if (error) throw error
+        if (!data || data.length === 0) break
+
+        allData = allData.concat(data)
+        if (data.length < PAGE_SIZE) break // last page
+        from += PAGE_SIZE
       }
 
-      const { data, error } = await query
-      if (error) throw error
-      if (!data || data.length === 0) break
-
-      allData = allData.concat(data)
-      if (data.length < PAGE_SIZE) break // last page
-      from += PAGE_SIZE
+      return allData
+    } finally {
+      clearTimeout(timeoutId)
     }
-
-    return allData
   }
 
   // Fetch all updated records in parallel (paginated)
@@ -178,8 +190,6 @@ export async function pullFromCloud(userId, lastSyncedAt) {
 export async function mergeOnFirstLogin(userId) {
   if (!supabase || !userId) return
 
-  console.log('First login — uploading all local data to cloud...')
-
   // Upload all workouts
   const allWorkouts = await db.workouts.toArray()
   if (allWorkouts.length > 0) {
@@ -217,7 +227,6 @@ export async function mergeOnFirstLogin(userId) {
         }
       }
     }
-    console.log(`Uploaded ${allWorkouts.length} workouts`)
   }
 
   // Upload exercises
@@ -236,7 +245,6 @@ export async function mergeOnFirstLogin(userId) {
       .upsert(rows, { onConflict: 'user_id,name', ignoreDuplicates: true })
 
     if (error) console.error('Exercise upload error:', error)
-    else console.log(`Uploaded ${exercises.length} exercises`)
   }
 
   // Upload templates
@@ -257,7 +265,6 @@ export async function mergeOnFirstLogin(userId) {
       .upsert(rows, { ignoreDuplicates: true })
 
     if (error) console.error('Template upload error:', error)
-    else console.log(`Uploaded ${templates.length} templates`)
   }
 
   // Upload folders
@@ -275,7 +282,6 @@ export async function mergeOnFirstLogin(userId) {
       .upsert(rows, { ignoreDuplicates: true })
 
     if (error) console.error('Folder upload error:', error)
-    else console.log(`Uploaded ${folders.length} folders`)
   }
 
   // Update sync timestamp
@@ -286,8 +292,6 @@ export async function mergeOnFirstLogin(userId) {
   } catch (err) {
     console.warn('user_profiles update failed (non-fatal):', err)
   }
-
-  console.log('First login merge complete')
 }
 
 // ============================================================

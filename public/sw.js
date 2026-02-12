@@ -1,4 +1,4 @@
-const CACHE_NAME = 'workout-tracker-v4';
+const CACHE_NAME = 'workout-tracker-v5';
 const APP_VERSION = '1.0.0';
 
 const urlsToCache = [
@@ -31,15 +31,19 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event - network first, then cache (same-origin only)
+// Fetch event - network first, then cache (same-origin GET only)
 self.addEventListener('fetch', event => {
-  // Skip cross-origin requests (Supabase API, external CDNs, etc.)
-  // Let the browser handle these directly without SW interference
+  // Skip cross-origin requests entirely (Supabase API, external CDNs, etc.)
+  // Let the browser handle these directly without any SW interference
   if (!event.request.url.startsWith(self.location.origin)) return;
+
+  // Only cache GET requests — never interfere with POST/PUT/DELETE
+  if (event.request.method !== 'GET') return;
 
   event.respondWith(
     fetch(event.request)
       .then(response => {
+        // Cache successful responses
         if (response && response.status === 200) {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then(cache => {
@@ -49,6 +53,7 @@ self.addEventListener('fetch', event => {
         return response;
       })
       .catch(() => {
+        // Fallback to cache if offline
         return caches.match(event.request);
       })
   );
