@@ -8,7 +8,6 @@ export async function pushToCloud(userId) {
   if (!supabase || !userId) return { pushed: 0, errors: [] }
 
   const queue = await db.syncQueue.toArray()
-  console.log('[SYNC] pushToCloud: queue has', queue.length, 'items')
   if (queue.length === 0) return { pushed: 0, errors: [] }
 
   let pushed = 0
@@ -80,7 +79,6 @@ export async function pullFromCloud(userId, lastSyncedAt) {
   if (!supabase || !userId) return { pulled: 0 }
 
   const since = lastSyncedAt || '1970-01-01T00:00:00Z'
-  console.log('[SYNC] pullFromCloud: since =', since)
 
   // Paginated fetch helper — Supabase caps at 1000 rows per query
   async function fetchAll(table, filters = {}) {
@@ -89,7 +87,6 @@ export async function pullFromCloud(userId, lastSyncedAt) {
     let from = 0
 
     while (true) {
-      console.log(`[SYNC] fetchAll(${table}): fetching range ${from}-${from + PAGE_SIZE - 1}`)
       let query = supabase.from(table).select('*')
         .eq('user_id', userId)
         .gt('updated_at', since)
@@ -101,7 +98,6 @@ export async function pullFromCloud(userId, lastSyncedAt) {
       }
 
       const { data, error } = await query
-      console.log(`[SYNC] fetchAll(${table}): got ${data?.length ?? 0} rows, error:`, error)
       if (error) throw error
       if (!data || data.length === 0) break
 
@@ -110,29 +106,20 @@ export async function pullFromCloud(userId, lastSyncedAt) {
       from += PAGE_SIZE
     }
 
-    console.log(`[SYNC] fetchAll(${table}): total ${allData.length} rows`)
     return allData
   }
 
   // Fetch all updated records in parallel (paginated)
-  console.log('[SYNC] Starting parallel fetch of all tables...')
   const [workoutsData, exercisesData, templatesData, foldersData] = await Promise.all([
     fetchAll('workouts', { order: { column: 'date', ascending: false } }),
     fetchAll('exercises'),
     fetchAll('templates'),
     fetchAll('folders'),
   ])
-  console.log('[SYNC] All tables fetched:', {
-    workouts: workoutsData.length,
-    exercises: exercisesData.length,
-    templates: templatesData.length,
-    folders: foldersData.length
-  })
 
   let pulled = 0
 
   // Merge workouts into Dexie
-  console.log('[SYNC] Merging workouts into IndexedDB...')
   for (const w of workoutsData || []) {
     const existing = await db.workouts
       .where('cloudId').equals(w.id)
@@ -163,7 +150,6 @@ export async function pullFromCloud(userId, lastSyncedAt) {
       }
     }
   }
-  console.log('[SYNC] Workout merge done. Pulled:', pulled)
 
   // Merge exercises into localStorage
   pulled += mergeIntoLocalStorage('workout-exercises', exercisesData || [], 'name')
@@ -175,17 +161,14 @@ export async function pullFromCloud(userId, lastSyncedAt) {
   pulled += mergeIntoLocalStorage('workout-folders', foldersData || [], 'name')
 
   // Update last synced timestamp on server (best-effort, don't block on failure)
-  console.log('[SYNC] Updating user_profiles last_synced_at...')
   try {
     await supabase.from('user_profiles')
       .update({ last_synced_at: new Date().toISOString() })
       .eq('id', userId)
-    console.log('[SYNC] user_profiles updated')
   } catch (profileErr) {
-    console.warn('[SYNC] user_profiles update failed (non-fatal):', profileErr)
+    console.warn('user_profiles update failed (non-fatal):', profileErr)
   }
 
-  console.log('[SYNC] pullFromCloud complete. Total pulled:', pulled)
   return { pulled }
 }
 

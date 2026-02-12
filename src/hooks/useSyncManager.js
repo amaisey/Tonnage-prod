@@ -32,33 +32,13 @@ export function useSyncManager(user, isFirstLogin, clearFirstLogin, onDataChange
 
   // Core sync function — uses LOCAL timestamp so each device pulls everything it hasn't seen
   const doSync = useCallback(async () => {
-    console.log('[SYNC] doSync called', {
-      supabase: !!supabase,
-      user: !!user,
-      userId: user?.id?.substring(0, 8),
-      isOnline,
-      isSyncing: isSyncingRef.current
-    })
-
-    if (!supabase || !user || !isOnline || isSyncingRef.current) {
-      console.log('[SYNC] doSync bailing:', {
-        noSupabase: !supabase,
-        noUser: !user,
-        offline: !isOnline,
-        alreadySyncing: isSyncingRef.current
-      })
-      return
-    }
-
+    if (!supabase || !user || !isOnline || isSyncingRef.current) return
     isSyncingRef.current = true
     setSyncStatus('syncing')
 
     try {
       // Push local changes
-      console.log('[SYNC] Starting pushToCloud...')
       const pushResult = await pushToCloud(user.id)
-      console.log('[SYNC] pushToCloud done:', pushResult)
-
       if (pushResult.errors.length > 0) {
         console.warn('Some sync pushes failed:', pushResult.errors)
       }
@@ -66,23 +46,20 @@ export function useSyncManager(user, isFirstLogin, clearFirstLogin, onDataChange
       // Pull remote changes using LOCAL device timestamp (not server-side last_synced_at)
       // This ensures a new device pulls ALL cloud data on its first sync
       const localLastSynced = localStorage.getItem(LOCAL_SYNC_KEY)
-      console.log('[SYNC] Starting pullFromCloud...', { localLastSynced })
       const pullResult = await pullFromCloud(user.id, localLastSynced)
-      console.log('[SYNC] pullFromCloud done:', pullResult)
 
       // Save local sync timestamp
       const now = new Date().toISOString()
       localStorage.setItem(LOCAL_SYNC_KEY, now)
       setLastSynced(now)
       setSyncStatus('idle')
-      console.log('[SYNC] Sync complete! Status set to idle.')
 
       // Notify UI if new data was pulled
       if (pullResult.pulled > 0) {
         onDataChangedRef.current?.()
       }
     } catch (err) {
-      console.error('[SYNC] Sync error:', err)
+      console.error('Sync error:', err)
       setSyncStatus('error')
     } finally {
       isSyncingRef.current = false
@@ -95,7 +72,6 @@ export function useSyncManager(user, isFirstLogin, clearFirstLogin, onDataChange
     if (!isFirstLogin || !user || !isOnline) return
 
     const doMerge = async () => {
-      console.log('[SYNC] First login merge starting...')
       setSyncStatus('syncing')
       try {
         await mergeOnFirstLogin(user.id)
@@ -104,11 +80,10 @@ export function useSyncManager(user, isFirstLogin, clearFirstLogin, onDataChange
         localStorage.setItem(LOCAL_SYNC_KEY, now)
         setLastSynced(now)
         setSyncStatus('idle')
-        console.log('[SYNC] First login merge complete!')
         // Notify UI after merge (local data may have been enriched)
         onDataChangedRef.current?.()
       } catch (err) {
-        console.error('[SYNC] First login merge error:', err)
+        console.error('First login merge error:', err)
         setSyncStatus('error')
       }
       refreshPendingCount()
@@ -119,7 +94,6 @@ export function useSyncManager(user, isFirstLogin, clearFirstLogin, onDataChange
 
   // Sync when coming back online
   useEffect(() => {
-    console.log('[SYNC] Online/user effect:', { isOnline, user: !!user, isFirstLogin })
     if (isOnline && user && !isFirstLogin) {
       doSync()
     }
