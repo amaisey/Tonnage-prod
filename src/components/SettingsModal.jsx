@@ -5,7 +5,7 @@ import { defaultExercises } from '../data/defaultExercises';
 import AuthModal from './AuthModal';
 import SyncStatus from './SyncStatus';
 import { useAuth } from '../hooks/useAuth';
-import { queueSyncEntry } from '../lib/syncService';
+import { queueSyncEntry, replaceCloudWorkouts } from '../lib/syncService';
 
 export function SettingsModal({ onClose, exercises, templates, folders, onRestoreData, user, syncStatus, lastSynced, pendingCount, onSyncNow, onHistoryRefresh }) {
   const [exporting, setExporting] = useState(false);
@@ -19,6 +19,12 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
   const [importResult, setImportResult] = useState(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const { signOut } = useAuth();
+
+  // Sign out and close modal for clear visual feedback
+  const handleSignOut = () => {
+    signOut();  // Don't await — user state clears synchronously first
+    onClose();
+  };
 
   // Get workout count on mount and when sync status changes (e.g. after pull adds data)
   useEffect(() => {
@@ -104,6 +110,15 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
           folders: importedFolders
         });
       }
+
+      // Replace cloud data too — soft-deletes old cloud rows, batch upserts imported ones
+      if (user && workouts.length > 0) {
+        await db.syncQueue.clear(); // Remove stale sync entries from old data
+        await replaceCloudWorkouts(user.id);
+        localStorage.setItem('tonnage-local-last-synced', new Date().toISOString());
+      }
+
+      onHistoryRefresh?.();
 
       setMessage({
         type: 'success',
@@ -284,7 +299,7 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
                   <button onClick={onSyncNow} className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white py-2.5 px-4 rounded-xl text-sm font-medium transition-colors">
                     Sync Now
                   </button>
-                  <button onClick={signOut} className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2.5 px-4 rounded-xl text-sm font-medium transition-colors">
+                  <button onClick={handleSignOut} className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2.5 px-4 rounded-xl text-sm font-medium transition-colors">
                     Sign Out
                   </button>
                 </div>

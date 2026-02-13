@@ -6,14 +6,18 @@ import { formatDuration, generateStravaDescription, getDefaultSetForCategory } f
 const NumberPad = ({ value, onChange, onClose, onNext, showRPE, rpeValue, onRPEChange, fieldLabel }) => {
   const [showRPEPicker, setShowRPEPicker] = useState(false);
   const [hasEdited, setHasEdited] = useState(false);
+  const hasEditedRef = useRef(false); // Ref mirrors state for rapid-tap accuracy
   const [localValue, setLocalValue] = useState(value);
   const valueRef = useRef(value);
+  const dragStartY = useRef(null);
+  const [dragOffset, setDragOffset] = useState(0);
 
   // Sync local value with prop when FIELD changes (not value - that causes overwrite bug)
   useEffect(() => {
     setLocalValue(value);
     valueRef.current = value;
     setHasEdited(false);
+    hasEditedRef.current = false;
   }, [fieldLabel]); // Only reset when switching fields, not on every value change
 
   // Update parent and local state together
@@ -24,10 +28,11 @@ const NumberPad = ({ value, onChange, onClose, onNext, showRPE, rpeValue, onRPEC
   };
 
   const handleDigit = (digit) => {
-    if (!hasEdited) {
+    if (!hasEditedRef.current) {
       // First keystroke - overwrite the existing value
-      updateValue(digit);
+      hasEditedRef.current = true;
       setHasEdited(true);
+      updateValue(digit);
     } else {
       // Subsequent keystrokes - append using ref for latest value
       updateValue(valueRef.current + digit);
@@ -48,10 +53,41 @@ const NumberPad = ({ value, onChange, onClose, onNext, showRPE, rpeValue, onRPEC
     updateValue(String(newVal));
   };
 
+  // Drag-down to dismiss
+  const handleDragStart = (e) => {
+    dragStartY.current = e.touches[0].clientY;
+    setDragOffset(0);
+  };
+  const handleDragMove = (e) => {
+    if (dragStartY.current === null) return;
+    const dy = e.touches[0].clientY - dragStartY.current;
+    if (dy > 0) {
+      setDragOffset(dy);
+      e.preventDefault();
+    }
+  };
+  const handleDragEnd = () => {
+    if (dragOffset > 80) {
+      onClose();
+    }
+    setDragOffset(0);
+    dragStartY.current = null;
+  };
+
   const rpeOptions = [6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10];
 
   return (
-    <div className="fixed inset-x-0 bottom-0 bg-gray-900 border-t border-gray-800 z-50 rounded-t-2xl">
+    <div
+      className="fixed inset-x-0 bottom-0 bg-gray-900 border-t border-gray-800 z-50 rounded-t-2xl transition-transform"
+      style={{ transform: dragOffset > 0 ? `translateY(${dragOffset}px)` : undefined }}
+      onTouchStart={handleDragStart}
+      onTouchMove={handleDragMove}
+      onTouchEnd={handleDragEnd}
+    >
+      {/* Drag handle indicator */}
+      <div className="flex justify-center pt-2 pb-1">
+        <div className="w-10 h-1 bg-gray-600 rounded-full" />
+      </div>
       {showRPEPicker ? (
         <div className="p-4">
           <div className="flex items-center justify-between mb-3">
@@ -328,7 +364,7 @@ const SetInputRow = ({ set, setIndex, category, onUpdate, onComplete, onRemove, 
     }
 
     const updateElapsed = () => {
-      const elapsed = Math.round((Date.now() - lastCompletionTimestamp) / 1000);
+      const elapsed = Math.floor((Date.now() - lastCompletionTimestamp) / 1000);
       setElapsedTime(elapsed);
     };
 
@@ -1068,8 +1104,10 @@ const CATEGORY_BACKGROUNDS = {
 };
 
 // Exercise Detail Modal with About, History, Charts, Records tabs
-const ExerciseDetailModal = ({ exercise, history, onEdit, onMerge, onClose }) => {
+const ExerciseDetailModal = ({ exercise, history, onEdit, onMerge, onClose, onUpdateNotes }) => {
   const [activeTab, setActiveTab] = useState('about');
+  const [editingNotes, setEditingNotes] = useState(false);
+  const [notesText, setNotesText] = useState(exercise.notes || exercise.instructions || '');
   const backgroundImage = CATEGORY_BACKGROUNDS[exercise.category] || '/backgrounds/bg-1.jpg';
 
   // Get all instances of this exercise from history (guard against undefined/null)
@@ -1127,7 +1165,7 @@ const ExerciseDetailModal = ({ exercise, history, onEdit, onMerge, onClose }) =>
             <button onClick={onClose} className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 border border-white/20"><Icons.X /></button>
             <div className="flex items-center gap-2">
               {onMerge && <button onClick={onMerge} className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-cyan-300 font-medium hover:bg-white/20 border border-white/20 text-sm">Merge</button>}
-              <button onClick={onEdit} className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white font-medium hover:bg-white/20 border border-white/20">Edit</button>
+              {onEdit && !onUpdateNotes && <button onClick={onEdit} className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white font-medium hover:bg-white/20 border border-white/20">Edit</button>}
             </div>
           </div>
           <div className="flex-1 flex flex-col justify-end p-4">
@@ -1178,9 +1216,32 @@ const ExerciseDetailModal = ({ exercise, history, onEdit, onMerge, onClose }) =>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
               <h3 className="text-sm font-semibold text-white/60 mb-2">Instructions</h3>
-              <p className="text-white/80 text-sm">
-                {exercise.instructions || "No instructions added yet. Tap Edit to add instructions for this exercise."}
-              </p>
+              {editingNotes ? (
+                <div>
+                  <textarea
+                    value={notesText}
+                    onChange={(e) => setNotesText(e.target.value)}
+                    placeholder="Add exercise notes/instructions..."
+                    className="w-full bg-white/10 text-white text-sm rounded-lg p-3 min-h-[100px] focus:outline-none focus:ring-1 focus:ring-cyan-500 border border-white/20 resize-none"
+                    autoFocus
+                  />
+                  <div className="flex gap-2 mt-2">
+                    <button onClick={() => { onUpdateNotes?.(notesText); setEditingNotes(false); }}
+                      className="px-4 py-2 bg-cyan-600 text-white rounded-lg text-sm font-medium">Save</button>
+                    <button onClick={() => { setNotesText(exercise.notes || exercise.instructions || ''); setEditingNotes(false); }}
+                      className="px-4 py-2 bg-white/10 text-white/70 rounded-lg text-sm">Cancel</button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => onUpdateNotes ? setEditingNotes(true) : null}
+                  className={`text-left w-full ${onUpdateNotes ? 'cursor-pointer hover:bg-white/5 rounded-lg -m-1 p-1' : ''}`}
+                >
+                  <p className="text-white/80 text-sm">
+                    {exercise.notes || exercise.instructions || (onUpdateNotes ? "Tap to add notes for this exercise." : "No instructions added yet. Go to Exercises to add instructions.")}
+                  </p>
+                </button>
+              )}
             </div>
           </div>
         )}

@@ -295,6 +295,78 @@ export async function mergeOnFirstLogin(userId) {
 }
 
 // ============================================================
+// Replace ALL cloud workouts for a user (used by Import Backup)
+// 1. Soft-delete existing cloud workouts
+// 2. Batch upsert imported workouts (un-deletes matched rows)
+// 3. Orphaned cloud rows stay soft-deleted
+// ============================================================
+export async function replaceCloudWorkouts(userId) {
+  if (!supabase || !userId) return
+
+  // Soft-delete all existing cloud workouts for this user
+  const { error: deleteError } = await supabase
+    .from('workouts')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('user_id', userId)
+    .is('deleted_at', null)
+
+  if (deleteError) {
+    console.error('Cloud workout soft-delete error:', deleteError)
+    throw deleteError
+  }
+
+  // Batch upsert all local workouts
+  const allWorkouts = await db.workouts.toArray()
+  if (allWorkouts.length === 0) return
+
+  const BATCH_SIZE = 100
+  const replaceTimestamp = new Date().toISOString()
+
+  for (let i = 0; i < allWorkouts.length; i += BATCH_SIZE) {
+    const batch = allWorkouts.slice(i, i + BATCH_SIZE).map(w => ({
+      user_id: userId,
+      local_id: String(w.id),
+      name: w.name,
+      notes: w.notes || null,
+      start_time: w.startTime || w.date,
+      date: w.date,
+      duration_ms: w.duration || 0,
+      exercises: w.exercises || [],
+      updated_at: replaceTimestamp,
+      deleted_at: null // Explicitly un-delete if row matched
+    }))
+
+    const { data, error } = await supabase
+      .from('workouts')
+      .upsert(batch, { onConflict: 'user_id,local_id', ignoreDuplicates: false })
+      .select('id, local_id')
+
+    if (error) {
+      console.error('Batch replace error:', error)
+    } else if (data) {
+      // Store cloud IDs back on local records
+      for (const row of data) {
+        if (row.local_id) {
+          const localIdNum = Number(row.local_id)
+          if (!isNaN(localIdNum)) {
+            await db.workouts.update(localIdNum, { cloudId: row.id })
+          }
+        }
+      }
+    }
+  }
+
+  // Update sync timestamp
+  try {
+    await supabase.from('user_profiles')
+      .update({ last_synced_at: replaceTimestamp })
+      .eq('id', userId)
+  } catch (err) {
+    console.warn('user_profiles update failed (non-fatal):', err)
+  }
+}
+
+// ============================================================
 // Queue a sync entry for later push
 // ============================================================
 export async function queueSyncEntry(entityType, entityId, action, payload) {

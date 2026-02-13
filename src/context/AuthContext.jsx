@@ -82,17 +82,19 @@ export function AuthProvider({ children }) {
   }, [])
 
   const signOut = useCallback(async () => {
+    // Clear user state FIRST for immediate UI response.
+    // supabase.auth.signOut() can hang in Brave due to async internal cleanup
+    // (BroadcastChannel, storage events). By clearing state first, the UI
+    // updates instantly regardless of what Supabase does internally.
+    setUser(null)
+    setIsFirstLogin(false)
+
     if (!supabase) return
     try {
-      // Use scope: 'local' to clear session immediately without a network call.
-      // This avoids hanging on cross-origin POST requests in Brave/SW contexts.
       await supabase.auth.signOut({ scope: 'local' })
     } catch (err) {
       console.error('Sign out error:', err)
     }
-    // Force-clear user state immediately — don't rely solely on onAuthStateChange
-    setUser(null)
-    setIsFirstLogin(false)
   }, [])
 
   const clearFirstLogin = useCallback(() => {

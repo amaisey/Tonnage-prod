@@ -23,20 +23,103 @@ export const generateStravaDescription = (workout) => {
   const duration = Math.round(workout.duration / 60000);
   const totalSets = workout.exercises.reduce((acc, ex) => acc + ex.sets.filter(s => s.completed).length, 0);
   let description = `💪 ${workout.name}\n⏱️ ${duration} min | ${totalSets} sets\n\n`;
-  workout.exercises.forEach(ex => {
+
+  const formatSets = (completedSets) => {
+    return completedSets.map(s => {
+      if (s.weight !== undefined) return `${s.weight}lb×${s.reps}`;
+      if (s.reps !== undefined) return `${s.reps} reps`;
+      if (s.duration !== undefined) return formatDuration(s.duration);
+      return '';
+    }).join(', ');
+  };
+
+  // Group by superset for display
+  const used = new Set();
+  workout.exercises.forEach((ex, i) => {
+    if (used.has(i)) return;
     const completedSets = ex.sets.filter(s => s.completed);
-    if (completedSets.length > 0) {
-      description += `${ex.name}: `;
-      description += completedSets.map(s => {
-        if (s.weight !== undefined) return `${s.weight}lb×${s.reps}`;
-        if (s.reps !== undefined) return `${s.reps} reps`;
-        if (s.duration !== undefined) return formatDuration(s.duration);
-        return '';
-      }).join(', ');
-      description += '\n';
+    if (completedSets.length === 0) { used.add(i); return; }
+
+    if (ex.supersetId) {
+      // Gather all superset exercises
+      const ssExercises = [];
+      workout.exercises.forEach((e, j) => {
+        if (e.supersetId === ex.supersetId) {
+          ssExercises.push(e);
+          used.add(j);
+        }
+      });
+      if (ssExercises.length > 1) {
+        description += `⚡ Superset:\n`;
+        ssExercises.forEach(ssEx => {
+          const sets = ssEx.sets.filter(s => s.completed);
+          if (sets.length > 0) {
+            description += `  ${ssEx.name}: ${formatSets(sets)}\n`;
+          }
+        });
+      } else {
+        description += `${ex.name}: ${formatSets(completedSets)}\n`;
+      }
+    } else {
+      used.add(i);
+      description += `${ex.name}: ${formatSets(completedSets)}\n`;
     }
   });
   return description;
+};
+
+// Generate a blank AI boilerplate that teaches an AI how to create Tonnage templates
+export const generateTemplateAIBoilerplate = () => {
+  return `# Tonnage Workout Template Format
+
+You are helping create a workout template for the Tonnage app. Return ONLY a valid JSON object (no markdown, no code fences).
+
+## JSON Structure
+
+{
+  "name": "Template Name",
+  "estimatedTime": 60,         // estimated minutes (optional)
+  "notes": "",                  // template-level notes (optional)
+  "exercises": [
+    {
+      "name": "Exercise Name",
+      "bodyPart": "Chest",       // Chest, Back, Shoulders, Legs, Arms, Core, Cardio, Other
+      "category": "barbell",     // barbell, dumbbell, machine, reps_only, duration, band, assisted_bodyweight, cardio
+      "phase": "workout",        // warmup, workout, cooldown
+      "restTime": 90,            // rest time in seconds between sets (0 = no rest)
+      "notes": "",               // exercise-specific notes (optional)
+      "sets": [
+        { "weight": 135, "reps": 10 }   // repeat for each set
+      ]
+    }
+  ]
+}
+
+## Set Formats by Category
+- barbell/dumbbell/machine: { "weight": NUMBER, "reps": NUMBER }
+- reps_only: { "reps": NUMBER }
+- duration: { "duration": NUMBER }  (seconds)
+- cardio: { "distance": NUMBER, "duration": NUMBER }
+- band: { "bandColor": "COLOR", "reps": NUMBER }  (red/black/purple/green/blue/yellow)
+- assisted_bodyweight: { "assistedWeight": NUMBER, "reps": NUMBER }
+
+## Optional Set Fields
+- "rpe": NUMBER (1-10, rate of perceived exertion)
+
+## Supersets
+Give exercises the same "supersetId" string to group them. Non-last exercises in a superset should have restTime: 0.
+Example:
+  { "name": "Bench Press", "supersetId": "ss1", "restTime": 0, ... },
+  { "name": "Bent Over Row", "supersetId": "ss1", "restTime": 90, ... }
+
+## Phases
+- "warmup": lighter prep exercises
+- "workout": main working sets
+- "cooldown": stretching/mobility
+
+## Import
+To import into Tonnage: Templates tab → Import button (top-right) → paste JSON → Import.
+`;
 };
 
 // Generate AI-friendly JSON export of a template (for pasting into an AI chat to modify)

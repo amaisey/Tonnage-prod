@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, Fragment } from 'react';
 import { Icons } from './Icons';
 import { BODY_PARTS, CATEGORIES, BAND_COLORS, EXERCISE_TYPES, EXERCISE_PHASES } from '../data/constants';
-import { formatDuration, getDefaultSetForCategory, generateTemplateAIExport, generateTemplateSummary } from '../utils/helpers';
+import { formatDuration, getDefaultSetForCategory, generateTemplateAIExport, generateTemplateAIBoilerplate, generateTemplateSummary } from '../utils/helpers';
 import { ExerciseSearchModal, CreateFolderModal } from './SharedComponents';
 import { CreateTemplateModal, ImportModal } from './ExercisesScreen';
 
@@ -647,10 +647,21 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
   const [editingTemplate, setEditingTemplate] = useState(null);
   const [deleteFolderConfirm, setDeleteFolderConfirm] = useState(null);
   const [viewingTemplate, setViewingTemplate] = useState(null);
+  const [aiBoilerplateCopied, setAiBoilerplateCopied] = useState(false);
   // Bug #10: Swipe-to-delete state for folders
   const [swipedFolder, setSwipedFolder] = useState(null);
   const folderTouchRef = useRef({ x: 0, y: 0, swiping: false });
   const DELETE_THRESHOLD = 80;
+
+  const copyAIBoilerplate = async () => {
+    try {
+      await navigator.clipboard.writeText(generateTemplateAIBoilerplate());
+      setAiBoilerplateCopied(true);
+      setTimeout(() => setAiBoilerplateCopied(false), 2000);
+    } catch (err) {
+      console.error('Copy AI boilerplate failed:', err);
+    }
+  };
 
   // Notify parent when any modal is open to hide navbar
   useEffect(() => {
@@ -674,6 +685,37 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
     };
     recurse(parentId);
     return ids;
+  };
+
+  const exportFolderJSON = (folder) => {
+    const allSubfolderIds = getAllSubfolderIds(folder.id);
+    const folderIds = [folder.id, ...allSubfolderIds];
+    const folderTemplates = templates.filter(t => folderIds.includes(t.folderId));
+    const subfolders = folders.filter(f => allSubfolderIds.includes(f.id));
+
+    const exportData = {
+      version: 1,
+      exportDate: new Date().toISOString(),
+      folder: { name: folder.name, id: folder.id },
+      subfolders: subfolders.map(f => ({ name: f.name, id: f.id, parentId: f.parentId })),
+      templates: folderTemplates.map(t => ({
+        name: t.name,
+        folderId: t.folderId,
+        estimatedTime: t.estimatedTime || null,
+        notes: t.notes || '',
+        exercises: t.exercises,
+      })),
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${folder.name.replace(/\s+/g, '-')}-templates.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const executeDeleteFolder = (folder, subfolderIds) => {
@@ -717,6 +759,9 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-bold text-white">Templates</h2>
             <div className="flex gap-2">
+              <button onClick={copyAIBoilerplate} className="p-2 text-white/70 hover:text-white rounded-lg hover:bg-white/10" title="Copy AI template format">
+                {aiBoilerplateCopied ? <span className="text-green-400 text-xs font-medium">Copied!</span> : <Icons.Code />}
+              </button>
               <button onClick={() => setShowCreateFolder(true)} className="p-2 text-white/70 hover:text-white rounded-lg hover:bg-white/10"><Icons.Folder /></button>
               <button onClick={() => setShowImport(true)} className="p-2 text-white/70 hover:text-white rounded-lg hover:bg-white/10"><Icons.Import /></button>
               <button onClick={() => setShowCreateTemplate(true)} className="bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/30 flex items-center gap-1 border border-white/30">
@@ -788,6 +833,13 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
                       {allSubfolderIds.length > 0 ? `${allSubfolderIds.length} folder${allSubfolderIds.length !== 1 ? 's' : ''}, ` : ''}{totalTemplateCount} template{totalTemplateCount !== 1 ? 's' : ''}
                     </div>
                   </div>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); exportFolderJSON(folder); }}
+                    className="p-1.5 text-gray-400 hover:text-teal-400 hover:bg-white/10 rounded-lg"
+                    title="Export folder"
+                  >
+                    <Icons.Export />
+                  </button>
                   <span className="text-teal-500/70"><Icons.ChevronRight /></span>
                 </button>
               </div>

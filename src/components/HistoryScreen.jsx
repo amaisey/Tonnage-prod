@@ -230,21 +230,37 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
           {stravaCopied ? '✓ Copied!' : '🏃 Copy Strava Description'}
         </button>
 
-        <button onClick={async () => {
-          try {
-            await navigator.clipboard.writeText(exportWorkoutJSON(workout));
-            setJsonCopied(true);
-            setTimeout(() => setJsonCopied(false), 2000);
-          } catch (err) {
-            console.error('Clipboard write failed:', err);
-          }
-        }} className={`w-full py-3 rounded-xl font-medium flex items-center justify-center gap-2 ${
-          jsonCopied
-            ? 'bg-green-600 text-white'
-            : 'bg-teal-600 text-white hover:bg-teal-700'
-        }`}>
-          {jsonCopied ? '✓ Copied!' : <><Icons.Export /> Copy Workout JSON</>}
-        </button>
+        <div className="flex gap-2">
+          <button onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(exportWorkoutJSON(workout));
+              setJsonCopied(true);
+              setTimeout(() => setJsonCopied(false), 2000);
+            } catch (err) {
+              console.error('Clipboard write failed:', err);
+            }
+          }} className={`flex-1 py-3 rounded-xl font-medium flex items-center justify-center gap-2 ${
+            jsonCopied
+              ? 'bg-green-600 text-white'
+              : 'bg-teal-600 text-white hover:bg-teal-700'
+          }`}>
+            {jsonCopied ? '✓ Copied!' : <><Icons.Export /> Copy JSON</>}
+          </button>
+          <button onClick={() => {
+            const json = exportWorkoutJSON(workout);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${workout.name.replace(/\s+/g, '-')}-${new Date(workout.date || workout.startTime).toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }} className="py-3 px-4 rounded-xl font-medium bg-gray-700 text-white hover:bg-gray-600 flex items-center justify-center">
+            ⬇️
+          </button>
+        </div>
       </div>
 
       {/* Delete Confirmation */}
