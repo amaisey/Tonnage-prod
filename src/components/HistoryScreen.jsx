@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { Icons } from './Icons';
 import { CATEGORIES, BAND_COLORS, EXERCISE_PHASES } from '../data/constants';
 import { formatDuration, exportWorkoutJSON, generateStravaDescription } from '../utils/helpers';
-import { workoutDb } from '../db/workoutDb';
+import { workoutDb, db } from '../db/workoutDb';
+import { useAuth } from '../hooks/useAuth';
+import { replaceCloudWorkouts } from '../lib/syncService';
 
 // Workout Detail Modal - shows full workout when clicking on history item
 const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
@@ -281,6 +283,7 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
 };
 
 const HistoryScreen = ({ onRefreshNeeded, onScroll, navVisible, onModalStateChange }) => {
+  const { user } = useAuth();
   const [history, setHistory] = useState([]);
   const [showExport, setShowExport] = useState(false);
   const [showImport, setShowImport] = useState(false);
@@ -419,7 +422,21 @@ const HistoryScreen = ({ onRefreshNeeded, onScroll, navVisible, onModalStateChan
         }
       }
 
-      setImportStatus({ message: `Successfully imported ${imported} workouts!`, progress: 100, done: true });
+      // Sync to cloud if logged in
+      if (user) {
+        setImportStatus({ message: `Syncing ${imported} workouts to cloud...`, progress: 95 });
+        try {
+          await db.syncQueue.clear();
+          await replaceCloudWorkouts(user.id);
+          localStorage.setItem('tonnage-local-last-synced', new Date().toISOString());
+          setImportStatus({ message: `Imported & synced ${imported} workouts!`, progress: 100, done: true });
+        } catch (syncErr) {
+          console.error('Cloud sync after import failed:', syncErr);
+          setImportStatus({ message: `Imported ${imported} workouts locally, but cloud sync failed: ${syncErr.message}`, progress: 100, done: true });
+        }
+      } else {
+        setImportStatus({ message: `Successfully imported ${imported} workouts!`, progress: 100, done: true });
+      }
 
       // Reload history
       const workouts = await workoutDb.getAll();

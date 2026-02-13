@@ -14,7 +14,7 @@ import { workoutDb } from './db/workoutDb';
 import { usePreviousExerciseData } from './hooks/useWorkoutDb';
 import { useAuth } from './hooks/useAuth';
 import { useSyncManager } from './hooks/useSyncManager';
-import { queueSyncEntry } from './lib/syncService';
+import { queueSyncEntry, directPushWorkout } from './lib/syncService';
 
 // Update Toast Component
 function UpdateToast({ onUpdate, onDismiss }) {
@@ -194,10 +194,17 @@ function App() {
       // Trigger history refresh
       setHistoryRefreshKey(k => k + 1);
 
-      // Queue for cloud sync if logged in
+      // Auto-upload to cloud immediately (bypasses queue for reliability)
       if (user) {
-        await queueSyncEntry('workout', localId, 'create', completedWorkoutData);
-        syncNow();
+        directPushWorkout(user.id, completedWorkoutData, localId)
+          .then(result => {
+            if (result.success) {
+              console.log('Workout auto-uploaded to cloud:', result.cloudId);
+            } else {
+              console.warn('Direct push failed, queued for retry:', result.reason);
+            }
+          })
+          .catch(err => console.error('Auto-upload error:', err));
       }
     } catch (err) {
       console.error('Error saving workout:', err);
@@ -205,7 +212,7 @@ function App() {
 
     setCompletedWorkout(completedWorkoutData);
     setActiveWorkout(null);
-  }, [clearCache]);
+  }, [clearCache, user]);
 
   const saveAsTemplate = (workout, name, folderId) => {
     const newTemplate = {

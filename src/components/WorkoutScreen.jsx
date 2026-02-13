@@ -148,6 +148,38 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     }
   }, [activeWorkout?.exercises?.length]);
 
+  // Validate expectedNext on every workout change.
+  // If expectedNext points to a stale/completed/missing set, recalculate it.
+  // This catches edge cases from removeExercise, removeSet, addExercises, addSet, etc.
+  useEffect(() => {
+    if (!activeWorkout?.exercises) return;
+    const ex = activeWorkout.exercises;
+
+    // Check if current expectedNext is valid
+    const isValid = expectedNext &&
+      ex[expectedNext.exIndex] &&
+      ex[expectedNext.exIndex].sets[expectedNext.setIndex] &&
+      !ex[expectedNext.exIndex].sets[expectedNext.setIndex].completed;
+
+    if (isValid) return; // Current pointer is fine
+
+    // Find first incomplete set across all exercises
+    let firstIncomplete = null;
+    for (let i = 0; i < ex.length; i++) {
+      const setIdx = ex[i].sets.findIndex(s => !s.completed);
+      if (setIdx >= 0) {
+        firstIncomplete = { exIndex: i, setIndex: setIdx };
+        break;
+      }
+    }
+
+    // Only update if different from current value (avoid infinite loop)
+    if (firstIncomplete?.exIndex !== expectedNext?.exIndex ||
+        firstIncomplete?.setIndex !== expectedNext?.setIndex) {
+      setExpectedNext(firstIncomplete);
+    }
+  }, [activeWorkout]);
+
   const togglePhase = (phase) => {
     setCollapsedPhases(prev => ({ ...prev, [phase]: !prev[phase] }));
   };
@@ -503,6 +535,25 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       });
     }
     setActiveWorkout(updated);
+
+    // Recalculate expectedNext when adding exercises.
+    // The green bar disappears when all sets are complete (expectedNext = null).
+    // Adding new exercises should bring it back. Also handle the case where
+    // expectedNext exists but points to an already-completed set (stale).
+    const needsRecalc = !expectedNext ||
+      !updated.exercises[expectedNext.exIndex] ||
+      updated.exercises[expectedNext.exIndex].sets[expectedNext.setIndex]?.completed;
+
+    if (needsRecalc) {
+      for (let i = 0; i < updated.exercises.length; i++) {
+        const setIdx = updated.exercises[i].sets.findIndex(s => !s.completed);
+        if (setIdx >= 0) {
+          setExpectedNext({ exIndex: i, setIndex: setIdx });
+          break;
+        }
+      }
+    }
+
     setShowExerciseModal(false);
     setAddToPhase(null); // Reset target phase
   };
@@ -817,6 +868,13 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     });
     exercise.sets.push(newSet);
     setActiveWorkout(updated);
+
+    // If green bar was hidden (all sets complete), recalculate expectedNext
+    // so the new set gets the green "next" indicator
+    if (!expectedNext || updated.exercises[expectedNext?.exIndex]?.sets[expectedNext?.setIndex]?.completed) {
+      const newSetIndex = exercise.sets.length - 1;
+      setExpectedNext({ exIndex, setIndex: newSetIndex });
+    }
   };
 
   const removeSet = (exIndex, setIndex) => {
