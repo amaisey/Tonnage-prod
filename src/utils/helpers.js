@@ -26,10 +26,12 @@ export const generateStravaDescription = (workout) => {
 
   const formatSets = (completedSets) => {
     return completedSets.map(s => {
-      if (s.weight !== undefined) return `${s.weight}lb×${s.reps}`;
-      if (s.reps !== undefined) return `${s.reps} reps`;
-      if (s.duration !== undefined) return formatDuration(s.duration);
-      return '';
+      let str = '';
+      if (s.weight !== undefined) str = `${s.weight}lb×${s.reps}`;
+      else if (s.reps !== undefined) str = `${s.reps} reps`;
+      else if (s.duration !== undefined) str = formatDuration(s.duration);
+      if (s.rpe) str += ` @${s.rpe}`;
+      return str;
     }).join(', ');
   };
 

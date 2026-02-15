@@ -4,7 +4,7 @@ import { CATEGORIES, BAND_COLORS, EXERCISE_PHASES } from '../data/constants';
 import { formatDuration, exportWorkoutJSON, generateStravaDescription } from '../utils/helpers';
 import { workoutDb, db } from '../db/workoutDb';
 import { useAuth } from '../hooks/useAuth';
-import { replaceCloudWorkouts } from '../lib/syncService';
+import { replaceCloudWorkouts, directDeleteWorkout } from '../lib/syncService';
 
 // Workout Detail Modal - shows full workout when clicking on history item
 const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
@@ -456,6 +456,13 @@ const HistoryScreen = ({ onRefreshNeeded, onScroll, navVisible, onModalStateChan
     try {
       await workoutDb.delete(id);
       setHistory(history.filter(w => w.id !== id));
+      // Immediately sync delete to cloud (no waiting for 5-min interval)
+      if (user) {
+        const result = await directDeleteWorkout(user.id, id);
+        if (!result.success) {
+          console.warn('Direct cloud delete failed, queued for retry:', result.reason);
+        }
+      }
     } catch (err) {
       console.error('Error deleting workout:', err);
     }

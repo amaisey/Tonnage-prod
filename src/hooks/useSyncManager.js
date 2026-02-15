@@ -30,6 +30,19 @@ export function useSyncManager(user, isFirstLogin, clearFirstLogin, onDataChange
     }
   }, [])
 
+  // Safety: if syncStatus is 'syncing' for more than 30s, reset to idle
+  // This catches edge cases where doSync errors silently or isSyncingRef gets stuck
+  useEffect(() => {
+    if (syncStatus !== 'syncing') return
+    const timeout = setTimeout(() => {
+      if (syncStatus === 'syncing' && !isSyncingRef.current) {
+        console.warn('Sync status stuck at syncing — resetting to idle')
+        setSyncStatus('idle')
+      }
+    }, 30000)
+    return () => clearTimeout(timeout)
+  }, [syncStatus])
+
   // Core sync function — uses LOCAL timestamp so each device pulls everything it hasn't seen
   const doSync = useCallback(async () => {
     if (!supabase || !user || !isOnline || isSyncingRef.current) return
@@ -67,6 +80,8 @@ export function useSyncManager(user, isFirstLogin, clearFirstLogin, onDataChange
         console.warn('Sync timed out — will retry on next interval')
       }
       setSyncStatus('error')
+      // Auto-recover from error state after 5 seconds
+      setTimeout(() => setSyncStatus('idle'), 5000)
     } finally {
       isSyncingRef.current = false
       refreshPendingCount()

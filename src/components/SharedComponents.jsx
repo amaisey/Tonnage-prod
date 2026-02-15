@@ -308,7 +308,7 @@ const DurationPad = ({ value, onChange, onClose, onNext, fieldLabel }) => {
 // Set Input Row Component with dual rest time display (elapsed + target)
 // Bug #13: Added swipe-to-delete functionality
 // Bug #3: Only shows timer if isNextExpected or has frozenElapsed
-const SetInputRow = ({ set, setIndex, category, onUpdate, onComplete, onRemove, restTime, previousSet, previousWorkoutSet, onOpenNumpad, onOpenBandPicker, activeField, isNextExpected, lastCompletionTimestamp, frozenElapsed }) => {
+const SetInputRow = ({ set, setIndex, category, onUpdate, onComplete, onRemove, restTime, previousSet, previousWorkoutSet, onOpenNumpad, onOpenBandPicker, activeField, isNextExpected, lastCompletionTimestamp, frozenElapsed, allSets, exerciseStartTime }) => {
   const fields = CATEGORIES[category]?.fields || ['weight', 'reps'];
   const rowRef = useRef(null);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -357,6 +357,18 @@ const SetInputRow = ({ set, setIndex, category, onUpdate, onComplete, onRemove, 
       return;
     }
 
+    // For completed sets without frozen elapsed, compute from completedAt timestamps
+    if (set.completed && set.completedAt && setIndex > 0) {
+      // Find previous set's completedAt
+      const prevSet = allSets?.[setIndex - 1];
+      if (prevSet?.completedAt) {
+        setElapsedTime(Math.round((set.completedAt - prevSet.completedAt) / 1000));
+      } else if (exerciseStartTime) {
+        setElapsedTime(Math.round((set.completedAt - exerciseStartTime) / 1000));
+      }
+      return;
+    }
+
     // Only the next expected set gets a live timer
     if (!isNextExpected || !lastCompletionTimestamp) {
       setElapsedTime(0);
@@ -371,7 +383,7 @@ const SetInputRow = ({ set, setIndex, category, onUpdate, onComplete, onRemove, 
     updateElapsed();
     const interval = setInterval(updateElapsed, 1000);
     return () => clearInterval(interval);
-  }, [isNextExpected, lastCompletionTimestamp, frozenElapsed]);
+  }, [isNextExpected, lastCompletionTimestamp, frozenElapsed, set.completed, set.completedAt]);
 
   const renderInput = (field, fieldIndex) => {
     const isActive = activeField === field;
@@ -431,8 +443,8 @@ const SetInputRow = ({ set, setIndex, category, onUpdate, onComplete, onRemove, 
     }
   };
 
-  // Bug #3: Only show the rest timer row if this is the next expected set OR has a frozen timer
-  const showRestRow = isNextExpected || (frozenElapsed !== null && frozenElapsed !== undefined);
+  // Show rest timer row if: next expected set (live counting), has frozen timer, or completed set (stamped time)
+  const showRestRow = isNextExpected || (frozenElapsed !== null && frozenElapsed !== undefined) || (set.completed && setIndex > 0);
 
   // Bug #13: Touch handlers for swipe-to-delete
   const handleTouchStart = (e) => {
@@ -517,9 +529,12 @@ const SetInputRow = ({ set, setIndex, category, onUpdate, onComplete, onRemove, 
           {fields.length < 2 && <div></div>}
           {fields.slice(0, 2).map((field, idx) => renderInput(field, idx))}
           {fields.length > 2 && fields.slice(2).map((field, idx) => renderInput(field, idx + 2))}
-          <button onClick={onComplete} className={`p-1.5 rounded-lg justify-self-center ${set.completed ? 'bg-green-500 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'}`}>
-            <Icons.Check />
-          </button>
+          <div className="flex items-center gap-0.5 justify-self-center">
+            {set.rpe && <span className="text-[9px] text-amber-400 font-mono">{set.rpe}</span>}
+            <button onClick={onComplete} className={`p-1.5 rounded-lg ${set.completed ? 'bg-green-500 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'}`}>
+              <Icons.Check />
+            </button>
+          </div>
         </div>
       </div>
     </>

@@ -9,16 +9,17 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
       .then(registration => {
-        // Check for updates every 5 minutes
+        // Check for SW updates every 30 minutes (not more often — avoids phantom toasts)
         setInterval(() => {
           registration.update();
-        }, 5 * 60 * 1000);
+        }, 30 * 60 * 1000);
 
         // Listen for new service worker installing
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
-          // Only show update toast if the page is already controlled by a SW
-          // (i.e., this is a genuine update, not the very first installation)
+          // Only show update toast if:
+          // 1. The page is already controlled by a SW (not the very first install)
+          // 2. This is a genuine code update (new SW detected)
           if (newWorker && navigator.serviceWorker.controller) {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'activated') {
@@ -33,27 +34,6 @@ if ('serviceWorker' in navigator) {
         console.error('SW registration failed:', error);
       });
   });
-
-  // Also check version.json periodically for non-SW updates (Vite hash changes)
-  const checkForUpdates = async () => {
-    try {
-      const res = await fetch('/version.json?t=' + Date.now());
-      if (res.ok) {
-        const data = await res.json();
-        const storedVersion = localStorage.getItem('app-version');
-        if (storedVersion && storedVersion !== data.version) {
-          window.dispatchEvent(new CustomEvent('swUpdated'));
-        }
-        localStorage.setItem('app-version', data.version);
-      }
-    } catch (e) {
-      // Offline or fetch failed — ignore
-    }
-  };
-
-  // Check on load and every 10 minutes
-  setTimeout(checkForUpdates, 5000);
-  setInterval(checkForUpdates, 10 * 60 * 1000);
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(

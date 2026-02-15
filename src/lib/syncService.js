@@ -120,7 +120,7 @@ export async function pushToCloud(userId) {
       if (item.action === 'delete') {
         const { error } = await supabase
           .from(table)
-          .update({ deleted_at: new Date().toISOString() })
+          .update({ deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
           .eq('user_id', userId)
           .eq('local_id', String(item.entityId))
 
@@ -336,7 +336,7 @@ export async function mergeOnFirstLogin(userId) {
 
     const { error } = await supabase
       .from('templates')
-      .upsert(rows, { ignoreDuplicates: true })
+      .upsert(rows, { onConflict: 'user_id,local_id', ignoreDuplicates: true })
 
     if (error) console.error('Template upload error:', error)
   }
@@ -662,6 +662,39 @@ export async function directPushWorkout(userId, workoutData, localId) {
     console.error('Direct push exception:', err)
     // Queue for retry on next sync
     await queueSyncEntry('workout', localId, 'create', workoutData)
+    return { success: false, reason: err.message }
+  }
+}
+
+// ============================================================
+// Direct delete a workout from cloud (bypasses queue)
+// Used by HistoryScreen for immediate cloud deletion.
+// Falls back to queueing if the direct delete fails (e.g. offline).
+// ============================================================
+export async function directDeleteWorkout(userId, localId) {
+  if (!supabase || !userId) {
+    await queueSyncEntry('workout', localId, 'delete', {})
+    return { success: false, reason: 'no-supabase' }
+  }
+
+  try {
+    const { error } = await supabase
+      .from('workouts')
+      .update({ deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      .eq('user_id', userId)
+      .eq('local_id', String(localId))
+
+    if (error) {
+      console.error('Direct delete error:', error)
+      await queueSyncEntry('workout', localId, 'delete', {})
+      return { success: false, reason: error.message }
+    }
+
+    console.log('Direct delete OK: localId=', localId)
+    return { success: true }
+  } catch (err) {
+    console.error('Direct delete exception:', err)
+    await queueSyncEntry('workout', localId, 'delete', {})
     return { success: false, reason: err.message }
   }
 }

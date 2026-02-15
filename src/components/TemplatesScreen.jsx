@@ -639,18 +639,20 @@ const EditTemplateModal = ({ template, onSave, onDelete, onClose, allExercises }
   );
 };
 
-const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout, onImport, onBulkImport, onUpdateTemplate, onDeleteTemplate, onAddFolder, onBulkAddFolders, onDeleteFolder, onAddExercises, exercises, onScroll, navVisible, onModalStateChange }) => {
+const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout, onImport, onBulkImport, onUpdateTemplate, onDeleteTemplate, onAddFolder, onBulkAddFolders, onUpdateFolder, onDeleteFolder, onAddExercises, exercises, onScroll, navVisible, onModalStateChange }) => {
   const [currentFolderId, setCurrentFolderId] = useState('root');
   const [showImport, setShowImport] = useState(false);
   const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [showCreateTemplate, setShowCreateTemplate] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState(null);
   const [deleteFolderConfirm, setDeleteFolderConfirm] = useState(null);
+  const [renamingFolder, setRenamingFolder] = useState(null); // { id, name }
   const [viewingTemplate, setViewingTemplate] = useState(null);
   const [aiBoilerplateCopied, setAiBoilerplateCopied] = useState(false);
   // Bug #10: Swipe-to-delete state for folders
   const [swipedFolder, setSwipedFolder] = useState(null);
   const folderTouchRef = useRef({ x: 0, y: 0, swiping: false });
+  const folderLongPressRef = useRef(null);
   const DELETE_THRESHOLD = 80;
 
   const copyAIBoilerplate = async () => {
@@ -737,8 +739,8 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
       ? isRootLevel(f.parentId)
       : f.parentId === currentFolderId;
     return matchesParent && f.name && !hiddenFolders.includes(f.name.toLowerCase());
-  });
-  const folderTemplates = templates.filter(t => (t.folderId || 'root') === currentFolderId);
+  }).sort((a, b) => a.name.localeCompare(b.name));
+  const folderTemplates = templates.filter(t => (t.folderId || 'root') === currentFolderId).sort((a, b) => a.name.localeCompare(b.name));
 
   const getBreadcrumbs = () => {
     const crumbs = [];
@@ -803,15 +805,28 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
                   </button>
                 </div>
 
-                {/* Folder button — slides left on swipe */}
+                {/* Folder button — slides left on swipe, long-press to rename */}
                 <button
-                  onClick={() => swipedFolder === folder.id ? setSwipedFolder(null) : setCurrentFolderId(folder.id)}
+                  onClick={() => {
+                    if (folderLongPressRef.current?.fired) return; // Ignore tap after long-press
+                    swipedFolder === folder.id ? setSwipedFolder(null) : setCurrentFolderId(folder.id);
+                  }}
                   onTouchStart={(e) => {
                     folderTouchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, swiping: false };
+                    folderLongPressRef.current = { fired: false };
+                    folderLongPressRef.current.timer = setTimeout(() => {
+                      folderLongPressRef.current.fired = true;
+                      if (navigator.vibrate) navigator.vibrate(50);
+                      setRenamingFolder({ id: folder.id, name: folder.name });
+                    }, 500);
                   }}
                   onTouchMove={(e) => {
                     const deltaX = e.touches[0].clientX - folderTouchRef.current.x;
                     const deltaY = Math.abs(e.touches[0].clientY - folderTouchRef.current.y);
+                    // Cancel long-press on any movement
+                    if (Math.abs(deltaX) > 10 || deltaY > 10) {
+                      clearTimeout(folderLongPressRef.current?.timer);
+                    }
                     // Only swipe horizontally, not if scrolling vertically
                     if (deltaY > 20 && !folderTouchRef.current.swiping) return;
                     if (deltaX < -(DELETE_THRESHOLD / 2)) {
@@ -821,6 +836,7 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
                       setSwipedFolder(null);
                     }
                   }}
+                  onTouchEnd={() => { clearTimeout(folderLongPressRef.current?.timer); }}
                   style={{
                     transform: swipedFolder === folder.id ? `translateX(-${DELETE_THRESHOLD}px)` : 'translateX(0)',
                     transition: 'transform 0.2s ease-out'
@@ -906,6 +922,39 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
       {showCreateTemplate && <CreateTemplateModal folderId={currentFolderId} allExercises={exercises} onSave={t => { onImport(t); setShowCreateTemplate(false); }} onClose={() => setShowCreateTemplate(false)} />}
       {editingTemplate && <EditTemplateModal template={editingTemplate} onSave={onUpdateTemplate} onDelete={onDeleteTemplate} onClose={() => setEditingTemplate(null)} allExercises={exercises} />}
       {viewingTemplate && <TemplateDetailModal template={viewingTemplate} onClose={() => setViewingTemplate(null)} onStart={onStartTemplate} onEdit={setEditingTemplate} hasActiveWorkout={hasActiveWorkout} />}
+
+      {/* Rename Folder Modal */}
+      {renamingFolder && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-sm">
+            <h3 className="text-lg font-semibold text-white mb-4">Rename Folder</h3>
+            <input
+              type="text"
+              value={renamingFolder.name}
+              onChange={(e) => setRenamingFolder({ ...renamingFolder, name: e.target.value })}
+              className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500 border border-gray-700"
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && renamingFolder.name.trim()) {
+                  const folder = folders.find(f => f.id === renamingFolder.id);
+                  if (folder) onUpdateFolder?.({ ...folder, name: renamingFolder.name.trim() });
+                  setRenamingFolder(null);
+                }
+              }}
+            />
+            <div className="flex gap-3">
+              <button onClick={() => setRenamingFolder(null)} className="flex-1 bg-gray-700 text-white py-3 rounded-xl font-medium hover:bg-gray-600">Cancel</button>
+              <button onClick={() => {
+                if (renamingFolder.name.trim()) {
+                  const folder = folders.find(f => f.id === renamingFolder.id);
+                  if (folder) onUpdateFolder?.({ ...folder, name: renamingFolder.name.trim() });
+                  setRenamingFolder(null);
+                }
+              }} className="flex-1 bg-teal-600 text-white py-3 rounded-xl font-medium hover:bg-teal-700">Save</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {deleteFolderConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
