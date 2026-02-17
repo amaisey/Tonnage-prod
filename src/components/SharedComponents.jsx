@@ -1119,10 +1119,11 @@ const CATEGORY_BACKGROUNDS = {
 };
 
 // Exercise Detail Modal with About, History, Charts, Records tabs
-const ExerciseDetailModal = ({ exercise, history, onEdit, onMerge, onClose, onUpdateNotes }) => {
+const ExerciseDetailModal = ({ exercise, history, onEdit, onMerge, onDelete, onClose, onUpdateNotes, templates }) => {
   const [activeTab, setActiveTab] = useState('about');
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesText, setNotesText] = useState(exercise.notes || exercise.instructions || '');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const backgroundImage = CATEGORY_BACKGROUNDS[exercise.category] || '/backgrounds/bg-1.jpg';
 
   // Get all instances of this exercise from history (guard against undefined/null)
@@ -1179,6 +1180,7 @@ const ExerciseDetailModal = ({ exercise, history, onEdit, onMerge, onClose, onUp
           <div className="px-4 py-3 flex items-center justify-between">
             <button onClick={onClose} className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 border border-white/20"><Icons.X /></button>
             <div className="flex items-center gap-2">
+              {onDelete && <button onClick={() => setShowDeleteConfirm(true)} className="w-10 h-10 rounded-full bg-red-900/40 backdrop-blur-sm flex items-center justify-center text-red-400 hover:bg-red-900/60 border border-red-800/40"><Icons.Trash /></button>}
               {onMerge && <button onClick={onMerge} className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-cyan-300 font-medium hover:bg-white/20 border border-white/20 text-sm">Merge</button>}
               {onEdit && !onUpdateNotes && <button onClick={onEdit} className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white font-medium hover:bg-white/20 border border-white/20">Edit</button>}
             </div>
@@ -1388,6 +1390,53 @@ const ExerciseDetailModal = ({ exercise, history, onEdit, onMerge, onClose, onUp
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteConfirm && (() => {
+        const templateCount = (templates || []).filter(t =>
+          t.exercises?.some(ex => ex.name === exercise.name)
+        ).length;
+        const historyCount = exerciseHistory.length;
+
+        return (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60] p-4">
+            <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-sm border border-gray-700">
+              <h3 className="text-lg font-bold text-white mb-2">Delete "{exercise.name}"?</h3>
+              <p className="text-sm text-gray-400 mb-4">This removes the exercise from your library. Your workout history is not affected.</p>
+
+              {(templateCount > 0 || historyCount > 0) && (
+                <div className="bg-amber-900/30 border border-amber-700/50 rounded-lg p-3 mb-4 space-y-1">
+                  {templateCount > 0 && (
+                    <p className="text-sm text-amber-400">
+                      Used in {templateCount} template{templateCount !== 1 ? 's' : ''}
+                    </p>
+                  )}
+                  {historyCount > 0 && (
+                    <p className="text-sm text-amber-400">
+                      Appears in {historyCount} workout{historyCount !== 1 ? 's' : ''}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="flex-1 py-3 rounded-xl bg-gray-700 text-white font-medium hover:bg-gray-600"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => { onDelete(exercise.id); onClose(); }}
+                  className="flex-1 py-3 rounded-xl bg-red-600 text-white font-medium hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 };

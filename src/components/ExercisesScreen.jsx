@@ -5,7 +5,7 @@ import { formatDuration, getDefaultSetForCategory } from '../utils/helpers';
 import { EditExerciseModal, ExerciseSearchModal, ExerciseDetailModal, MergeExerciseModal } from './SharedComponents';
 import { workoutDb } from '../db/workoutDb';
 
-const ExercisesScreen = ({ exercises, onAddExercise, onUpdateExercise, onDeleteExercise, onMergeExercise, onScroll, navVisible }) => {
+const ExercisesScreen = ({ exercises, onAddExercise, onUpdateExercise, onDeleteExercise, onMergeExercise, onScroll, navVisible, templates }) => {
   const [search, setSearch] = useState('');
   const [selectedBodyPart, setSelectedBodyPart] = useState('All');
   const [editingExercise, setEditingExercise] = useState(null);
@@ -106,8 +106,10 @@ const ExercisesScreen = ({ exercises, onAddExercise, onUpdateExercise, onDeleteE
         <ExerciseDetailModal
           exercise={selectedExercise}
           history={history}
+          templates={templates}
           onEdit={() => { setEditingExercise(selectedExercise); setSelectedExercise(null); }}
           onMerge={() => { setMergingExercise(selectedExercise); setSelectedExercise(null); }}
+          onDelete={(id) => { onDeleteExercise(id); setSelectedExercise(null); }}
           onClose={() => setSelectedExercise(null)}
         />
       )}

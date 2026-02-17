@@ -359,6 +359,7 @@ function App() {
           {activeTab === 'exercises' && (
             <ExercisesScreen
               exercises={exercises}
+              templates={templates}
               onAddExercise={ex => {
                 setExercises([...exercises, ex]);
                 if (user) queueSyncEntry('exercise', ex.id, 'create', ex);
