@@ -771,9 +771,14 @@ function mergeIntoLocalStorage(key, cloudRecords, dedupeField) {
     }
   }
 
-  localStorage.setItem(key, JSON.stringify(existing))
-  // Dispatch storage event so useLocalStorage hooks pick up changes
-  window.dispatchEvent(new Event('storage'))
+  // Only write + dispatch if something actually changed
+  const newJson = JSON.stringify(existing)
+  const oldJson = localStorage.getItem(key)
+  if (newJson !== oldJson) {
+    localStorage.setItem(key, newJson)
+    // Dispatch storage event so useLocalStorage hooks pick up changes
+    window.dispatchEvent(new Event('storage'))
+  }
 
   return added
 }
@@ -783,7 +788,11 @@ function mergeIntoLocalStorage(key, cloudRecords, dedupeField) {
 // ============================================================
 function cloudToLocalShape(key, record) {
   if (key === 'workout-exercises') {
+    const rawId = record.local_id
+    const numId = Number(rawId)
+    const id = (rawId && !isNaN(numId)) ? numId : (rawId || Date.now())
     return {
+      id,
       name: record.name,
       bodyPart: record.body_part,
       category: record.category,
