@@ -1,6 +1,6 @@
 {
-  "name": "Workout Tracker",
-  "short_name": "Workout",
+  "name": "Tonnage",
+  "short_name": "Tonnage",
   "description": "Track your lifts, supersets, and progress",
   "start_url": "/",
   "display": "standalone",
