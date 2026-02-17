@@ -44,6 +44,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   const scrollContainerRef = useRef(null);
   const audioContextRef = useRef(null);
   const audioInitialized = useRef(false);
+  const alarmAudioRef = useRef(null);  // HTML5 Audio fallback for iOS
   const scrollToNextRef = useRef(false); // Flag: scroll to next set after green bar tap
   const greenBarSwipeRef = useRef(null); // Track green bar swipe start position
 
@@ -81,6 +82,8 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   // Initialize audio context on first user interaction
   // iOS audio unlock — must create/resume AudioContext AND play a buffer
   // all within the same user gesture. Keep retrying until it actually works.
+  // Also pre-load an HTML5 Audio element as fallback for when AudioContext
+  // gets suspended (iOS suspends it on screen lock / app switch).
   const initAudio = async () => {
     try {
       if (!audioContextRef.current) {
@@ -97,6 +100,16 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       source.connect(ctx.destination);
       source.start(0);
       audioInitialized.current = true;
+
+      // Pre-load HTML5 Audio fallback (survives iOS AudioContext suspension)
+      if (!alarmAudioRef.current) {
+        const audio = new Audio('/sounds/timer-complete.wav');
+        audio.preload = 'auto';
+        audio.volume = 0.5;
+        // iOS requires a play() during user gesture to unlock HTML5 Audio too
+        audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(() => {});
+        alarmAudioRef.current = audio;
+      }
     } catch (e) {
       console.log('Audio init failed:', e);
     }
@@ -146,23 +159,42 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   const playRestTimerAlarm = async () => {
     await initAudio();
     const ctx = audioContextRef.current;
-    if (!ctx || ctx.state !== 'running') return;
+
+    // Try Web Audio API first (better quality, multiple tones)
+    if (ctx && ctx.state === 'running') {
+      try {
+        // Three ascending tones
+        [0, 0.2, 0.4].forEach((delay, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.value = 660 + (i * 220);
+          osc.type = 'sine';
+          gain.gain.setValueAtTime(0.4, ctx.currentTime + delay);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.3);
+          osc.start(ctx.currentTime + delay);
+          osc.stop(ctx.currentTime + delay + 0.3);
+        });
+        return; // Success — skip fallback
+      } catch (e) {
+        console.log('Web Audio alarm failed, trying fallback:', e);
+      }
+    }
+
+    // Fallback: HTML5 Audio (works when AudioContext is suspended by iOS)
     try {
-      // Three ascending tones
-      [0, 0.2, 0.4].forEach((delay, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.frequency.value = 660 + (i * 220);
-        osc.type = 'sine';
-        gain.gain.setValueAtTime(0.4, ctx.currentTime + delay);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.3);
-        osc.start(ctx.currentTime + delay);
-        osc.stop(ctx.currentTime + delay + 0.3);
-      });
+      if (alarmAudioRef.current) {
+        alarmAudioRef.current.currentTime = 0;
+        await alarmAudioRef.current.play();
+      } else {
+        // Last resort: create and play immediately
+        const audio = new Audio('/sounds/timer-complete.wav');
+        audio.volume = 0.5;
+        await audio.play();
+      }
     } catch (e) {
-      console.log('Alarm failed:', e);
+      console.log('HTML5 Audio alarm also failed:', e);
     }
   };
 

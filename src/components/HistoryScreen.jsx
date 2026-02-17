@@ -85,11 +85,23 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
           </div>
         </div>
 
-        {workout.notes && (
-          <div className="bg-teal-900/20 border border-teal-700/30 rounded-xl p-3 mb-4">
-            <div className="text-sm text-teal-300 flex items-center gap-2">
-              <span>📋</span> {workout.notes}
-            </div>
+        {(workout.notes || workout.estimatedTime) && (
+          <div className="bg-teal-900/20 border border-teal-700/30 rounded-xl p-3 mb-4 space-y-1">
+            {workout.notes && (
+              <div className="text-sm text-teal-300 flex items-center gap-2">
+                <span>📋</span> {workout.notes}
+              </div>
+            )}
+            {workout.estimatedTime && (
+              <div className="text-xs text-teal-400/70">
+                Estimated: {workout.estimatedTime} min {duration > 0 && `• Actual: ${duration} min`}
+                {duration > 0 && workout.estimatedTime > 0 && (
+                  <span className={duration <= workout.estimatedTime ? ' text-green-400' : ' text-amber-400'}>
+                    {' '}({duration <= workout.estimatedTime ? 'on pace' : `+${duration - workout.estimatedTime} min over`})
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -143,9 +155,18 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
                             <span className="text-sm text-gray-400">{exVolume.toLocaleString()} lbs</span>
                           )}
                         </div>
-                        <div className="text-xs text-gray-400 mb-3">
+                        <div className="text-xs text-gray-400 mb-1">
                           {exercise.bodyPart} • {completedSets.length}/{realSets.length} sets completed
+                          {exercise.exerciseType && exercise.exerciseType !== 'standard' && (
+                            <span className="ml-1">• {exercise.exerciseType}</span>
+                          )}
+                          {exercise.restTime !== undefined && exercise.restTime > 0 && (
+                            <span className="ml-1">• {exercise.restTime}s rest</span>
+                          )}
                         </div>
+                        {exercise.instructions && (
+                          <div className="text-xs text-blue-400/70 mb-2 italic">💡 {exercise.instructions}</div>
+                        )}
 
                         {/* Set details - filter out rest periods (sets with only duration, no reps/weight) */}
                         <div className="space-y-1">
@@ -198,6 +219,9 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
                                 </div>
                                 {set.rpe && (
                                   <span className="text-xs text-amber-400">RPE {set.rpe}</span>
+                                )}
+                                {set.completedAt && (
+                                  <span className="text-xs text-gray-500">{new Date(set.completedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</span>
                                 )}
                               </div>
                             );
@@ -385,7 +409,36 @@ const HistoryScreen = ({ onRefreshNeeded, onScroll, navVisible, onModalStateChan
 
       if (importFormat === 'json') {
         const data = JSON.parse(text);
-        workoutsToImport = Array.isArray(data) ? data : (data.workouts || []);
+
+        if (Array.isArray(data)) {
+          workoutsToImport = data;
+        } else if (data.workouts) {
+          workoutsToImport = data.workouts;
+        } else if (data.name && data.exercises && Array.isArray(data.exercises)) {
+          // Single workout object — wrap in array and mark sets completed
+          workoutsToImport = [{
+            ...data,
+            exercises: (data.exercises || []).map(ex => ({
+              ...ex,
+              sets: (ex.sets || []).map(s => ({
+                ...s,
+                completed: s.completed !== undefined ? s.completed : true,
+                weight: s.weight !== undefined ? Number(s.weight) : undefined,
+                reps: s.reps !== undefined ? Number(s.reps) : undefined,
+                duration: s.duration !== undefined ? Number(s.duration) : undefined,
+                distance: s.distance !== undefined ? Number(s.distance) : undefined,
+              }))
+            }))
+          }];
+        } else {
+          throw new Error(
+            'Unrecognized JSON format. Expected one of:\n' +
+            '• A single workout: { "name": "...", "exercises": [...] }\n' +
+            '• An array of workouts: [ { ... }, ... ]\n' +
+            '• A history export: { "workouts": [...] }'
+          );
+        }
+
         // Ensure each workout has an id and proper date
         workoutsToImport = workoutsToImport.map((w, i) => ({
           ...w,
@@ -394,6 +447,15 @@ const HistoryScreen = ({ onRefreshNeeded, onScroll, navVisible, onModalStateChan
         }));
       } else {
         workoutsToImport = parseStrongCSV(text);
+      }
+
+      if (workoutsToImport.length === 0) {
+        setImportStatus({
+          message: 'No workouts found in file. Supported formats: single workout JSON, workout array, history export, or Strong CSV.',
+          error: true
+        });
+        setImporting(false);
+        return;
       }
 
       if (replace) {

@@ -90,7 +90,10 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
 
       // Validate backup structure
       if (!backup.data || !backup.version) {
-        throw new Error('Invalid backup file format');
+        throw new Error(
+          'This file isn\'t a Tonnage backup (missing version/data fields). ' +
+          'To import a single workout or history file, use "Import History" instead.'
+        );
       }
 
       const { workouts = [], exercises: importedExercises = [], templates: importedTemplates = [], folders: importedFolders = [] } = backup.data;
@@ -149,7 +152,42 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
 
       if (file.name.endsWith('.json')) {
         const data = JSON.parse(text);
-        workouts = data.workouts || (Array.isArray(data) ? data : []);
+
+        if (data.workouts) {
+          // Format: { workouts: [...] }
+          workouts = data.workouts;
+        } else if (Array.isArray(data)) {
+          // Format: [ { name, exercises, ... }, ... ]
+          workouts = data;
+        } else if (data.name && data.exercises && Array.isArray(data.exercises)) {
+          // Format: single workout object { name, date, exercises, ... }
+          // Ensure sets are marked completed and date is a timestamp
+          const workout = {
+            ...data,
+            date: data.date ? new Date(data.date).getTime() : Date.now(),
+            startTime: data.startTime || (data.date ? new Date(data.date).getTime() : Date.now()),
+            duration: data.duration || 0,
+            exercises: data.exercises.map(ex => ({
+              ...ex,
+              sets: (ex.sets || []).map(s => ({
+                ...s,
+                completed: s.completed !== undefined ? s.completed : true,
+                weight: s.weight !== undefined ? Number(s.weight) : undefined,
+                reps: s.reps !== undefined ? Number(s.reps) : undefined,
+                duration: s.duration !== undefined ? Number(s.duration) : undefined,
+                distance: s.distance !== undefined ? Number(s.distance) : undefined,
+              }))
+            }))
+          };
+          workouts = [workout];
+        } else {
+          throw new Error(
+            'Unrecognized JSON format. Expected one of:\n' +
+            '• A single workout: { "name": "...", "exercises": [...] }\n' +
+            '• An array of workouts: [ { "name": "...", ... }, ... ]\n' +
+            '• A history export: { "workouts": [...] }'
+          );
+        }
       } else if (file.name.endsWith('.csv')) {
         // Parse Strong CSV
         const lines = text.split('\n');
@@ -217,7 +255,10 @@ export function SettingsModal({ onClose, exercises, templates, folders, onRestor
       }
 
       if (workouts.length === 0) {
-        setImportResult({ success: false, message: 'No workouts found in file' });
+        setImportResult({
+          success: false,
+          message: 'No workouts found in file. Supported formats: single workout JSON, workout array JSON, history export JSON ({ workouts: [...] }), or Strong CSV.'
+        });
         setImportingHistory(false);
         return;
       }

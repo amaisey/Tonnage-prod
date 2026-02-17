@@ -144,6 +144,7 @@ function App() {
       }));
     if (newExercises.length > 0) {
       setExercises(prev => [...prev, ...newExercises]);
+      if (user) newExercises.forEach(ex => queueSyncEntry('exercise', ex.id, 'create', ex));
     }
 
     // Fetch previous data for all exercises in parallel
@@ -358,9 +359,19 @@ function App() {
           {activeTab === 'exercises' && (
             <ExercisesScreen
               exercises={exercises}
-              onAddExercise={ex => setExercises([...exercises, ex])}
-              onUpdateExercise={ex => setExercises(exercises.map(e => e.id === ex.id ? ex : e))}
-              onDeleteExercise={id => setExercises(exercises.filter(e => e.id !== id))}
+              onAddExercise={ex => {
+                setExercises([...exercises, ex]);
+                if (user) queueSyncEntry('exercise', ex.id, 'create', ex);
+              }}
+              onUpdateExercise={ex => {
+                setExercises(exercises.map(e => e.id === ex.id ? ex : e));
+                if (user) queueSyncEntry('exercise', ex.id, 'update', ex);
+              }}
+              onDeleteExercise={id => {
+                const exerciseToDelete = exercises.find(e => e.id === id);
+                setExercises(exercises.filter(e => e.id !== id));
+                if (user) queueSyncEntry('exercise', id, 'delete', exerciseToDelete || {});
+              }}
               onMergeExercise={handleMergeExercise}
               onScroll={handleScroll}
             />
@@ -403,7 +414,10 @@ function App() {
                 setFolders(prev => prev.filter(f => f.id !== id));
                 if (user) queueSyncEntry('folder', id, 'delete', {});
               }}
-              onAddExercises={arr => setExercises(prev => [...prev, ...arr])}
+              onAddExercises={arr => {
+                setExercises(prev => [...prev, ...arr]);
+                if (user) arr.forEach(ex => queueSyncEntry('exercise', ex.id, 'create', ex));
+              }}
               exercises={exercises}
               onModalStateChange={setIsTemplatesModalOpen}
               onScroll={handleScroll}
