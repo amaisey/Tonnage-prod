@@ -94,12 +94,16 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
             )}
             {workout.estimatedTime && (
               <div className="text-xs text-teal-400/70">
-                Estimated: {workout.estimatedTime} min {duration > 0 && `• Actual: ${duration} min`}
-                {duration > 0 && workout.estimatedTime > 0 && (
-                  <span className={duration <= workout.estimatedTime ? ' text-green-400' : ' text-amber-400'}>
-                    {' '}({duration <= workout.estimatedTime ? 'on pace' : `+${duration - workout.estimatedTime} min over`})
-                  </span>
-                )}
+                Estimated: {Number(workout.estimatedTime)} min {duration > 0 && `• Actual: ${duration} min`}
+                {duration > 0 && Number(workout.estimatedTime) > 0 && (() => {
+                  const est = Number(workout.estimatedTime);
+                  const diff = duration - est;
+                  return (
+                    <span className={diff <= 0 ? ' text-green-400' : ' text-amber-400'}>
+                      {' '}({diff <= 0 ? `on pace${diff < 0 ? ` (${Math.abs(diff)} min early)` : ''}` : `+${diff} min over`})
+                    </span>
+                  );
+                })()}
               </div>
             )}
           </div>

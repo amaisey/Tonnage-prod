@@ -542,7 +542,7 @@ const SetInputRow = ({ set, setIndex, category, onUpdate, onComplete, onRemove, 
 };
 
 // Exercise Search Modal with Multi-Select and Superset Support
-const ExerciseSearchModal = ({ exercises, onSelect, onSelectMultiple, onClose, allowMultiSelect = true }) => {
+const ExerciseSearchModal = ({ exercises, onSelect, onSelectMultiple, onClose, allowMultiSelect = true, title }) => {
   const [search, setSearch] = useState('');
   const [selectedBodyPart, setSelectedBodyPart] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -591,7 +591,7 @@ const ExerciseSearchModal = ({ exercises, onSelect, onSelectMultiple, onClose, a
             <button onClick={onClose} className="text-rose-400 font-medium">
               Cancel
             </button>
-            <span className="font-bold text-white">Add Exercises</span>
+            <span className="font-bold text-white">{title || 'Add Exercises'}</span>
             <div className="w-14"></div>
           </div>
         </div>
@@ -784,8 +784,10 @@ const MergeExerciseModal = ({ exercise, allExercises, onMerge, onClose }) => {
   const [step, setStep] = useState('select'); // 'select' | 'confirm'
 
   // Filter out the current exercise and match search
+  // Use index-based identity to handle exercises with missing/undefined IDs (e.g. after cloud sync)
+  const exerciseIndex = allExercises.indexOf(exercise);
   const candidates = allExercises
-    .filter(ex => ex.id !== exercise.id && ex.name.toLowerCase().includes(search.toLowerCase()))
+    .filter((ex, idx) => idx !== exerciseIndex && ex.name.toLowerCase().includes(search.toLowerCase()))
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const handleMerge = () => {

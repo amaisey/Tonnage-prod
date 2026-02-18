@@ -17,6 +17,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   const [exerciseDetailHistory, setExerciseDetailHistory] = useState([]);
   const [bandPickerState, setBandPickerState] = useState(null); // { exIndex, setIndex, currentColor }
   const [deleteConfirmIndex, setDeleteConfirmIndex] = useState(null); // exercise index pending deletion
+  const [replaceExerciseIndex, setReplaceExerciseIndex] = useState(null); // exercise index to replace
   const [collapsedPhases, setCollapsedPhases] = useState({}); // which phases are collapsed
   const [addToPhase, setAddToPhase] = useState(null); // Bug #12: target phase for adding exercises
   // Bug #11: Drag to reorder state
@@ -956,18 +957,15 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       setExpectedNext(newExpected);
       setLastCompletionTimestamp(now);
 
-      // Bug #17: If the new expected set was previously frozen (e.g. skipped then looped back via superset),
-      // clear its frozen value so the live timer takes over instead of showing a stale frozen time
+      // Bug #17/#18: Set a live timer anchor for the new expected set.
+      // Using a negative timestamp (convention: negative = live anchor) ensures
+      // the count-up timer starts from `now` immediately, even if
+      // setLastCompletionTimestamp(now) hasn't propagated to child components yet.
       if (newExpected) {
-        setFrozenElapsed(prev => {
-          const key = `${newExpected.exIndex}-${newExpected.setIndex}`;
-          if (prev[key] !== undefined) {
-            const copy = { ...prev };
-            delete copy[key];
-            return copy;
-          }
-          return prev;
-        });
+        setFrozenElapsed(prev => ({
+          ...prev,
+          [`${newExpected.exIndex}-${newExpected.setIndex}`]: -now
+        }));
       }
 
       // Start rest timer if appropriate
@@ -1245,6 +1243,25 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     setDeleteConfirmIndex(null);
   };
 
+  const replaceExercise = (newExercise) => {
+    if (replaceExerciseIndex === null) return;
+    pushUndo();
+    const updated = { ...activeWorkout };
+    updated.exercises = [...updated.exercises];
+    const old = updated.exercises[replaceExerciseIndex];
+    // Preserve sets, superset, phase, rest time — swap name/bodyPart/category/instructions
+    updated.exercises[replaceExerciseIndex] = {
+      ...old,
+      name: newExercise.name,
+      bodyPart: newExercise.bodyPart,
+      category: newExercise.category,
+      instructions: newExercise.instructions || '',
+      exerciseType: newExercise.exerciseType || old.exerciseType,
+    };
+    setActiveWorkout(updated);
+    setReplaceExerciseIndex(null);
+  };
+
   // Bug #5: Unlink restores original rest time
   const unlinkSuperset = (exIndex) => {
     pushUndo();
@@ -1506,7 +1523,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
         onTouchMove={handleExerciseTouchMove}
         onTouchEnd={handleExerciseTouchEnd}
         className={`${exercise.highlight ? 'ring-2 ring-rose-500' : ''} ${dragState?.exIndex === exIndex ? 'ring-2 ring-cyan-400 opacity-75' : ''} ${dragTouch?.exIndex === exIndex ? 'opacity-50 ring-2 ring-cyan-400 scale-[1.02]' : ''} bg-white/10 backdrop-blur-md border border-white/20 ${isSuperset ? `px-3 pt-2 pb-0 ${isFirst ? 'rounded-t-2xl' : isLast ? 'rounded-b-2xl' : ''}` : `pt-3 px-4 pb-0 rounded-2xl mb-3`} transition-transform`}>
-        <div className="flex items-center justify-between mb-0">
+        <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             {/* Drag handle */}
             <button
@@ -1558,7 +1575,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
                   </div>
                 </div>
               ) : exercise.notes ? (
-                <div className="flex items-center gap-1 mt-0">
+                <div className="flex items-center gap-1 mt-0.5">
                   <button onClick={() => setExpandedExNotes(expandedExNotes === exIndex ? null : exIndex)}
                     className="flex-1 min-w-0 text-left">
                     <p className={`text-xs text-amber-400/70 ${expandedExNotes === exIndex ? '' : 'truncate'}`}>{exercise.notes}</p>
@@ -1609,6 +1626,10 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
                 <Icons.Unlink />
               </button>
             )}
+            {/* Replace exercise */}
+            <button onClick={() => setReplaceExerciseIndex(exIndex)} className="text-gray-400 hover:text-cyan-300 p-1 flex-shrink-0" title="Replace exercise">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            </button>
             {/* Delete button — triggers modal */}
             <button onClick={() => setDeleteConfirmIndex(exIndex)} className="text-red-400 hover:text-red-300 p-1 flex-shrink-0"><Icons.X /></button>
           </div>
@@ -2110,6 +2131,15 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
           onSelect={addSingleExercise}
           onSelectMultiple={addExercises}
           onClose={() => setShowExerciseModal(false)}
+        />
+      )}
+
+      {replaceExerciseIndex !== null && (
+        <ExerciseSearchModal
+          exercises={exercises}
+          onSelect={replaceExercise}
+          onClose={() => setReplaceExerciseIndex(null)}
+          title={`Replace: ${activeWorkout.exercises[replaceExerciseIndex]?.name}`}
         />
       )}
 
