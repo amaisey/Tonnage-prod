@@ -284,12 +284,15 @@ function App() {
       console.error('Error updating history during merge:', err);
     }
 
-    // 3. Remove the duplicate from exercises list
-    setExercises(prev => prev.filter(e => e.id !== duplicateExercise.id));
+    // 3. Remove the duplicate from exercises list (use name, not id — cloud-synced exercises may have undefined ids)
+    setExercises(prev => prev.filter(e => e.name !== oldName));
 
-    // 4. Refresh history view
+    // 4. Queue sync deletion so cloud copy gets soft-deleted
+    if (user) queueSyncEntry('exercise', duplicateExercise.id || oldName, 'delete', duplicateExercise);
+
+    // 5. Refresh history view
     setHistoryRefreshKey(k => k + 1);
-  }, [setTemplates, setExercises]);
+  }, [setTemplates, setExercises, user]);
 
   // Refresh defaults: merge in new/updated default exercises and templates without touching user data
   const handleRefreshDefaults = useCallback(() => {
