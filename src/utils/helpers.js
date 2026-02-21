@@ -22,7 +22,7 @@ export const getDefaultSetForCategory = (category) => {
 export const generateStravaDescription = (workout) => {
   const duration = Math.round(workout.duration / 60000);
   const totalSets = workout.exercises.reduce((acc, ex) => acc + ex.sets.filter(s => s.completed).length, 0);
-  let description = `💪 ${workout.name}\n⏱️ ${duration} min | ${totalSets} sets\n\n`;
+  let description = `💪 ${workout.name}\n⏱️ ${duration} min | ${totalSets} sets\n`;
 
   const formatSets = (completedSets) => {
     return completedSets.map(s => {
@@ -35,17 +35,25 @@ export const generateStravaDescription = (workout) => {
     }).join(', ');
   };
 
+  // Process exercises in phase order (warmup → workout → cooldown), matching UI display
+  const phases = { warmup: [], workout: [], cooldown: [] };
+  workout.exercises.forEach((ex, i) => {
+    const phase = ex.phase || 'workout';
+    phases[phase].push({ ex, i });
+  });
+  const orderedExercises = [...phases.warmup, ...phases.workout, ...phases.cooldown];
+
   // Group by superset for display
   const used = new Set();
-  workout.exercises.forEach((ex, i) => {
+  orderedExercises.forEach(({ ex, i }) => {
     if (used.has(i)) return;
     const completedSets = ex.sets.filter(s => s.completed);
     if (completedSets.length === 0) { used.add(i); return; }
 
     if (ex.supersetId) {
-      // Gather all superset exercises
+      // Gather all superset exercises (in phase-ordered sequence)
       const ssExercises = [];
-      workout.exercises.forEach((e, j) => {
+      orderedExercises.forEach(({ ex: e, i: j }) => {
         if (e.supersetId === ex.supersetId) {
           ssExercises.push(e);
           used.add(j);
@@ -71,7 +79,7 @@ export const generateStravaDescription = (workout) => {
 };
 
 // Generate a blank AI boilerplate that teaches an AI how to create Tonnage templates
-export const generateTemplateAIBoilerplate = () => {
+export const generateTemplateAIBoilerplate = (exerciseLibrary) => {
   return `# Tonnage Workout Template Format
 
 You are helping create a workout template for the Tonnage app. Return ONLY a valid JSON object (no markdown, no code fences).
@@ -89,6 +97,7 @@ You are helping create a workout template for the Tonnage app. Return ONLY a val
       "category": "barbell",     // barbell, dumbbell, machine, reps_only, duration, band, assisted_bodyweight, cardio
       "phase": "workout",        // warmup, workout, cooldown
       "restTime": 90,            // rest time in seconds between sets (0 = no rest)
+      "instructions": "",         // step-by-step form instructions (required for NEW exercises)
       "notes": "",               // exercise-specific notes (optional)
       "sets": [
         { "weight": 135, "reps": 10 }   // repeat for each set
@@ -121,13 +130,23 @@ Example:
 
 ## Import
 To import into Tonnage: Templates tab → Import button (top-right) → paste JSON → Import.
+
+## IMPORTANT: Reuse Existing Exercises
+ALWAYS use the exact exercise name (case-sensitive) from the user's existing library to avoid creating duplicates. If the user provides their exercise list, prefer those exact names over inventing new ones.
+
+## IMPORTANT: Instructions for New Exercises
+If you create a NEW exercise that is not in the user's library, you MUST include an "instructions" field with clear, step-by-step form cues (e.g. "1. Set bench to 30-degree incline\\n2. Grip barbell slightly wider than shoulders\\n3. Lower bar to upper chest\\n4. Press up to full extension"). This helps the user learn proper form. Existing exercises from the library already have instructions — do not override them.
+${exerciseLibrary?.length ? `
+## User's Exercise Library (use these exact names)
+${exerciseLibrary.map(e => `- ${e.name} (${e.bodyPart}, ${e.category})`).join('\n')}
+` : ''}
 `;
 };
 
 // Generate AI-friendly JSON export of a template (for pasting into an AI chat to modify)
 export const generateTemplateAIExport = (template) => {
   return JSON.stringify({
-    _instructions: "This is a workout template from the Tonnage app. Modify anything below and return the result as JSON. You can change exercises, sets, reps, weights, rest times (in seconds), phases (warmup/workout/cooldown), and superset groupings (exercises sharing the same supersetId are performed back-to-back). Valid categories: barbell, dumbbell, machine, reps_only, duration, band, assisted_bodyweight, cardio. Return ONLY the JSON object with name, exercises, and optionally estimatedTime/notes — remove the _instructions and _importInstructions fields.",
+    _instructions: "This is a workout template from the Tonnage app. Modify anything below and return the result as JSON. You can change exercises, sets, reps, weights, rest times (in seconds), phases (warmup/workout/cooldown), and superset groupings (exercises sharing the same supersetId are performed back-to-back). Valid categories: barbell, dumbbell, machine, reps_only, duration, band, assisted_bodyweight, cardio. Each exercise includes an 'instructions' field with form cues — preserve these for existing exercises, and write new instructions for any new exercises you add. Return ONLY the JSON object with name, exercises, and optionally estimatedTime/notes — remove the _instructions and _importInstructions fields.",
     name: template.name,
     estimatedTime: template.estimatedTime || null,
     notes: template.notes || '',
@@ -151,6 +170,7 @@ export const generateTemplateAIExport = (template) => {
       };
       if (ex.supersetId) exercise.supersetId = ex.supersetId;
       if (ex.notes) exercise.notes = ex.notes;
+      if (ex.instructions) exercise.instructions = ex.instructions;
       if (ex.highlight) exercise.highlight = true;
       if (ex.exerciseType) exercise.exerciseType = ex.exerciseType;
       return exercise;
@@ -288,4 +308,87 @@ export const exportWorkoutJSON = (workout) => {
       return exercise;
     })
   }, null, 2);
+};
+
+// Generate a full exercise library export grouped by body part (for giving AI full context)
+export const generateExerciseLibraryExport = (exercises) => {
+  if (!exercises?.length) return { text: '', size: 0 };
+
+  const grouped = {};
+  exercises.forEach(ex => {
+    const bp = ex.bodyPart || 'Other';
+    if (!grouped[bp]) grouped[bp] = [];
+    grouped[bp].push(ex);
+  });
+
+  let text = `# My Exercise Library (${exercises.length} exercises)\n\n`;
+  text += `Use these EXACT exercise names when building templates to avoid creating duplicates.\n`;
+  text += `If you need to create a new exercise not listed here, include an "instructions" field with step-by-step form cues.\n\n`;
+
+  const bodyPartOrder = ['Chest', 'Back', 'Shoulders', 'Legs', 'Arms', 'Core', 'Cardio', 'Other'];
+  const sortedParts = Object.keys(grouped).sort((a, b) => {
+    const ai = bodyPartOrder.indexOf(a);
+    const bi = bodyPartOrder.indexOf(b);
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+  });
+
+  sortedParts.forEach(bp => {
+    text += `## ${bp}\n\n`;
+    grouped[bp].sort((a, b) => a.name.localeCompare(b.name)).forEach(ex => {
+      text += `### ${ex.name}\n`;
+      text += `- Category: ${ex.category || 'other'}\n`;
+      if (ex.instructions) {
+        text += `- Instructions: ${ex.instructions}\n`;
+      }
+      text += `\n`;
+    });
+  });
+
+  const size = new Blob([text]).size;
+  return { text, size };
+};
+
+// Generate folder export data with exercise library context
+export const generateFolderExportData = (folder, folderTemplates, subfolders, exercises) => {
+  // Build exercise library summary for AI context
+  const libraryByBodyPart = {};
+  if (exercises?.length) {
+    exercises.forEach(ex => {
+      const bp = ex.bodyPart || 'Other';
+      if (!libraryByBodyPart[bp]) libraryByBodyPart[bp] = [];
+      libraryByBodyPart[bp].push({
+        name: ex.name,
+        category: ex.category || 'other',
+        ...(ex.instructions ? { instructions: ex.instructions } : {}),
+      });
+    });
+  }
+
+  const exportData = {
+    _aiContext: "This is a folder export from the Tonnage workout app. It contains templates and an exercise library. When modifying or creating templates, use exact exercise names from _exerciseLibrary to avoid duplicates. For any new exercises, include an 'instructions' field with form cues.",
+    version: 1,
+    exportDate: new Date().toISOString(),
+    folder: { name: folder.name, id: folder.id },
+    subfolders: subfolders.map(f => ({ name: f.name, id: f.id, parentId: f.parentId })),
+    templates: folderTemplates.map(t => ({
+      name: t.name,
+      folderId: t.folderId,
+      estimatedTime: t.estimatedTime || null,
+      notes: t.notes || '',
+      exercises: t.exercises.map(ex => {
+        const e = { ...ex };
+        // Enrich with instructions from library if missing
+        if (!e.instructions && exercises?.length) {
+          const libEx = exercises.find(le => le.name.toLowerCase() === ex.name.toLowerCase());
+          if (libEx?.instructions) e.instructions = libEx.instructions;
+        }
+        return e;
+      }),
+    })),
+    _exerciseLibrary: libraryByBodyPart,
+  };
+
+  const json = JSON.stringify(exportData, null, 2);
+  const size = new Blob([json]).size;
+  return { json, size, data: exportData };
 };

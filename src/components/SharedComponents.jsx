@@ -330,7 +330,12 @@ const SetInputRow = ({ set, setIndex, category, onUpdate, onComplete, onRemove, 
           const elementRect = element.getBoundingClientRect();
           const containerRect = container.getBoundingClientRect();
           const scrollTop = container.scrollTop;
-          const targetPosition = scrollTop + (elementRect.top - containerRect.top) - 120;
+          // Dynamically measure numpad height instead of hardcoded 120px
+          const numpad = document.querySelector('.fixed.inset-x-0.bottom-0.bg-gray-900.border-t');
+          const numpadHeight = numpad ? numpad.getBoundingClientRect().height : 280;
+          // Position the row in the visible area above the numpad with 20px breathing room
+          const visibleHeight = containerRect.height - numpadHeight;
+          const targetPosition = scrollTop + (elementRect.top - containerRect.top) - Math.min(visibleHeight * 0.4, 160);
           container.scrollTo({ top: Math.max(0, targetPosition), behavior: 'smooth' });
         }
       }, 50);
@@ -553,7 +558,7 @@ const ExerciseSearchModal = ({ exercises, onSelect, onSelectMultiple, onClose, a
     const matchesBodyPart = selectedBodyPart === 'All' || ex.bodyPart === selectedBodyPart;
     const matchesCategory = selectedCategory === 'All' || ex.category === selectedCategory;
     return matchesSearch && matchesBodyPart && matchesCategory;
-  });
+  }).sort((a, b) => a.name.localeCompare(b.name));
 
   const toggleExercise = (ex) => {
     if (selectedExercises.find(e => e.id === ex.id)) {
@@ -1124,7 +1129,7 @@ const CATEGORY_BACKGROUNDS = {
 const ExerciseDetailModal = ({ exercise, history, onEdit, onMerge, onDelete, onClose, onUpdateNotes, templates }) => {
   const [activeTab, setActiveTab] = useState('about');
   const [editingNotes, setEditingNotes] = useState(false);
-  const [notesText, setNotesText] = useState(exercise.notes || exercise.instructions || '');
+  const [notesText, setNotesText] = useState(exercise.notes || '');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const backgroundImage = CATEGORY_BACKGROUNDS[exercise.category] || '/backgrounds/bg-1.jpg';
 
@@ -1233,35 +1238,45 @@ const ExerciseDetailModal = ({ exercise, history, onEdit, onMerge, onDelete, onC
                 )}
               </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+            {/* Read-only instructions from the exercise library */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 mb-4">
               <h3 className="text-sm font-semibold text-white/60 mb-2">Instructions</h3>
-              {editingNotes ? (
-                <div>
-                  <textarea
-                    value={notesText}
-                    onChange={(e) => setNotesText(e.target.value)}
-                    placeholder="Add exercise notes/instructions..."
-                    className="w-full bg-white/10 text-white text-sm rounded-lg p-3 min-h-[100px] focus:outline-none focus:ring-1 focus:ring-cyan-500 border border-white/20 resize-none"
-                    autoFocus
-                  />
-                  <div className="flex gap-2 mt-2">
-                    <button onClick={() => { onUpdateNotes?.(notesText); setEditingNotes(false); }}
-                      className="px-4 py-2 bg-cyan-600 text-white rounded-lg text-sm font-medium">Save</button>
-                    <button onClick={() => { setNotesText(exercise.notes || exercise.instructions || ''); setEditingNotes(false); }}
-                      className="px-4 py-2 bg-white/10 text-white/70 rounded-lg text-sm">Cancel</button>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() => onUpdateNotes ? setEditingNotes(true) : null}
-                  className={`text-left w-full ${onUpdateNotes ? 'cursor-pointer hover:bg-white/5 rounded-lg -m-1 p-1' : ''}`}
-                >
-                  <p className="text-white/80 text-sm">
-                    {exercise.notes || exercise.instructions || (onUpdateNotes ? "Tap to add notes for this exercise." : "No instructions added yet. Go to Exercises to add instructions.")}
-                  </p>
-                </button>
-              )}
+              <p className="text-white/80 text-sm" style={{ whiteSpace: 'pre-line' }}>
+                {exercise.instructions || "No instructions added yet. Go to Exercises to add instructions."}
+              </p>
             </div>
+            {/* Editable per-workout notes — only shown when opened from an active workout */}
+            {onUpdateNotes && (
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                <h3 className="text-sm font-semibold text-white/60 mb-2">Workout Notes</h3>
+                {editingNotes ? (
+                  <div>
+                    <textarea
+                      value={notesText}
+                      onChange={(e) => setNotesText(e.target.value)}
+                      placeholder="Add notes for this exercise in today's workout..."
+                      className="w-full bg-white/10 text-white text-sm rounded-lg p-3 min-h-[100px] focus:outline-none focus:ring-1 focus:ring-cyan-500 border border-white/20 resize-none"
+                      autoFocus
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <button onClick={() => { onUpdateNotes?.(notesText); setEditingNotes(false); }}
+                        className="px-4 py-2 bg-cyan-600 text-white rounded-lg text-sm font-medium">Save</button>
+                      <button onClick={() => { setNotesText(exercise.notes || ''); setEditingNotes(false); }}
+                        className="px-4 py-2 bg-white/10 text-white/70 rounded-lg text-sm">Cancel</button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setEditingNotes(true)}
+                    className="text-left w-full cursor-pointer hover:bg-white/5 rounded-lg -m-1 p-1"
+                  >
+                    <p className="text-white/80 text-sm" style={{ whiteSpace: 'pre-line' }}>
+                      {exercise.notes || "Tap to add notes for this exercise."}
+                    </p>
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         )}
 

@@ -30,12 +30,15 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   // Bug #9: Touch drag-to-reorder state
   const [dragTouch, setDragTouch] = useState(null); // { exIndex, startY, currentY, insertBefore }
   const [completionFlash, setCompletionFlash] = useState(false); // Green bar expand animation
+  const [overallElapsed, setOverallElapsed] = useState(0); // Overall workout elapsed minutes
   const [notesExpanded, setNotesExpanded] = useState(false); // Collapsible workout notes
   const [editingExNotes, setEditingExNotes] = useState(null); // { exIndex, text } - inline exercise notes editing
   const [expandedExNotes, setExpandedExNotes] = useState(null); // exIndex of expanded notes
   const [editingWorkoutNotes, setEditingWorkoutNotes] = useState(false); // editing overall workout notes
   const undoStackRef = useRef([]); // Stack of previous workout states for undo
+  const redoStackRef = useRef([]); // Stack of states for redo
   const [undoAvailable, setUndoAvailable] = useState(0); // Number of undo steps available
+  const [redoAvailable, setRedoAvailable] = useState(0); // Number of redo steps available
   const longPressTimerRef = useRef(null);
   const dragRefs = useRef({}); // refs for each exercise row
   const intervalRef = useRef(null);
@@ -46,6 +49,8 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   const audioContextRef = useRef(null);
   const audioInitialized = useRef(false);
   const alarmAudioRef = useRef(null);  // HTML5 Audio fallback for iOS
+  const notificationPermission = useRef(typeof Notification !== 'undefined' ? Notification.permission : 'default');
+  const restTimerTimeoutRef = useRef(null); // setTimeout for background notification
   const scrollToNextRef = useRef(false); // Flag: scroll to next set after green bar tap
   const greenBarSwipeRef = useRef(null); // Track green bar swipe start position
 
@@ -63,10 +68,21 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       undoStackRef.current.shift(); // Remove oldest
     }
     setUndoAvailable(undoStackRef.current.length);
+    // Clear redo stack on any new action (standard undo/redo behavior)
+    redoStackRef.current = [];
+    setRedoAvailable(0);
   };
 
   const handleUndo = () => {
     if (undoStackRef.current.length === 0) return;
+    // Push current state to redo stack before restoring
+    const currentSnapshot = JSON.parse(JSON.stringify(activeWorkout));
+    redoStackRef.current.push({
+      workout: currentSnapshot,
+      expectedNext: expectedNext ? { ...expectedNext } : null,
+      lastCompletionTimestamp,
+    });
+    setRedoAvailable(redoStackRef.current.length);
     const prev = undoStackRef.current.pop();
     setActiveWorkout(prev.workout);
     setExpectedNext(prev.expectedNext);
@@ -80,11 +96,29 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     if (navigator.vibrate) navigator.vibrate(20);
   };
 
+  const handleRedo = () => {
+    if (redoStackRef.current.length === 0) return;
+    // Push current state to undo stack before restoring
+    const currentSnapshot = JSON.parse(JSON.stringify(activeWorkout));
+    undoStackRef.current.push({
+      workout: currentSnapshot,
+      expectedNext: expectedNext ? { ...expectedNext } : null,
+      lastCompletionTimestamp,
+    });
+    setUndoAvailable(undoStackRef.current.length);
+    const next = redoStackRef.current.pop();
+    setActiveWorkout(next.workout);
+    setExpectedNext(next.expectedNext);
+    setLastCompletionTimestamp(next.lastCompletionTimestamp);
+    setRedoAvailable(redoStackRef.current.length);
+    if (navigator.vibrate) navigator.vibrate(20);
+  };
+
   // Initialize audio context on first user interaction
-  // iOS audio unlock — must create/resume AudioContext AND play a buffer
-  // all within the same user gesture. Keep retrying until it actually works.
-  // Also pre-load an HTML5 Audio element as fallback for when AudioContext
-  // gets suspended (iOS suspends it on screen lock / app switch).
+  // iOS audio unlock — must create/resume AudioContext AND play a silent buffer
+  // all within the same user gesture. IMPORTANT: Do NOT use HTML5 Audio.play()
+  // during init — iOS treats it as media playback and pauses background music.
+  // We only use HTML5 Audio as a last-resort fallback when AudioContext is suspended.
   const initAudio = async () => {
     try {
       if (!audioContextRef.current) {
@@ -94,7 +128,8 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       if (ctx.state === 'suspended') {
         await ctx.resume();
       }
-      // Play a silent buffer to fully unlock iOS audio pipeline
+      // Play a truly silent buffer to unlock iOS audio pipeline
+      // This uses the "ambient" audio path and won't pause background music
       const silentBuffer = ctx.createBuffer(1, 1, 22050);
       const source = ctx.createBufferSource();
       source.buffer = silentBuffer;
@@ -102,14 +137,20 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       source.start(0);
       audioInitialized.current = true;
 
-      // Pre-load HTML5 Audio fallback (survives iOS AudioContext suspension)
+      // Pre-load HTML5 Audio fallback (but do NOT play it — that pauses music)
+      // It will only be used when AudioContext is suspended (screen lock/app switch)
       if (!alarmAudioRef.current) {
         const audio = new Audio('/sounds/timer-complete.wav');
         audio.preload = 'auto';
         audio.volume = 0.5;
-        // iOS requires a play() during user gesture to unlock HTML5 Audio too
-        audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(() => {});
         alarmAudioRef.current = audio;
+      }
+
+      // Request notification permission for background rest timer alerts
+      if ('Notification' in window && notificationPermission.current === 'default') {
+        Notification.requestPermission().then(perm => {
+          notificationPermission.current = perm;
+        });
       }
     } catch (e) {
       console.log('Audio init failed:', e);
@@ -158,46 +199,72 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   };
 
   const playRestTimerAlarm = async () => {
-    await initAudio();
-    const ctx = audioContextRef.current;
+    let soundPlayed = false;
 
-    // Try Web Audio API first (better quality, multiple tones)
-    if (ctx && ctx.state === 'running') {
+    // Try to resume AudioContext (may work if page is still visible)
+    const ctx = audioContextRef.current;
+    if (ctx) {
       try {
-        // Three ascending tones
-        [0, 0.2, 0.4].forEach((delay, i) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.frequency.value = 660 + (i * 220);
-          osc.type = 'sine';
-          gain.gain.setValueAtTime(0.4, ctx.currentTime + delay);
-          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.3);
-          osc.start(ctx.currentTime + delay);
-          osc.stop(ctx.currentTime + delay + 0.3);
-        });
-        return; // Success — skip fallback
-      } catch (e) {
-        console.log('Web Audio alarm failed, trying fallback:', e);
+        if (ctx.state === 'suspended') await ctx.resume();
+      } catch (e) { /* resume failed, that's ok */ }
+
+      // Try Web Audio API first (better quality, multiple tones)
+      if (ctx.state === 'running') {
+        try {
+          [0, 0.2, 0.4].forEach((delay, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.value = 660 + (i * 220);
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.5, ctx.currentTime + delay);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.3);
+            osc.start(ctx.currentTime + delay);
+            osc.stop(ctx.currentTime + delay + 0.3);
+          });
+          soundPlayed = true;
+        } catch (e) {
+          console.log('Web Audio alarm failed:', e);
+        }
       }
     }
 
-    // Fallback: HTML5 Audio (works when AudioContext is suspended by iOS)
-    try {
-      if (alarmAudioRef.current) {
-        alarmAudioRef.current.currentTime = 0;
-        await alarmAudioRef.current.play();
-      } else {
-        // Last resort: create and play immediately
-        const audio = new Audio('/sounds/timer-complete.wav');
-        audio.volume = 0.5;
-        await audio.play();
+    // Fallback: HTML5 Audio — ONLY when page is visible (foreground).
+    // iOS treats Audio.play() as media playback which pauses background music.
+    // If the page is hidden (user switched apps), skip this fallback entirely —
+    // the vibration + notification are the only background feedback we can give.
+    if (!soundPlayed && !document.hidden) {
+      try {
+        if (alarmAudioRef.current) {
+          alarmAudioRef.current.currentTime = 0;
+          await alarmAudioRef.current.play();
+          soundPlayed = true;
+        } else {
+          const audio = new Audio('/sounds/timer-complete.wav');
+          audio.volume = 0.5;
+          await audio.play();
+          soundPlayed = true;
+        }
+      } catch (e) {
+        console.log('HTML5 Audio alarm also failed:', e);
       }
-    } catch (e) {
-      console.log('HTML5 Audio alarm also failed:', e);
+    }
+
+    // Always vibrate as tactile feedback (works even when sound fails)
+    if (navigator.vibrate) {
+      navigator.vibrate([200, 100, 200, 100, 300]);
     }
   };
+
+  // Overall workout elapsed timer — ticks every second so the header stays updated
+  useEffect(() => {
+    if (!activeWorkout?.startTime) return;
+    const tick = () => setOverallElapsed(Math.floor((Date.now() - activeWorkout.startTime) / 60000));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [activeWorkout?.startTime]);
 
   // Bug #1: Seed timer state when workout starts so the first set shows elapsed time
   useEffect(() => {
@@ -277,23 +344,29 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     });
   }, [activeWorkout]);
 
-  // Auto-scroll to next set when green bar triggers a completion
-  // Position the exercise card about 30% from top of viewport (20% above center)
+  // Auto-scroll: put the next incomplete exercise title near the top of the viewport.
+  // Triggers after set completion, exercise replace, exercise reorder, green bar tap.
+  const scrollToExpectedNext = useRef(false); // Broader flag (not just green bar)
   useEffect(() => {
-    if (scrollToNextRef.current && expectedNext) {
-      scrollToNextRef.current = false;
-      setTimeout(() => {
-        const el = dragRefs.current[expectedNext.exIndex];
-        const container = scrollContainerRef.current;
-        if (el && container) {
-          const elRect = el.getBoundingClientRect();
-          const containerRect = container.getBoundingClientRect();
-          const targetOffset = containerRect.height * 0.30; // 30% from top
-          const scrollDelta = elRect.top - containerRect.top - targetOffset;
+    if (!expectedNext) return;
+    if (!scrollToNextRef.current && !scrollToExpectedNext.current) return;
+    scrollToNextRef.current = false;
+    scrollToExpectedNext.current = false;
+    setTimeout(() => {
+      const el = dragRefs.current[expectedNext.exIndex];
+      const container = scrollContainerRef.current;
+      if (el && container) {
+        const elRect = el.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        // Place the exercise title ~8% from top (just below the header area)
+        const targetOffset = containerRect.height * 0.08;
+        const scrollDelta = elRect.top - containerRect.top - targetOffset;
+        // Only scroll if the element is more than 30% off-screen or below midpoint
+        if (Math.abs(scrollDelta) > containerRect.height * 0.15) {
           container.scrollBy({ top: scrollDelta, behavior: 'smooth' });
         }
-      }, 50);
-    }
+      }
+    }, 80);
   }, [expectedNext]);
 
   // Notify parent when numpad state changes
@@ -302,12 +375,24 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   }, [numpadState, onNumpadStateChange]);
 
   // Auto-scroll input into view when numpad opens so input isn't hidden behind it
+  // Uses same intelligent positioning as SetInputRow — measures numpad height dynamically
   useEffect(() => {
     if (numpadState) {
       setTimeout(() => {
         const el = dragRefs.current[numpadState.exIndex];
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!el) return;
+        const container = el.closest('[style*="overflow"]') || el.parentElement?.parentElement?.parentElement;
+        if (container) {
+          const elementRect = el.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          const scrollTop = container.scrollTop;
+          // Dynamically measure numpad height
+          const numpad = document.querySelector('.fixed.inset-x-0.bottom-0.bg-gray-900.border-t');
+          const numpadHeight = numpad ? numpad.getBoundingClientRect().height : 280;
+          // Position in visible area above numpad with breathing room
+          const visibleHeight = containerRect.height - numpadHeight;
+          const targetPosition = scrollTop + (elementRect.top - containerRect.top) - Math.min(visibleHeight * 0.4, 160);
+          container.scrollTo({ top: Math.max(0, targetPosition), behavior: 'smooth' });
         }
       }, 150);
     }
@@ -388,6 +473,12 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         scrollToNextIncomplete();
+        // Clear any lingering rest-timer notifications when user returns to app
+        if ('Notification' in window && navigator.serviceWorker?.ready) {
+          navigator.serviceWorker.ready.then(reg => {
+            reg.getNotifications({ tag: 'rest-timer' }).then(notifs => notifs.forEach(n => n.close()));
+          }).catch(() => {});
+        }
       }
     };
 
@@ -405,11 +496,9 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       const elapsed = Math.floor((Date.now() - restTimer.startedAt) / 1000);
       const remaining = Math.max(0, restTimer.totalTime - elapsed);
       if (remaining === 0) {
-        // Play alarm sound and vibrate
+        // Play alarm sound and vibrate (vibration is handled inside playRestTimerAlarm)
         playRestTimerAlarm();
-        if (navigator.vibrate) {
-          navigator.vibrate([200, 100, 200, 100, 300]);
-        }
+        if (restTimerTimeoutRef.current) { clearTimeout(restTimerTimeoutRef.current); restTimerTimeoutRef.current = null; }
         setRestTimer(prev => ({ ...prev, active: false, time: 0 }));
         return;
       }
@@ -425,8 +514,45 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     const time = restTime ?? 60; // Bug #16: Use ?? so restTime=0 is preserved (|| treats 0 as falsy)
     if (time <= 0) return; // Don't start timer for 0-rest exercises (supersets)
     // Use provided timestamp to stay in sync with lastCompletionTimestamp
-    setRestTimer({ active: true, time, totalTime: time, startedAt: timestamp || Date.now(), exerciseName, exIndex: exIdx ?? null });
+    const startedAt = timestamp || Date.now();
+    setRestTimer({ active: true, time, totalTime: time, startedAt, exerciseName, exIndex: exIdx ?? null });
     setRestTimerMinimized(false); // Bug #6: auto-show when new timer starts
+
+    // Schedule a background notification in case user switches apps
+    // clearTimeout first to avoid stacking from rapid completions
+    if (restTimerTimeoutRef.current) clearTimeout(restTimerTimeoutRef.current);
+    if ('Notification' in window && notificationPermission.current === 'granted') {
+      restTimerTimeoutRef.current = setTimeout(() => {
+        // Only fire if document is hidden (user is in another app)
+        if (document.hidden) {
+          // Use Service Worker showNotification so it's clearable via getNotifications()
+          if (navigator.serviceWorker?.ready) {
+            navigator.serviceWorker.ready.then(reg => {
+              reg.showNotification('Rest Complete', {
+                body: `Time to start ${exerciseName}`,
+                icon: '/icons/icon-192.png',
+                tag: 'rest-timer',
+                requireInteraction: false,
+                silent: false,
+              });
+            }).catch(() => {
+              // Fallback to regular Notification if SW unavailable
+              try {
+                new Notification('Rest Complete', {
+                  body: `Time to start ${exerciseName}`,
+                  icon: '/icons/icon-192.png',
+                  tag: 'rest-timer',
+                });
+              } catch (e) { /* Safari may throw */ }
+            });
+          }
+          // Do NOT call playRestTimerAlarm() here — it fires stale when user returns
+          // and causes music to pause. The foreground timer tick handles the alarm
+          // when remaining === 0 (line ~473 above). Vibrate only as background feedback.
+          if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 300]);
+        }
+      }, time * 1000);
+    }
   };
 
   // Returns exercise indices in visual display order (warmup → workout → cooldown).
@@ -956,6 +1082,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       const newExpected = calculateNextExpected(exIndex, setIndex);
       setExpectedNext(newExpected);
       setLastCompletionTimestamp(now);
+      scrollToExpectedNext.current = true; // Auto-scroll to next exercise
 
       // Bug #17/#18: Set a live timer anchor for the new expected set.
       // Using a negative timestamp (convention: negative = live anchor) ensures
@@ -1260,6 +1387,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     };
     setActiveWorkout(updated);
     setReplaceExerciseIndex(null);
+    scrollToExpectedNext.current = true;
   };
 
   // Bug #5: Unlink restores original rest time
@@ -1310,11 +1438,12 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   };
 
   // Bug #5: Link exercise with the next one as a superset — zero non-last rest timers
-  const linkWithNext = (exIndex) => {
-    if (exIndex >= activeWorkout.exercises.length - 1) return;
+  const linkWithNext = (exIndex, nextExIndex) => {
+    const targetNextIdx = nextExIndex !== undefined ? nextExIndex : exIndex + 1;
+    if (targetNextIdx >= activeWorkout.exercises.length) return;
     const updated = { ...activeWorkout };
     const currentEx = updated.exercises[exIndex];
-    const nextEx = updated.exercises[exIndex + 1];
+    const nextEx = updated.exercises[targetNextIdx];
 
     const supersetId = currentEx.supersetId || nextEx.supersetId || `superset-${Date.now()}`;
     currentEx.supersetId = supersetId;
@@ -1337,6 +1466,30 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     });
 
     setActiveWorkout(updated);
+
+    // Recalculate expectedNext for superset round-robin order
+    // After linking, the next incomplete set should follow superset logic
+    if (expectedNext) {
+      const ex = updated.exercises[expectedNext.exIndex];
+      if (ex?.supersetId === supersetId) {
+        // Current expectedNext is in this superset — recalculate using round-robin
+        let bestCandidate = null;
+        let bestSetIndex = Infinity;
+        let bestExPos = Infinity;
+        supersetExercises.forEach(({ ex: ssEx, idx }, posInSuperset) => {
+          ssEx.sets.forEach((s, sIdx) => {
+            if (!s.completed) {
+              if (sIdx < bestSetIndex || (sIdx === bestSetIndex && posInSuperset < bestExPos)) {
+                bestCandidate = { exIndex: idx, setIndex: sIdx };
+                bestSetIndex = sIdx;
+                bestExPos = posInSuperset;
+              }
+            }
+          });
+        });
+        if (bestCandidate) setExpectedNext(bestCandidate);
+      }
+    }
   };
 
   // Group exercises by phase, then by superset within each phase
@@ -1480,7 +1633,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
 
   const restTimePresets = [30, 45, 60, 90, 120, 180, 300];
 
-  const renderExerciseCard = (exercise, exIndex, isSuperset = false, isFirst = true, isLast = true, supersetColorDot = null) => {
+  const renderExerciseCard = (exercise, exIndex, isSuperset = false, isFirst = true, isLast = true, supersetColorDot = null, nextExIndexInPhase = null) => {
     const exerciseRestTime = exercise.restTime ?? 60;
     const typeInfo = exercise.exerciseType ? EXERCISE_TYPES[exercise.exerciseType] : null;
     const phaseInfo = exercise.phase && exercise.phase !== 'workout' ? EXERCISE_PHASES[exercise.phase] : null;
@@ -1599,17 +1752,22 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
             <button onClick={() => setEditingRestTime(editingRestTime === exIndex ? null : exIndex)} className="text-xs text-gray-400 px-2 py-1 rounded hover:bg-white/10">
               ⏱️ {formatDuration(exerciseRestTime)}
             </button>
-            {/* Link button - show if the immediately next exercise is in the same phase and linkable */}
+            {/* Link button - show if there's a next exercise in the same phase that can be linked */}
             {(() => {
+              // Use phase-aware next index if available, fall back to raw array index
+              const nextIdx = nextExIndexInPhase !== null ? nextExIndexInPhase : exIndex + 1;
+              const nextEx = activeWorkout.exercises[nextIdx];
+              if (!nextEx) return false; // No next exercise
               const currentPhase = exercise.phase || 'workout';
-              const nextEx = activeWorkout.exercises[exIndex + 1];
-              if (!nextEx) return false; // Last exercise overall
-              if ((nextEx.phase || 'workout') !== currentPhase) return false; // Next exercise is in a different phase
-              if (!isSuperset && !isLast) return false; // In a superset but not the last — can't link further
+              if ((nextEx.phase || 'workout') !== currentPhase) return false; // Different phase
+              if (!isSuperset && !isLast) return false; // In a superset but not the last
               return (!isSuperset || isLast); // Show if standalone or last in its superset
             })() && (
               <button
-                onClick={() => linkWithNext(exIndex)}
+                onClick={() => {
+                  const nextIdx = nextExIndexInPhase !== null ? nextExIndexInPhase : exIndex + 1;
+                  linkWithNext(exIndex, nextIdx);
+                }}
                 className="text-teal-400 hover:text-teal-300 p-1 hover:bg-white/10 rounded"
                 title="Link with next exercise"
               >
@@ -1736,7 +1894,8 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
   };
 
   // Helper to render a group (superset or single)
-  const renderGroup = (group, groupIdx) => {
+  // nextGroupFirstIndex: the raw array index of the first exercise in the next group (for link button)
+  const renderGroup = (group, groupIdx, nextGroupFirstIndex = null) => {
     if (group.type === 'superset') {
       const color = getSupersetColor(group.supersetId);
       return (
@@ -1747,13 +1906,14 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
           </div>
           <div className={`border-l-4 ${color.border} rounded-2xl overflow-hidden`}>
             {group.exercises.map(({ exercise, index }, i) =>
-              renderExerciseCard(exercise, index, true, i === 0, i === group.exercises.length - 1, color.dot)
+              renderExerciseCard(exercise, index, true, i === 0, i === group.exercises.length - 1, color.dot,
+                i === group.exercises.length - 1 ? nextGroupFirstIndex : null)
             )}
           </div>
         </div>
       );
     } else {
-      return renderExerciseCard(group.exercise, group.index, false);
+      return renderExerciseCard(group.exercise, group.index, false, true, true, null, nextGroupFirstIndex);
     }
   };
 
@@ -1812,7 +1972,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
 
       <div className="px-4 pt-0 pb-1 border-b border-white/10 bg-white/5 backdrop-blur-sm flex-shrink-0" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
         <div className="flex items-center justify-between">
-          <div className="flex-1 min-w-0 text-center pl-6">
+          <div className="flex-1 min-w-0 text-center" style={{ paddingLeft: undoAvailable > 0 ? (redoAvailable > 0 ? '4rem' : '2.5rem') : '1.5rem' }}>
             <input type="text" value={activeWorkout.name} onChange={e => setActiveWorkout({ ...activeWorkout, name: e.target.value })}
               className="text-lg font-bold text-white bg-transparent border-none focus:outline-none w-full text-center truncate" />
             {/* Bug #15: Pace tracking display */}
@@ -1831,7 +1991,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
                   </div>
                 );
               }
-              return <div className="text-sm text-gray-400 text-center">{Math.floor((Date.now() - activeWorkout.startTime) / 60000)} min elapsed</div>;
+              return <div className="text-sm text-gray-400 text-center">{overallElapsed} min elapsed</div>;
             })()}
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
@@ -1937,7 +2097,11 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
 
                 {!isCollapsed && (
                   <div className={`border-l-4 ${phaseInfo.borderColor} pl-3`}>
-                    {groups.map((group, idx) => renderGroup(group, idx))}
+                    {groups.map((group, idx) => {
+                      const nextGroup = groups[idx + 1];
+                      const nextFirstIdx = nextGroup ? (nextGroup.type === 'superset' ? nextGroup.exercises[0]?.index : nextGroup.index) : null;
+                      return renderGroup(group, idx, nextFirstIdx);
+                    })}
                     {/* Bug #11: Drop zone at end of phase when dragging */}
                     {dragState && (
                       <button
@@ -1968,7 +2132,14 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
           })
         ) : (
           // Render without phases (flat list with superset grouping)
-          Object.values(groupedByPhase).flat().map((group, idx) => renderGroup(group, idx))
+          (() => {
+            const allGroups = Object.values(groupedByPhase).flat();
+            return allGroups.map((group, idx) => {
+              const nextGroup = allGroups[idx + 1];
+              const nextFirstIdx = nextGroup ? (nextGroup.type === 'superset' ? nextGroup.exercises[0]?.index : nextGroup.index) : null;
+              return renderGroup(group, idx, nextFirstIdx);
+            });
+          })()
         )}
         {/* Bottom add exercise - only show when no phases (flat list) */}
         {!showPhases && (
@@ -2005,8 +2176,8 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
           }}
           className={`fixed right-0 z-30 flex items-center justify-center transition-all duration-300 ease-out ${completionFlash ? 'w-12 bg-green-400 shadow-lg shadow-green-400/50' : 'w-3.5 bg-green-500/70 hover:w-5 hover:bg-green-500'}`}
           style={{
-            top: numpadState ? '13%' : '30%',
-            height: numpadState ? '28%' : '38%',
+            top: numpadState ? '20%' : '30%',
+            height: numpadState ? '18%' : '38%',
             borderRadius: '8px 0 0 8px',
           }}
         >
@@ -2016,17 +2187,26 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
         </button>
       )}
 
-      {/* Undo button — top left, tucked into safe area */}
-      {!dragState && !dragTouch && (
-        <button
-          onClick={handleUndo}
-          disabled={undoAvailable === 0}
-          className={`fixed z-50 flex items-center justify-center w-7 h-7 rounded-full backdrop-blur-sm border transition-all ${undoAvailable > 0 ? 'bg-white/15 border-white/30 text-white hover:bg-white/25 active:bg-white/35' : 'bg-white/5 border-white/10 text-gray-600'}`}
-          style={{ top: 'calc(env(safe-area-inset-top, 0px) - 6px)', left: '12px' }}
-          title="Undo"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 10h10a5 5 0 015 5v2M3 10l4-4M3 10l4 4" /></svg>
-        </button>
+      {/* Undo / Redo buttons — top left, tucked into safe area. Only show when undo is available. */}
+      {!dragState && !dragTouch && undoAvailable > 0 && (
+        <div className="fixed z-50 flex items-center gap-1" style={{ top: 'calc(env(safe-area-inset-top, 0px) - 6px)', left: '12px' }}>
+          <button
+            onClick={handleUndo}
+            className="flex items-center justify-center w-7 h-7 rounded-full backdrop-blur-sm border transition-all bg-white/15 border-white/30 text-white hover:bg-white/25 active:bg-white/35"
+            title="Undo"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 10h10a5 5 0 015 5v2M3 10l4-4M3 10l4 4" /></svg>
+          </button>
+          {redoAvailable > 0 && (
+            <button
+              onClick={handleRedo}
+              className="flex items-center justify-center w-7 h-7 rounded-full backdrop-blur-sm border transition-all bg-white/15 border-white/30 text-white hover:bg-white/25 active:bg-white/35"
+              title="Redo"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 10H11a5 5 0 00-5 5v2M21 10l-4-4M21 10l-4 4" /></svg>
+            </button>
+          )}
+        </div>
       )}
 
       {/* Cancel Confirmation Modal */}
@@ -2143,10 +2323,13 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
         />
       )}
 
-      {/* Exercise Detail Modal */}
+      {/* Exercise Detail Modal — merge current library instructions so updated descriptions show */}
       {showExerciseDetailModal && (
         <ExerciseDetailModal
-          exercise={showExerciseDetailModal}
+          exercise={{
+            ...showExerciseDetailModal,
+            instructions: (exercises.find(e => e.name === showExerciseDetailModal.name)?.instructions) || showExerciseDetailModal.instructions || '',
+          }}
           history={exerciseDetailHistory}
           onEdit={() => {
             setExerciseDetail(showExerciseDetailModal);

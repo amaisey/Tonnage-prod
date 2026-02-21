@@ -12,9 +12,113 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <title>Tonnage</title>
+
+    <script>
+      // ── DIAGNOSTIC: catch ALL JS errors and show on screen ──
+      // Without this, Safari shows a blank blue screen with no indication of what failed.
+      window.__appErrors = [];
+      window.onerror = function(msg, url, line, col, error) {
+        window.__appErrors.push(msg);
+        var loader = document.getElementById('app-loader');
+        if (loader) {
+          var file = url ? url.split('/').pop().split('?')[0] : '';
+          loader.innerHTML =
+            '<div style="text-align:center;padding:20px;max-width:360px;">' +
+              '<div style="font-size:40px;margin-bottom:8px;">⚠️</div>' +
+              '<div style="color:#f87171;font-family:ui-monospace,monospace;font-size:11px;margin-bottom:4px;word-break:break-all;">' + msg + '</div>' +
+              '<div style="color:#6b7280;font-family:ui-monospace,monospace;font-size:10px;margin-bottom:16px;">' + file + (line ? ':' + line : '') + '</div>' +
+              '<button onclick="location.reload()" style="background:#06b6d4;color:white;border:none;padding:10px 24px;border-radius:12px;font-size:14px;font-family:system-ui,sans-serif;cursor:pointer;">Tap to Retry</button>' +
+              '<div style="margin-top:12px;"><button onclick="clearCachesAndReload()" style="background:#374151;color:#9ca3af;border:none;padding:8px 20px;border-radius:12px;font-size:12px;font-family:system-ui,sans-serif;cursor:pointer;">Clear Cache &amp; Retry</button></div>' +
+            '</div>';
+        }
+      };
+
+      window.onunhandledrejection = function(event) {
+        var msg = event.reason ? (event.reason.message || String(event.reason)) : 'Promise rejection';
+        // Trigger the onerror handler display
+        window.onerror(msg, '', 0, 0, event.reason);
+      };
+
+      // Nuclear cache clear: unregister SW + delete all caches + reload
+      window.clearCachesAndReload = function() {
+        var p = [];
+        if ('serviceWorker' in navigator) {
+          p.push(
+            navigator.serviceWorker.getRegistrations().then(function(regs) {
+              return Promise.all(regs.map(function(r) { return r.unregister(); }));
+            })
+          );
+        }
+        if ('caches' in window) {
+          p.push(
+            caches.keys().then(function(names) {
+              return Promise.all(names.map(function(n) { return caches.delete(n); }));
+            })
+          );
+        }
+        Promise.all(p).then(function() {
+          window.location.href = window.location.origin + '/?cachebust=' + Date.now();
+        });
+      };
+    </script>
+
     <script type="module" src="/src/main.jsx"></script>
   </head>
   <body class="bg-gray-900">
-    <div id="root"></div>
+    <div id="root">
+      <!-- Loading indicator shown until React mounts -->
+      <div id="app-loader" style="display:flex;align-items:center;justify-content:center;height:100vh;background:#111827;">
+        <div style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">🏋️</div>
+          <div style="color:#9ca3af;font-family:system-ui,sans-serif;font-size:14px;">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ── INLINE SW REGISTRATION ──
+      // This runs independently of React. If React fails to load (e.g. stale SW
+      // serving old JS bundles), this still ensures the SW gets updated so the
+      // NEXT page load has fresh assets.
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
+          .then(function(reg) {
+            // If a new SW is waiting, tell it to activate immediately
+            if (reg.waiting) {
+              reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+            // Also listen for future updates
+            reg.addEventListener('updatefound', function() {
+              var newWorker = reg.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', function() {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                  }
+                });
+              }
+            });
+          })
+          .catch(function(err) {
+            console.warn('Inline SW registration failed:', err);
+          });
+      }
+
+      // ── TIMEOUT FALLBACK ──
+      // If React hasn't mounted after 8s AND no JS error was caught,
+      // show a retry button with cache-clear option
+      setTimeout(function() {
+        var loader = document.getElementById('app-loader');
+        if (loader && window.__appErrors.length === 0) {
+          loader.innerHTML =
+            '<div style="text-align:center;padding:20px;">' +
+              '<div style="font-size:48px;margin-bottom:12px;">🏋️</div>' +
+              '<div style="color:#9ca3af;font-family:system-ui,sans-serif;font-size:14px;margin-bottom:16px;">Taking longer than expected...</div>' +
+              '<button onclick="location.reload()" style="background:#06b6d4;color:white;border:none;padding:10px 24px;border-radius:12px;font-size:14px;font-family:system-ui,sans-serif;cursor:pointer;margin-bottom:8px;">Tap to Retry</button>' +
+              '<div style="margin-top:8px;"><button onclick="clearCachesAndReload()" style="background:#374151;color:#9ca3af;border:none;padding:8px 20px;border-radius:12px;font-size:12px;font-family:system-ui,sans-serif;cursor:pointer;">Clear Cache &amp; Retry</button></div>' +
+            '</div>';
+        }
+      }, 8000);
+    </script>
   </body>
 </html>

@@ -4,7 +4,7 @@ import { CATEGORIES, BAND_COLORS, EXERCISE_PHASES } from '../data/constants';
 import { formatDuration, exportWorkoutJSON, generateStravaDescription } from '../utils/helpers';
 import { workoutDb, db } from '../db/workoutDb';
 import { useAuth } from '../hooks/useAuth';
-import { replaceCloudWorkouts, directDeleteWorkout } from '../lib/syncService';
+import { replaceCloudWorkouts, directDeleteWorkout, directPushWorkout } from '../lib/syncService';
 
 // Workout Detail Modal - shows full workout when clicking on history item
 const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
@@ -169,7 +169,7 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
                           )}
                         </div>
                         {exercise.instructions && (
-                          <div className="text-xs text-blue-400/70 mb-2 italic">💡 {exercise.instructions}</div>
+                          <div className="text-xs text-blue-400/70 mb-2 italic" style={{ whiteSpace: 'pre-line' }}>💡 {exercise.instructions}</div>
                         )}
 
                         {/* Set details - filter out rest periods (sets with only duration, no reps/weight) */}
@@ -492,8 +492,25 @@ const HistoryScreen = ({ onRefreshNeeded, onScroll, navVisible, onModalStateChan
       if (user) {
         setImportStatus({ message: `Syncing ${imported} workouts to cloud...`, progress: 95 });
         try {
-          await db.syncQueue.clear();
-          await replaceCloudWorkouts(user.id);
+          if (replace) {
+            // Full replace: nuke cloud and re-upload everything
+            await db.syncQueue.clear();
+            await replaceCloudWorkouts(user.id);
+          } else {
+            // Normal import: only push the newly imported workouts (fast)
+            const allWorkouts = await workoutDb.getAll();
+            const newWorkouts = allWorkouts.filter(w => !w.cloudId);
+            let synced = 0;
+            for (const w of newWorkouts) {
+              try {
+                await directPushWorkout(user.id, w, w.id);
+                synced++;
+              } catch (pushErr) {
+                console.warn('Push failed for workout:', w.id, pushErr);
+              }
+            }
+            console.log(`Pushed ${synced}/${newWorkouts.length} new workouts to cloud`);
+          }
           localStorage.setItem('tonnage-local-last-synced', new Date().toISOString());
           setImportStatus({ message: `Imported & synced ${imported} workouts!`, progress: 100, done: true });
         } catch (syncErr) {

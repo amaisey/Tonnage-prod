@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, Fragment } from 'react';
 import { Icons } from './Icons';
 import { BODY_PARTS, CATEGORIES, BAND_COLORS, EXERCISE_TYPES, EXERCISE_PHASES } from '../data/constants';
-import { formatDuration, getDefaultSetForCategory, generateTemplateAIExport, generateTemplateAIBoilerplate, generateTemplateSummary } from '../utils/helpers';
+import { formatDuration, getDefaultSetForCategory, generateTemplateAIExport, generateTemplateAIBoilerplate, generateTemplateSummary, generateExerciseLibraryExport, generateFolderExportData } from '../utils/helpers';
 import { ExerciseSearchModal, CreateFolderModal } from './SharedComponents';
 import { CreateTemplateModal, ImportModal } from './ExercisesScreen';
 
@@ -649,6 +649,8 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
   const [renamingFolder, setRenamingFolder] = useState(null); // { id, name }
   const [viewingTemplate, setViewingTemplate] = useState(null);
   const [aiBoilerplateCopied, setAiBoilerplateCopied] = useState(false);
+  const [exerciseLibraryCopied, setExerciseLibraryCopied] = useState(false);
+  const [folderExportCopied, setFolderExportCopied] = useState(null); // folder id or null
   // Bug #10: Swipe-to-delete state for folders
   const [swipedFolder, setSwipedFolder] = useState(null);
   const folderTouchRef = useRef({ x: 0, y: 0, swiping: false });
@@ -657,11 +659,37 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
 
   const copyAIBoilerplate = async () => {
     try {
-      await navigator.clipboard.writeText(generateTemplateAIBoilerplate());
+      await navigator.clipboard.writeText(generateTemplateAIBoilerplate(exercises));
       setAiBoilerplateCopied(true);
       setTimeout(() => setAiBoilerplateCopied(false), 2000);
     } catch (err) {
       console.error('Copy AI boilerplate failed:', err);
+    }
+  };
+
+  const copyExerciseLibrary = async () => {
+    try {
+      const { text, size } = generateExerciseLibraryExport(exercises);
+      if (!text) return;
+      const SIZE_THRESHOLD = 100 * 1024; // 100KB
+      if (size < SIZE_THRESHOLD) {
+        await navigator.clipboard.writeText(text);
+        setExerciseLibraryCopied(true);
+        setTimeout(() => setExerciseLibraryCopied(false), 2000);
+      } else {
+        // Too large for clipboard — download as .md file
+        const blob = new Blob([text], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'exercise-library.md';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+    } catch (err) {
+      console.error('Copy exercise library failed:', err);
     }
   };
 
@@ -689,31 +717,37 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
     return ids;
   };
 
-  const exportFolderJSON = (folder) => {
+  const exportFolderJSON = async (folder) => {
     const allSubfolderIds = getAllSubfolderIds(folder.id);
     const folderIds = [folder.id, ...allSubfolderIds];
     const folderTemplates = templates.filter(t => folderIds.includes(t.folderId));
     const subfolders = folders.filter(f => allSubfolderIds.includes(f.id));
 
-    const exportData = {
-      version: 1,
-      exportDate: new Date().toISOString(),
-      folder: { name: folder.name, id: folder.id },
-      subfolders: subfolders.map(f => ({ name: f.name, id: f.id, parentId: f.parentId })),
-      templates: folderTemplates.map(t => ({
-        name: t.name,
-        folderId: t.folderId,
-        estimatedTime: t.estimatedTime || null,
-        notes: t.notes || '',
-        exercises: t.exercises,
-      })),
-    };
+    const { json, size } = generateFolderExportData(folder, folderTemplates, subfolders, exercises);
+    const SIZE_THRESHOLD = 100 * 1024; // 100KB
 
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    if (size < SIZE_THRESHOLD) {
+      // Small enough to clipboard
+      try {
+        await navigator.clipboard.writeText(json);
+        setFolderExportCopied(folder.id);
+        setTimeout(() => setFolderExportCopied(null), 2000);
+      } catch (err) {
+        // Fallback to download if clipboard fails
+        downloadFolderFile(folder.name, json);
+      }
+    } else {
+      // Too large — download as file
+      downloadFolderFile(folder.name, json);
+    }
+  };
+
+  const downloadFolderFile = (folderName, json) => {
+    const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${folder.name.replace(/\s+/g, '-')}-templates.json`;
+    a.download = `${folderName.replace(/\s+/g, '-')}-templates.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -761,6 +795,9 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-bold text-white">Templates</h2>
             <div className="flex gap-2">
+              <button onClick={copyExerciseLibrary} className="p-2 text-white/70 hover:text-white rounded-lg hover:bg-white/10" title="Copy exercise library for AI">
+                {exerciseLibraryCopied ? <span className="text-green-400 text-xs font-medium">Copied!</span> : <Icons.Book />}
+              </button>
               <button onClick={copyAIBoilerplate} className="p-2 text-white/70 hover:text-white rounded-lg hover:bg-white/10" title="Copy AI template format">
                 {aiBoilerplateCopied ? <span className="text-green-400 text-xs font-medium">Copied!</span> : <Icons.Code />}
               </button>
@@ -854,7 +891,7 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
                     className="p-1.5 text-gray-400 hover:text-teal-400 hover:bg-white/10 rounded-lg"
                     title="Export folder"
                   >
-                    <Icons.Export />
+                    {folderExportCopied === folder.id ? <span className="text-green-400 text-xs font-medium">Copied!</span> : <Icons.Export />}
                   </button>
                   <span className="text-teal-500/70"><Icons.ChevronRight /></span>
                 </button>

@@ -67,7 +67,7 @@ function App() {
     // Refresh history and any other data-dependent UI after sync pulls new data
     setHistoryRefreshKey(k => k + 1);
   }, []);
-  const { syncStatus, lastSynced, pendingCount, syncNow } = useSyncManager(user, isFirstLogin, clearFirstLogin, handleSyncDataChanged);
+  const { syncStatus, lastSynced, pendingCount, syncNow, refreshPendingCount } = useSyncManager(user, isFirstLogin, clearFirstLogin, handleSyncDataChanged);
 
   // Bug #8: Check if default templates need updating when app loads
   useEffect(() => {
@@ -132,10 +132,10 @@ function App() {
   // Start a workout from a template (blocked if one is already active)
   const startTemplate = useCallback(async (template) => {
     if (activeWorkout) return; // Guard: don't overwrite an active workout
-    // Bug #4: Auto-add template exercises not in library
-    const exerciseNames = new Set(exercises.map(e => e.name));
+    // Bug #4: Auto-add template exercises not in library (case-insensitive)
+    const exerciseNamesLower = new Set(exercises.map(e => e.name.toLowerCase()));
     const newExercises = template.exercises
-      .filter(ex => !exerciseNames.has(ex.name))
+      .filter(ex => !exerciseNamesLower.has(ex.name.toLowerCase()))
       .map((ex, i) => ({
         id: Date.now() + i,
         name: ex.name,
@@ -210,11 +210,15 @@ function App() {
           .then(result => {
             if (result.success) {
               console.log('Workout auto-uploaded to cloud:', result.cloudId);
+              // Write local sync timestamp so Settings doesn't show "last synced: never" after refresh
+              const now = new Date().toISOString();
+              localStorage.setItem('tonnage-local-last-synced', now);
             } else {
               console.warn('Direct push failed, queued for retry:', result.reason);
             }
           })
-          .catch(err => console.error('Auto-upload error:', err));
+          .catch(err => console.error('Auto-upload error:', err))
+          .finally(() => refreshPendingCount());
       }
     } catch (err) {
       console.error('Error saving workout:', err);
