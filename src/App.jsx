@@ -90,6 +90,34 @@ function App() {
     }
   }, []);
 
+  // Bug #1 fix: Sync template exercises into exercise library on app load and when templates change.
+  // Extracts unique exercises from all templates and adds any missing ones to the exercises table.
+  useEffect(() => {
+    if (!templates?.length || !exercises) return;
+    const exerciseNamesLower = new Set(exercises.map(e => e.name.toLowerCase()));
+    const newExercises = [];
+    const addedNames = new Set();
+    templates.forEach(t => {
+      (t.exercises || []).forEach(ex => {
+        const nameLower = ex.name?.toLowerCase();
+        if (nameLower && !exerciseNamesLower.has(nameLower) && !addedNames.has(nameLower)) {
+          newExercises.push({
+            id: Date.now() + Math.random(),
+            name: ex.name,
+            bodyPart: ex.bodyPart || 'Other',
+            category: ex.category || 'machine',
+            instructions: ex.instructions || '',
+          });
+          addedNames.add(nameLower);
+        }
+      });
+    });
+    if (newExercises.length > 0) {
+      setExercises(prev => [...prev, ...newExercises]);
+      if (user) newExercises.forEach(ex => queueSyncEntry('exercise', ex.id, 'create', ex));
+    }
+  }, [templates?.length]); // Re-run when template count changes (import, sync, etc.)
+
   // Reset navbar and numpad state when there's no active workout (empty state shouldn't hide navbar)
   useEffect(() => {
     if (!activeWorkout) {
@@ -155,11 +183,12 @@ function App() {
         // Previous data is only used for the PREV column display.
         const sets = ex.sets.map(s => ({ ...s, completed: false, proposed: true, manuallyEdited: false }));
         // Look up exercise library entry for its instructions (read-only how-to)
+        // Bug #2 fix: Check template JSONB instructions first, then fall back to exercise library
         const libraryEx = exercises.find(e => e.name === ex.name);
         return {
           ...ex,
           restTime: ex.restTime ?? 60,
-          instructions: libraryEx?.instructions || '', // Exercise how-to from library (read-only)
+          instructions: ex.instructions || libraryEx?.instructions || '', // Template instructions > library instructions
           notes: ex.notes || '', // Template notes copied into workout as editable notes
           sets,
           previousSets: prevData?.sets

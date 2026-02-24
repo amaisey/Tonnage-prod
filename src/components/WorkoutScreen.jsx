@@ -374,14 +374,14 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     onNumpadStateChange?.(numpadState !== null);
   }, [numpadState, onNumpadStateChange]);
 
-  // Auto-scroll input into view when numpad opens so input isn't hidden behind it
-  // Uses same intelligent positioning as SetInputRow — measures numpad height dynamically
+  // Bug #8 fix: Auto-scroll input into view when numpad opens so input isn't hidden behind it.
+  // Uses two-pass scroll: immediate rough scroll + delayed precise scroll after keyboard animation.
   useEffect(() => {
     if (numpadState) {
-      setTimeout(() => {
+      const doScroll = () => {
         const el = dragRefs.current[numpadState.exIndex];
         if (!el) return;
-        const container = el.closest('[style*="overflow"]') || el.parentElement?.parentElement?.parentElement;
+        const container = scrollContainerRef.current || el.closest('[style*="overflow"]') || el.parentElement?.parentElement?.parentElement;
         if (container) {
           const elementRect = el.getBoundingClientRect();
           const containerRect = container.getBoundingClientRect();
@@ -394,7 +394,11 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
           const targetPosition = scrollTop + (elementRect.top - containerRect.top) - Math.min(visibleHeight * 0.4, 160);
           container.scrollTo({ top: Math.max(0, targetPosition), behavior: 'smooth' });
         }
-      }, 150);
+      };
+      // Immediate scroll attempt
+      setTimeout(doScroll, 50);
+      // Second scroll after keyboard/numpad animation completes (iOS needs ~300ms)
+      setTimeout(doScroll, 350);
     }
   }, [numpadState?.exIndex, numpadState?.setIndex, numpadState?.field]);
 
@@ -1178,11 +1182,16 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     exercise.sets.push(newSet);
     setActiveWorkout(updated);
 
-    // If green bar was hidden (all sets complete), recalculate expectedNext
-    // so the new set gets the green "next" indicator
+    // Bug #5 fix: Always recalculate expectedNext when sets are added.
+    // If all sets were complete, point to the newly added set.
+    // If expectedNext was valid, the useEffect validator will keep it — but force
+    // a state update so the green bar re-renders with the new sets array.
     if (!expectedNext || updated.exercises[expectedNext?.exIndex]?.sets[expectedNext?.setIndex]?.completed) {
       const newSetIndex = exercise.sets.length - 1;
       setExpectedNext({ exIndex, setIndex: newSetIndex });
+    } else {
+      // Force re-render by setting to a new object reference so Next Up reflects new set count
+      setExpectedNext(prev => prev ? { ...prev } : null);
     }
   };
 
@@ -1193,6 +1202,9 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     if (exercise.sets.length > 1) {
       exercise.sets.splice(setIndex, 1);
       setActiveWorkout(updated);
+      // Bug #5 fix: Recalculate expectedNext after removing a set
+      // The useEffect validator will handle this, but force a re-render
+      setExpectedNext(prev => prev ? { ...prev } : null);
     }
   };
 
@@ -1376,7 +1388,20 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
     const updated = { ...activeWorkout };
     updated.exercises = [...updated.exercises];
     const old = updated.exercises[replaceExerciseIndex];
-    // Preserve sets, superset, phase, rest time — swap name/bodyPart/category/instructions
+
+    // Bug #7 fix: If exercise category changes, rebuild sets for the new category
+    // to avoid mismatched fields (e.g. barbell weight/reps → cardio distance/duration)
+    const categoryChanged = old.category !== newExercise.category;
+    let newSets = old.sets;
+    if (categoryChanged) {
+      // Rebuild sets with correct fields for the new category, preserving count
+      newSets = old.sets.map(s => ({
+        ...getDefaultSetForCategory(newExercise.category),
+        completed: s.completed || false,
+        ...(s.completedAt ? { completedAt: s.completedAt } : {}),
+      }));
+    }
+
     updated.exercises[replaceExerciseIndex] = {
       ...old,
       name: newExercise.name,
@@ -1384,6 +1409,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
       category: newExercise.category,
       instructions: newExercise.instructions || '',
       exerciseType: newExercise.exerciseType || old.exerciseType,
+      sets: newSets,
     };
     setActiveWorkout(updated);
     setReplaceExerciseIndex(null);

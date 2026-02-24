@@ -319,18 +319,25 @@ const EditTemplateModal = ({ template, onSave, onDelete, onClose, allExercises }
     return groups;
   };
 
+  // Bug #3 fix: Only apply default sets for exercises that truly have no sets.
+  // Never overwrite an existing sets array with defaults.
+  const ensureSets = (ex) => {
+    if (ex.sets && Array.isArray(ex.sets) && ex.sets.length > 0) return ex.sets;
+    return [getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category)];
+  };
+
   const addExercises = (newExercises, asSuperset) => {
     if (asSuperset && newExercises.length >= 2) {
       const supersetId = `superset-${Date.now()}`;
       const toAdd = newExercises.map(ex => ({
         ...ex, supersetId, restTime: ex.restTime || 90,
-        sets: ex.sets || [getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category)]
+        sets: ensureSets(ex)
       }));
       setExercises([...exercises, ...toAdd]);
     } else {
       const toAdd = newExercises.map(ex => ({
         ...ex, restTime: ex.restTime || 90,
-        sets: ex.sets || [getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category)]
+        sets: ensureSets(ex)
       }));
       setExercises([...exercises, ...toAdd]);
     }
@@ -651,6 +658,7 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
   const [aiBoilerplateCopied, setAiBoilerplateCopied] = useState(false);
   const [exerciseLibraryCopied, setExerciseLibraryCopied] = useState(false);
   const [folderExportCopied, setFolderExportCopied] = useState(null); // folder id or null
+  const [showImportExportSheet, setShowImportExportSheet] = useState(false); // Bug #9: combined action sheet
   // Bug #10: Swipe-to-delete state for folders
   const [swipedFolder, setSwipedFolder] = useState(null);
   const folderTouchRef = useRef({ x: 0, y: 0, swiping: false });
@@ -795,14 +803,11 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-bold text-white">Templates</h2>
             <div className="flex gap-2">
-              <button onClick={copyExerciseLibrary} className="p-2 text-white/70 hover:text-white rounded-lg hover:bg-white/10" title="Copy exercise library for AI">
-                {exerciseLibraryCopied ? <span className="text-green-400 text-xs font-medium">Copied!</span> : <Icons.Book />}
-              </button>
-              <button onClick={copyAIBoilerplate} className="p-2 text-white/70 hover:text-white rounded-lg hover:bg-white/10" title="Copy AI template format">
-                {aiBoilerplateCopied ? <span className="text-green-400 text-xs font-medium">Copied!</span> : <Icons.Code />}
-              </button>
               <button onClick={() => setShowCreateFolder(true)} className="p-2 text-white/70 hover:text-white rounded-lg hover:bg-white/10"><Icons.Folder /></button>
-              <button onClick={() => setShowImport(true)} className="p-2 text-white/70 hover:text-white rounded-lg hover:bg-white/10"><Icons.Import /></button>
+              {/* Bug #9: Single Import/Export button opens action sheet */}
+              <button onClick={() => setShowImportExportSheet(true)} className="p-2 text-white/70 hover:text-white rounded-lg hover:bg-white/10" title="Import / Export">
+                <Icons.Share />
+              </button>
               <button onClick={() => setShowCreateTemplate(true)} className="bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-white/30 flex items-center gap-1 border border-white/30">
                 <Icons.Plus /> New
               </button>
@@ -953,6 +958,34 @@ const TemplatesScreen = ({ templates, folders, onStartTemplate, hasActiveWorkout
           {childFolders.length === 0 && folderTemplates.length === 0 && <div className="text-center text-gray-400 py-8">No templates in this folder</div>}
         </div>
       </div>
+
+      {/* Bug #9: Import/Export Action Sheet */}
+      {showImportExportSheet && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center" onClick={() => setShowImportExportSheet(false)}>
+          <div className="bg-gray-900 rounded-t-3xl w-full max-w-md p-6 pb-8" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)' }} onClick={e => e.stopPropagation()}>
+            <div className="w-10 h-1 bg-gray-600 rounded-full mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-white mb-4">Import / Export</h3>
+            <div className="space-y-3">
+              <button onClick={() => { setShowImportExportSheet(false); setShowImport(true); }}
+                className="w-full flex items-center gap-4 p-4 bg-gray-800 rounded-xl hover:bg-gray-700 text-left">
+                <div className="w-10 h-10 rounded-full bg-teal-600/20 flex items-center justify-center text-teal-400"><Icons.Import /></div>
+                <div><div className="font-medium text-white">Import Templates</div><div className="text-xs text-gray-400">Paste or upload JSON template data</div></div>
+              </button>
+              <button onClick={() => { setShowImportExportSheet(false); copyAIBoilerplate(); }}
+                className="w-full flex items-center gap-4 p-4 bg-gray-800 rounded-xl hover:bg-gray-700 text-left">
+                <div className="w-10 h-10 rounded-full bg-cyan-600/20 flex items-center justify-center text-cyan-400"><Icons.Code /></div>
+                <div><div className="font-medium text-white">Copy AI Template Format</div><div className="text-xs text-gray-400">Copy the format guide for AI-generated templates</div></div>
+              </button>
+              <button onClick={() => { setShowImportExportSheet(false); copyExerciseLibrary(); }}
+                className="w-full flex items-center gap-4 p-4 bg-gray-800 rounded-xl hover:bg-gray-700 text-left">
+                <div className="w-10 h-10 rounded-full bg-rose-600/20 flex items-center justify-center text-rose-400"><Icons.Book /></div>
+                <div><div className="font-medium text-white">Export Exercise Library</div><div className="text-xs text-gray-400">Copy full exercise list for AI context</div></div>
+              </button>
+            </div>
+            <button onClick={() => setShowImportExportSheet(false)} className="w-full mt-4 text-gray-400 py-2 text-sm hover:text-white">Cancel</button>
+          </div>
+        </div>
+      )}
 
       {showImport && <ImportModal folders={folders} currentFolderId={currentFolderId} onAddFolder={onAddFolder} onBulkAddFolders={onBulkAddFolders} onImport={onImport} onBulkImport={onBulkImport} onUpdateTemplate={onUpdateTemplate} onAddExercises={onAddExercises} existingExercises={exercises} existingTemplates={templates} onClose={() => setShowImport(false)} />}
       {showCreateFolder && <CreateFolderModal parentId={currentFolderId} onSave={onAddFolder} onClose={() => setShowCreateFolder(false)} />}

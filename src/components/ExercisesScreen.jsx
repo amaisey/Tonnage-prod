@@ -230,7 +230,46 @@ const ImportModal = ({ folders, currentFolderId, onAddFolder, onBulkAddFolders, 
         return { duplicates, newTemplates };
       };
       let templatesData = [];
-      if (data.templates && Array.isArray(data.templates)) { templatesData = data.templates; }
+      // Bug #4 fix: Handle folder export format (has subfolders + templates with folderId)
+      if (data.folder && data.subfolders && data.templates) {
+        // Structured folder export — reconstruct folder hierarchy with ID mapping
+        const idMap = {};
+        // Create root folder (or find existing)
+        const existingRoot = allFolders.find(f => f.name === data.folder.name && f.parentId === (currentFolderId || 'root'));
+        if (existingRoot) {
+          idMap[data.folder.id] = existingRoot.id;
+        } else {
+          const newRootId = `folder-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          idMap[data.folder.id] = newRootId;
+          const rootFolder = { id: newRootId, name: data.folder.name, parentId: currentFolderId || 'root' };
+          newFoldersToAdd.push(rootFolder);
+          allFolders.push(rootFolder);
+        }
+        // Create subfolders in parent-first order (sort by depth via parentId chain)
+        const sortedSubs = [...data.subfolders].sort((a, b) => {
+          const depthOf = (f) => { let d = 0; let pid = f.parentId; while (pid && pid !== data.folder.id) { const parent = data.subfolders.find(s => s.id === pid); if (!parent) break; pid = parent.parentId; d++; } return d; };
+          return depthOf(a) - depthOf(b);
+        });
+        sortedSubs.forEach(sub => {
+          const mappedParentId = idMap[sub.parentId] || idMap[data.folder.id];
+          const existingSub = allFolders.find(f => f.name === sub.name && f.parentId === mappedParentId);
+          if (existingSub) {
+            idMap[sub.id] = existingSub.id;
+          } else {
+            const newSubId = `folder-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            idMap[sub.id] = newSubId;
+            const newSub = { id: newSubId, name: sub.name, parentId: mappedParentId };
+            newFoldersToAdd.push(newSub);
+            allFolders.push(newSub);
+          }
+        });
+        // Map templates to use new folder IDs
+        templatesData = data.templates.map(t => ({
+          ...t,
+          folder: undefined,
+          folderId: idMap[t.folderId] || idMap[data.folder.id] || currentFolderId,
+        }));
+      } else if (data.templates && Array.isArray(data.templates)) { templatesData = data.templates; }
       else if (data.name && data.exercises) {
         if (!Array.isArray(data.exercises)) { setError('"exercises" must be an array'); return; }
         templatesData = [data];
@@ -333,13 +372,19 @@ const CreateTemplateModal = ({ folderId, allExercises, onSave, onClose }) => {
   const [templateExercises, setTemplateExercises] = useState([]);
   const [showExercisePicker, setShowExercisePicker] = useState(false);
 
+  // Bug #3 fix: Preserve existing sets, only default for exercises with no sets
+  const ensureSets = (ex) => {
+    if (ex.sets && Array.isArray(ex.sets) && ex.sets.length > 0) return ex.sets;
+    return [getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category)];
+  };
+
   const addExercises = (exercises, asSuperset) => {
     if (asSuperset && exercises.length >= 2) {
       const supersetId = `superset-${Date.now()}`;
-      const newExercises = exercises.map(ex => ({ ...ex, supersetId, restTime: 60, sets: [getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category)] }));
+      const newExercises = exercises.map(ex => ({ ...ex, supersetId, restTime: 60, sets: ensureSets(ex) }));
       setTemplateExercises([...templateExercises, ...newExercises]);
     } else {
-      const newExercises = exercises.map(ex => ({ ...ex, restTime: 60, sets: [getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category), getDefaultSetForCategory(ex.category)] }));
+      const newExercises = exercises.map(ex => ({ ...ex, restTime: 60, sets: ensureSets(ex) }));
       setTemplateExercises([...templateExercises, ...newExercises]);
     }
     setShowExercisePicker(false);
