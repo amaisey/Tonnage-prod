@@ -25,15 +25,20 @@ function mapToCloud(entityType, payload, userId, localId) {
         duration_ms: payload.duration || payload.duration_ms || 0,
         exercises: payload.exercises || [],
       }
-    case 'exercise':
+    case 'exercise': {
+      // exercises.local_id is BIGINT — must be an integer, never a float.
+      // Date.now() + Math.random() produced floats; Math.floor guards against
+      // any legacy float IDs still in the queue.
+      const exerciseLocalId = Math.floor(Number(localId))
       return {
         ...base,
-        local_id: String(localId),
+        local_id: isNaN(exerciseLocalId) ? null : exerciseLocalId,
         name: payload.name,
         body_part: payload.bodyPart || payload.body_part || 'Other',
         category: payload.category || 'other',
         instructions: payload.instructions || '',
       }
+    }
     case 'template':
       return {
         ...base,
@@ -911,4 +916,18 @@ function cloudToLocalShape(key, record) {
     }
   }
   return record
+}
+
+// ============================================================
+// Reset retry counters for stuck queue items so they get
+// retried on next sync. Call this once after deploying the
+// float-ID fix so old malformed items get another attempt
+// rather than sitting at retries=4 forever.
+// ============================================================
+export async function resetSyncQueueRetries() {
+  const all = await db.syncQueue.toArray()
+  const stuckItems = all.filter(item => (item.retries || 0) > 0)
+  await Promise.all(stuckItems.map(item => db.syncQueue.update(item.id, { retries: 0 })))
+  console.log(`Reset retries for ${stuckItems.length} stuck sync queue items`)
+  return stuckItems.length
 }

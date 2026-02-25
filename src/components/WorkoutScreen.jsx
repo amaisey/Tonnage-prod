@@ -1701,7 +1701,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
         onTouchStart={(e) => handleExerciseTouchStart(exIndex, e)}
         onTouchMove={handleExerciseTouchMove}
         onTouchEnd={handleExerciseTouchEnd}
-        className={`${exercise.highlight ? 'ring-2 ring-rose-500' : ''} ${dragState?.exIndex === exIndex ? 'ring-2 ring-cyan-400 opacity-75' : ''} ${dragTouch?.exIndex === exIndex ? 'opacity-50 ring-2 ring-cyan-400 scale-[1.02]' : ''} bg-white/10 backdrop-blur-md border border-white/20 ${isSuperset ? `px-3 pt-2 pb-0 ${isFirst ? 'rounded-t-2xl' : isLast ? 'rounded-b-2xl' : ''}` : `pt-3 px-4 pb-0 rounded-2xl mb-3`} transition-transform`}>
+        className={`${exercise.highlight ? 'ring-2 ring-rose-500' : ''} ${dragState?.exIndex === exIndex ? 'ring-2 ring-cyan-400 opacity-75' : ''} ${dragTouch?.exIndex === exIndex ? 'opacity-50 ring-2 ring-cyan-400 scale-[1.02]' : ''} bg-white/10 backdrop-blur-md border border-white/20 ${isSuperset ? `px-3 pt-3 pb-0 ${isFirst ? 'rounded-t-2xl' : isLast ? 'rounded-b-2xl' : ''}` : `p-3 pb-0 rounded-2xl mb-3`} transition-transform`}>
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             {/* Drag handle */}
@@ -2074,7 +2074,10 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
         <div className="mx-4 mb-2 p-3 bg-cyan-900/50 border border-cyan-500/30 rounded-xl flex items-center justify-between">
           <div className="flex items-center gap-2 text-cyan-300">
             <Icons.GripVertical />
-            <span className="text-sm font-medium">Reordering: {activeWorkout.exercises[dragState.exIndex]?.name}</span>
+            <span className="text-sm font-medium">
+              Moving: <span className="font-semibold">{activeWorkout.exercises[dragState.exIndex]?.name}</span>
+              {showPhases ? ' — drop into a phase below' : ' — choose a section below'}
+            </span>
           </div>
           <button onClick={cancelDrag} className="text-cyan-400 hover:text-cyan-300 text-sm px-3 py-1 bg-cyan-900/50 rounded-lg">
             Cancel
@@ -2156,6 +2159,37 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
               </div>
             );
           })
+        ) : dragState ? (
+          // Dragging in a flat-list workout — show phase sections as drop targets
+          <div className="space-y-3">
+            {Object.entries(EXERCISE_PHASES).map(([phaseKey, phaseInfo]) => {
+              const isDragged = (activeWorkout.exercises[dragState.exIndex]?.phase || 'workout') === phaseKey;
+              return (
+                <div key={phaseKey}>
+                  <div className={`flex items-center gap-2 px-1 mb-2`}>
+                    <span>{phaseInfo.icon}</span>
+                    <span className={`text-sm font-semibold ${phaseInfo.textColor}`}>{phaseInfo.label}</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const lastInPhase = activeWorkout.exercises.reduce((last, ex, idx) =>
+                        (ex.phase || 'workout') === phaseKey ? idx : last, -1);
+                      dropExercise(lastInPhase + 1, phaseKey);
+                    }}
+                    className={`w-full border-2 border-dashed rounded-xl py-5 flex items-center justify-center gap-2 text-sm transition-colors ${
+                      isDragged
+                        ? 'border-cyan-500/60 bg-cyan-900/20 text-cyan-400'
+                        : `border-${phaseKey === 'warmup' ? 'amber' : phaseKey === 'cooldown' ? 'teal' : 'gray'}-600/40 bg-white/5 text-gray-500 hover:border-white/30 hover:text-gray-300`
+                    }`}
+                  >
+                    {isDragged
+                      ? `↕ Currently here — drop to keep in ${phaseInfo.label}`
+                      : `↓ Move to ${phaseInfo.label}`}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         ) : (
           // Render without phases (flat list with superset grouping)
           (() => {
@@ -2168,7 +2202,7 @@ const WorkoutScreen = ({ activeWorkout, setActiveWorkout, onFinish, onCancel, ex
           })()
         )}
         {/* Bottom add exercise - only show when no phases (flat list) */}
-        {!showPhases && (
+        {!showPhases && !dragState && (
           <button onClick={() => { setAddToPhase('workout'); setShowExerciseModal(true); }}
             className="w-full bg-gray-900 border-2 border-dashed border-gray-700 rounded-2xl p-6 text-gray-400 hover:border-teal-600 hover:text-teal-400 flex items-center justify-center gap-2">
             <Icons.Plus /> Add Exercise

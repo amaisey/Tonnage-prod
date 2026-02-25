@@ -7,11 +7,61 @@ import { useAuth } from '../hooks/useAuth';
 import { replaceCloudWorkouts, directDeleteWorkout, directPushWorkout } from '../lib/syncService';
 
 // Workout Detail Modal - shows full workout when clicking on history item
-const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
+const WorkoutDetailModal = ({ workout, onClose, onDelete, onUpdate }) => {
   const [collapsedPhases, setCollapsedPhases] = useState({});
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [stravaCopied, setStravaCopied] = useState(false);
   const [jsonCopied, setJsonCopied] = useState(false); // Bug #16: React state for copy button
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedWorkout, setEditedWorkout] = useState(null);
+
+  // Deep-clone workout when entering edit mode
+  const enterEditMode = () => {
+    setEditedWorkout(JSON.parse(JSON.stringify(workout)));
+    setIsEditing(true);
+  };
+  const exitEditMode = () => {
+    setEditedWorkout(null);
+    setIsEditing(false);
+  };
+
+  // Edit helpers — operate on editedWorkout
+  const updateSetField = (exIdx, setIdx, field, value) => {
+    setEditedWorkout(prev => {
+      const w = JSON.parse(JSON.stringify(prev));
+      w.exercises[exIdx].sets[setIdx][field] = value === '' ? undefined : Number(value);
+      return w;
+    });
+  };
+  const toggleSetCompleted = (exIdx, setIdx) => {
+    setEditedWorkout(prev => {
+      const w = JSON.parse(JSON.stringify(prev));
+      w.exercises[exIdx].sets[setIdx].completed = !w.exercises[exIdx].sets[setIdx].completed;
+      return w;
+    });
+  };
+  const addSet = (exIdx) => {
+    setEditedWorkout(prev => {
+      const w = JSON.parse(JSON.stringify(prev));
+      const ex = w.exercises[exIdx];
+      const lastSet = ex.sets[ex.sets.length - 1] || {};
+      ex.sets.push({ weight: lastSet.weight, reps: lastSet.reps, completed: false });
+      return w;
+    });
+  };
+  const removeSet = (exIdx, setIdx) => {
+    setEditedWorkout(prev => {
+      const w = JSON.parse(JSON.stringify(prev));
+      w.exercises[exIdx].sets.splice(setIdx, 1);
+      return w;
+    });
+  };
+  const updateWorkoutName = (name) => {
+    setEditedWorkout(prev => ({ ...prev, name }));
+  };
+  const updateWorkoutNotes = (notes) => {
+    setEditedWorkout(prev => ({ ...prev, notes }));
+  };
 
   const togglePhase = (phase) => {
     setCollapsedPhases(prev => ({ ...prev, [phase]: !prev[phase] }));
@@ -51,11 +101,38 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
   return (
     <div className="fixed inset-0 bg-black z-50 flex flex-col">
       <div className="shrink-0 p-4 border-b border-gray-800 flex items-center justify-between bg-gray-900" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 1rem)' }}>
-        <button onClick={onClose} className="text-gray-400 hover:text-white"><Icons.X /></button>
-        <h3 className="text-lg font-semibold text-white">{workout.name}</h3>
-        <button onClick={() => setShowDeleteConfirm(true)} className="text-red-400 hover:text-red-300">
-          <Icons.Trash />
-        </button>
+        {isEditing ? (
+          <button onClick={exitEditMode} className="text-gray-400 hover:text-white text-sm font-medium">Cancel</button>
+        ) : (
+          <button onClick={onClose} className="text-gray-400 hover:text-white"><Icons.X /></button>
+        )}
+        {isEditing ? (
+          <input
+            value={editedWorkout?.name || ''}
+            onChange={e => updateWorkoutName(e.target.value)}
+            className="flex-1 mx-3 bg-gray-800 text-white text-center font-semibold rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-rose-600 text-sm"
+          />
+        ) : (
+          <h3 className="text-lg font-semibold text-white">{workout.name}</h3>
+        )}
+        {isEditing ? (
+          <button
+            onClick={async () => {
+              await onUpdate(editedWorkout);
+              exitEditMode();
+            }}
+            className="text-green-400 hover:text-green-300 text-sm font-semibold"
+          >
+            Save
+          </button>
+        ) : (
+          <div className="flex items-center gap-3">
+            <button onClick={enterEditMode} className="text-cyan-400 hover:text-cyan-300 text-sm font-medium">Edit</button>
+            <button onClick={() => setShowDeleteConfirm(true)} className="text-red-400 hover:text-red-300">
+              <Icons.Trash />
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 bg-black" style={{ overscrollBehavior: 'contain' }}>
@@ -85,7 +162,18 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
           </div>
         </div>
 
-        {(workout.notes || workout.estimatedTime) && (
+        {isEditing && (
+          <div className="mb-4">
+            <textarea
+              value={editedWorkout?.notes || ''}
+              onChange={e => updateWorkoutNotes(e.target.value)}
+              placeholder="Workout notes..."
+              rows={2}
+              className="w-full bg-gray-900 text-white text-sm px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-600 border border-white/10 resize-none"
+            />
+          </div>
+        )}
+        {(workout.notes || workout.estimatedTime) && !isEditing && (
           <div className="bg-teal-900/20 border border-teal-700/30 rounded-xl p-3 mb-4 space-y-1">
             {workout.notes && (
               <div className="text-sm text-teal-300 flex items-center gap-2">
@@ -172,25 +260,62 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
                           <div className="text-xs text-blue-400/70 mb-2 italic" style={{ whiteSpace: 'pre-line' }}>💡 {exercise.instructions}</div>
                         )}
 
-                        {/* Set details - filter out rest periods (sets with only duration, no reps/weight) */}
+                        {/* Set details — read-only view or edit mode */}
                         <div className="space-y-1">
-                          {exercise.sets
-                            .filter(set => {
-                              // Keep sets that have actual workout data (reps, weight, distance)
-                              // Filter out rest-period sets (duration-only with no reps/weight)
+                          {(isEditing ? editedWorkout.exercises[index].sets : exercise.sets.filter(set => {
                               const hasReps = set.reps && set.reps > 0;
                               const hasWeight = set.weight && set.weight > 0;
                               const hasDistance = set.distance && set.distance > 0;
                               const isDurationExercise = exercise.category === 'duration' || exercise.category === 'cardio';
-
-                              // If it's a duration/cardio exercise, keep sets with duration
                               if (isDurationExercise && set.duration) return true;
-
-                              // For other exercises, keep sets that have reps, weight, or distance
                               return hasReps || hasWeight || hasDistance;
-                            })
-                            .map((set, sIdx) => {
+                            })).map((set, sIdx) => {
                             const fields = CATEGORIES[exercise.category]?.fields || ['weight', 'reps'];
+                            if (isEditing) {
+                              return (
+                                <div key={sIdx} className={`flex items-center gap-2 p-2 rounded-lg ${set.completed ? 'bg-gray-800' : 'bg-gray-800/30'}`}>
+                                  {/* Completion toggle */}
+                                  <button
+                                    onClick={() => toggleSetCompleted(index, sIdx)}
+                                    className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs border transition-all ${
+                                      set.completed ? 'bg-green-600 border-green-500 text-white' : 'border-gray-600 text-gray-500 hover:border-gray-400'
+                                    }`}
+                                  >
+                                    {set.completed ? '✓' : sIdx + 1}
+                                  </button>
+                                  {/* Weight */}
+                                  {fields.includes('weight') && (
+                                    <input
+                                      type="number"
+                                      value={set.weight ?? ''}
+                                      onChange={e => updateSetField(index, sIdx, 'weight', e.target.value)}
+                                      placeholder="lbs"
+                                      className="w-16 bg-gray-700 text-white text-xs text-center px-2 py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-rose-600"
+                                    />
+                                  )}
+                                  {fields.includes('weight') && fields.includes('reps') && (
+                                    <span className="text-gray-600 text-xs">×</span>
+                                  )}
+                                  {/* Reps */}
+                                  {fields.includes('reps') && (
+                                    <input
+                                      type="number"
+                                      value={set.reps ?? ''}
+                                      onChange={e => updateSetField(index, sIdx, 'reps', e.target.value)}
+                                      placeholder="reps"
+                                      className="w-14 bg-gray-700 text-white text-xs text-center px-2 py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-rose-600"
+                                    />
+                                  )}
+                                  {/* Delete set */}
+                                  <button
+                                    onClick={() => removeSet(index, sIdx)}
+                                    className="ml-auto text-red-500/50 hover:text-red-400 text-xs px-1"
+                                  >
+                                    ✕
+                                  </button>
+                                </div>
+                              );
+                            }
                             return (
                               <div key={sIdx} className={`flex items-center gap-3 p-2 rounded-lg ${set.completed ? 'bg-gray-800' : 'bg-gray-800/30'}`}>
                                 <span className={`w-6 text-center text-xs ${set.completed ? 'text-green-400' : 'text-gray-500'}`}>
@@ -230,6 +355,15 @@ const WorkoutDetailModal = ({ workout, onClose, onDelete }) => {
                               </div>
                             );
                           })}
+                          {/* Add set button — only in edit mode */}
+                          {isEditing && (
+                            <button
+                              onClick={() => addSet(index)}
+                              className="w-full text-xs text-cyan-400 hover:text-cyan-300 py-1.5 border border-dashed border-cyan-400/30 rounded-lg hover:border-cyan-400/60 transition-colors"
+                            >
+                              + Add Set
+                            </button>
+                          )}
                         </div>
 
                         {exercise.notes && (
@@ -551,6 +685,24 @@ const HistoryScreen = ({ onRefreshNeeded, onScroll, navVisible, onModalStateChan
     }
   };
 
+  const updateWorkout = async (updatedWorkout) => {
+    try {
+      await workoutDb.update(updatedWorkout.id, { ...updatedWorkout });
+      setHistory(prev => prev.map(w => w.id === updatedWorkout.id ? updatedWorkout : w));
+      // Update selected workout so the detail modal re-renders with new data
+      setSelectedWorkout(updatedWorkout);
+      // Push to cloud immediately
+      if (user) {
+        const result = await directPushWorkout(user.id, updatedWorkout, updatedWorkout.id);
+        if (!result.success) {
+          console.warn('Cloud workout update failed, will retry on next sync:', result.reason);
+        }
+      }
+    } catch (err) {
+      console.error('Error updating workout:', err);
+    }
+  };
+
   // Calculate stats
   const stats = {
     totalWorkouts: history.length,
@@ -747,7 +899,12 @@ const HistoryScreen = ({ onRefreshNeeded, onScroll, navVisible, onModalStateChan
       )}
 
       {selectedWorkout && (
-        <WorkoutDetailModal workout={selectedWorkout} onClose={() => setSelectedWorkout(null)} onDelete={deleteWorkout} />
+        <WorkoutDetailModal
+          workout={selectedWorkout}
+          onClose={() => setSelectedWorkout(null)}
+          onDelete={deleteWorkout}
+          onUpdate={updateWorkout}
+        />
       )}
 
       {showImport && (

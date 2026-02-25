@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS public.exercises (
   name TEXT NOT NULL,
   body_part TEXT NOT NULL,
   category TEXT NOT NULL,
+  instructions TEXT,
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
   deleted_at TIMESTAMPTZ

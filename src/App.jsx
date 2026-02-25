@@ -14,7 +14,7 @@ import { workoutDb } from './db/workoutDb';
 import { usePreviousExerciseData } from './hooks/useWorkoutDb';
 import { useAuth } from './hooks/useAuth';
 import { useSyncManager } from './hooks/useSyncManager';
-import { queueSyncEntry, directPushWorkout } from './lib/syncService';
+import { queueSyncEntry, directPushWorkout, resetSyncQueueRetries } from './lib/syncService';
 
 // Update Toast Component
 function UpdateToast({ onUpdate, onDismiss }) {
@@ -102,7 +102,7 @@ function App() {
         const nameLower = ex.name?.toLowerCase();
         if (nameLower && !exerciseNamesLower.has(nameLower) && !addedNames.has(nameLower)) {
           newExercises.push({
-            id: Date.now() + Math.random(),
+            id: Date.now() + Math.floor(Math.random() * 1000),
             name: ex.name,
             bodyPart: ex.bodyPart || 'Other',
             category: ex.category || 'machine',
@@ -118,7 +118,18 @@ function App() {
     }
   }, [templates?.length]); // Re-run when template count changes (import, sync, etc.)
 
-  // Reset navbar and numpad state when there's no active workout (empty state shouldn't hide navbar)
+  // One-time: reset retries on stuck sync queue items (caused by float IDs pre-fix)
+  // Guarded by localStorage flag so it only runs once per device.
+  useEffect(() => {
+    const FLAG = 'tonnage-sync-retry-reset-v1';
+    if (localStorage.getItem(FLAG)) return;
+    resetSyncQueueRetries().then(count => {
+      if (count > 0) console.log(`[startup] Reset ${count} stuck sync queue items for retry`);
+      localStorage.setItem(FLAG, '1');
+    });
+  }, []);
+
+    // Reset navbar and numpad state when there's no active workout (empty state shouldn't hide navbar)
   useEffect(() => {
     if (!activeWorkout) {
       setNavbarHiddenByScroll(false);

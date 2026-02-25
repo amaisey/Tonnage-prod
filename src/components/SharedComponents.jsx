@@ -561,8 +561,8 @@ const ExerciseSearchModal = ({ exercises, onSelect, onSelectMultiple, onClose, a
   }).sort((a, b) => a.name.localeCompare(b.name));
 
   const toggleExercise = (ex) => {
-    if (selectedExercises.find(e => e.id === ex.id)) {
-      setSelectedExercises(selectedExercises.filter(e => e.id !== ex.id));
+    if (selectedExercises.find(e => e.name === ex.name)) {
+      setSelectedExercises(selectedExercises.filter(e => e.name !== ex.name));
     } else {
       setSelectedExercises([...selectedExercises, ex]);
     }
@@ -584,7 +584,7 @@ const ExerciseSearchModal = ({ exercises, onSelect, onSelectMultiple, onClose, a
     onClose();
   };
 
-  const isSelected = (ex) => selectedExercises.some(e => e.id === ex.id);
+  const isSelected = (ex) => selectedExercises.some(e => e.name === ex.name);
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 overflow-hidden">
@@ -648,7 +648,7 @@ const ExerciseSearchModal = ({ exercises, onSelect, onSelectMultiple, onClose, a
           {filtered.map(ex => {
             const selected = isSelected(ex);
             return (
-              <button key={ex.id} onClick={() => allowMultiSelect ? toggleExercise(ex) : onSelect(ex)}
+              <button key={ex.name} onClick={() => allowMultiSelect ? toggleExercise(ex) : onSelect(ex)}
                 className={`w-full text-left p-4 flex items-center gap-3 border-b border-gray-800/50 ${selected ? 'bg-rose-700/10' : 'hover:bg-gray-800/50'}`}>
                 <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold text-sm">
                   {ex.name.charAt(0)}
